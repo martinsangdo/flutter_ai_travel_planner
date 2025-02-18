@@ -34,7 +34,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         if (objResponse['destinationMetas'] != null){
           for (Map<String, dynamic> item in objResponse['destinationMetas']){
             locationList.add({
-              "id": "GB/ENG/London",
+              "id": item['id'],
               "country": item['countryMeta']['name'],
               'city': item['cityMeta']['name']
             });
@@ -44,10 +44,40 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
          
       }
   }
+  _generateNewTripPlanner(locationId) async{
+    final headers = {'Content-Type': 'application/json'}; // Important for JSON requests
+    
+    final response = await http.Client().post(Uri.parse(WONDER_PLAN_URI + GENERATE_NEW_TRIP_PLANNER), 
+        headers: headers, body: jsonEncode({
+          "destinationDestinationId": locationId,
+          "travelAt": "2025-03-20T00:00:00.000Z",
+          "days": 3,
+          "budgetType": 2,
+          "groupType": 1,
+          "activityTypes": [
+            1,
+            5
+          ],
+          "isVegan": false,
+          "isHalal": false
+        }));
+    //debugPrint(response.body.toString());
+    if (response.statusCode != 200){
+      //debugPrint('Cannot get content from cloud');
+      return {'result': 'FAILED', 'message': 'Cannot create trip ID'};
+    } else {
+      Map<String, dynamic> objFromCloud = jsonDecode(response.body);
+      //debugPrint(objFromCloud.toString());
+      return {'result': 'OK', 'id': objFromCloud['id']};
+    }
+  }
+
   @override
   void initState() {
       super.initState();
-      _testGetCities('lond');
+      //_testGetCities('lond');
+      //_generateNewTripPlanner("GB/ENG/London");
+      
   } 
 
   @override

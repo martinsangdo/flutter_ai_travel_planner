@@ -62,6 +62,7 @@ final phoneNumberValidator = MinLengthValidator(10,
 final Center kOrText = Center(
     child: Text("Or", style: TextStyle(color: titleColor.withOpacity(0.7))));
 //my customization
-const WONDER_PLAN_URI = "https://wonderplan.ai/api/v1/";
+const WONDER_PLAN_URI = "https://wonderplan.ai/api/";
 //
-const SEARCH_LOCATION = "destinations?q=";
+const SEARCH_LOCATION = "v1/destinations?q=";
+const GENERATE_NEW_TRIP_PLANNER = 'v4/trips/generate';
