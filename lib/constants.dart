@@ -61,3 +61,7 @@ final phoneNumberValidator = MinLengthValidator(10,
 // Common Text
 final Center kOrText = Center(
     child: Text("Or", style: TextStyle(color: titleColor.withOpacity(0.7))));
+//my customization
+const WONDER_PLAN_URI = "https://wonderplan.ai/api/v1/";
+//
+const SEARCH_LOCATION = "destinations?q=";

@@ -1,9 +1,13 @@
+import 'dart:convert';
+
+import 'package:ai_travel_planner/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 
 import '../../components/dot_indicators.dart';
-import '../auth/sign_in_screen.dart';
 import 'components/onboard_content.dart';
+import 'package:http/http.dart' as http;
+
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -13,6 +17,44 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
+
+  _testGetCities(cityKeyword) async{
+    if (cityKeyword.length < 2){
+      return;
+    }
+    final response = await http.Client().get(Uri.parse(WONDER_PLAN_URI + SEARCH_LOCATION + cityKeyword));
+    if (response.statusCode != 200){
+        debugPrint('Cannot get locations from cloud');
+        
+      } else {
+        Map<String, dynamic> objResponse = jsonDecode(response.body);
+        //debugPrint(objResponse.toString());
+        List<Map<String, dynamic>> locationList = [];
+
+        if (objResponse['destinationMetas'] != null){
+          for (Map<String, dynamic> item in objResponse['destinationMetas']){
+            locationList.add({
+              "id": "GB/ENG/London",
+              "country": item['countryMeta']['name'],
+              'city': item['cityMeta']['name']
+            });
+          }
+          debugPrint(locationList.toString());
+        }
+         
+      }
+  }
+  @override
+  void initState() {
+      super.initState();
+      _testGetCities('lond');
+  } 
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   int currentPage = 0;
   @override
   Widget build(BuildContext context) {
@@ -53,7 +95,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SignInScreen(),
+                      builder: (context) => const HomeScreen(),
                     ),
                   );
                 },
