@@ -20,7 +20,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   _testGetCities(cityKeyword) async{
     if (cityKeyword.length < 2){
-      return;
+      return [];
     }
     final response = await http.Client().get(Uri.parse(WONDER_PLAN_URI + SEARCH_LOCATION + cityKeyword));
     if (response.statusCode != 200){
@@ -41,7 +41,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           }
           debugPrint(locationList.toString());
         }
-         
+        return locationList;
       }
   }
   _generateNewTripPlanner(locationId) async{
@@ -72,11 +72,45 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
+  _getHotelList(cityKeyword, start_date, end_date) async{
+    if (cityKeyword.length < 2){
+      return [];
+    }
+    String url = WONDER_PLAN_URI + GET_HOTEL_LIST + 'city=' + cityKeyword + '&start=' + start_date + '&end=' + end_date;
+    debugPrint(url);
+    final response = await http.Client().get(Uri.parse(url));
+    if (response.statusCode != 200){
+        debugPrint('Cannot get data from cloud');
+        
+      } else {
+        Map<String, dynamic> objResponse = jsonDecode(response.body);
+        //debugPrint(objResponse['data'].toString());
+        List<Map<String, dynamic>> resultList = [];
+
+        if (objResponse['data'] != null){
+          for (Map<String, dynamic> item in objResponse['data']){
+            resultList.add({
+              "name": item['name'],
+              "price": item['price'],
+              'city': item['location']['city'],
+              "ratingScore": item['ratingScore'],
+              "stars": item['stars'],
+              "images": item['images'][0],
+              "url": item['url']  //todo replace our aid
+            });
+          }
+          //debugPrint(resultList.toString());
+        }
+        return resultList;
+      }
+  }
+
   @override
   void initState() {
       super.initState();
       //_testGetCities('lond');
       //_generateNewTripPlanner("GB/ENG/London");
+      //_getHotelList('london', '2025-02-20','2025-02-23');
       
   } 
 
@@ -129,7 +163,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   );
                 },
-                child: Text("Get Started".toUpperCase()),
+                child: Text("Test".toUpperCase()),
               ),
             ),
             const Spacer(),
@@ -144,9 +178,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 List<Map<String, dynamic>> demoData = [
   {
     "illustration": "assets/Illustrations/Illustrations_1.svg",
-    "title": "All your favorites",
+    "title": "...",
     "text":
-        "Order from the best local restaurants \nwith easy, on-demand delivery.",
+        "....",
   },
   {
     "illustration": "assets/Illustrations/Illustrations_2.svg",
