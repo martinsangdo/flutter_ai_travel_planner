@@ -63,11 +63,11 @@ final Center kOrText = Center(
     child: Text("Or", style: TextStyle(color: titleColor.withOpacity(0.7))));
 //my customization
 String glb_booking_aid = '';  //todo replace our aid
-
-
-const WONDER_PLAN_URI = "https://wonderplan.ai/api/";
+String glb_wonder_uri = 'https://wonderplan.ai/api/';
+String glb_wonder_alias_uri = 'https://sonderback-us-6h6yp6ucpq-uc.a.run.app/v4/trips/';
 //
 const SEARCH_LOCATION = "v1/destinations?q=";
 const GENERATE_NEW_TRIP_PLANNER = 'v4/trips/generate';
 const GET_HOTEL_LIST = 'v4/trips/accommondation?';
-const GET_GENERAL_TRIP_ID = 'https://sonderback-us-6h6yp6ucpq-uc.a.run.app/v4/trips/';
+const GET_GENERAL_TRIP_ID = '';
+const GET_DAILY_ACTIVITIES = '';

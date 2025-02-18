@@ -7,7 +7,8 @@ import '../../constants.dart';
 import '../../components/dot_indicators.dart';
 import 'components/onboard_content.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:html/parser.dart' as parser;
+import 'package:html/dom.dart' as dom;
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -22,7 +23,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (cityKeyword.length < 2){
       return [];
     }
-    final response = await http.Client().get(Uri.parse(WONDER_PLAN_URI + SEARCH_LOCATION + cityKeyword));
+    final response = await http.Client().get(Uri.parse(glb_wonder_uri + SEARCH_LOCATION + cityKeyword));
     if (response.statusCode != 200){
         debugPrint('Cannot get locations from cloud');
         
@@ -47,7 +48,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   _generateNewTripPlanner(locationId) async{
     final headers = {'Content-Type': 'application/json'}; // Important for JSON requests
     
-    final response = await http.Client().post(Uri.parse(WONDER_PLAN_URI + GENERATE_NEW_TRIP_PLANNER), 
+    final response = await http.Client().post(Uri.parse(glb_wonder_uri + GENERATE_NEW_TRIP_PLANNER), 
         headers: headers, body: jsonEncode({
           "destinationDestinationId": locationId,
           "travelAt": "2025-03-20T00:00:00.000Z",
@@ -76,7 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (cityKeyword.length < 2){
       return [];
     }
-    String url = WONDER_PLAN_URI + GET_HOTEL_LIST + 'city=' + cityKeyword + '&start=' + start_date + '&end=' + end_date;
+    String url = glb_wonder_uri + GET_HOTEL_LIST + 'city=' + cityKeyword + '&start=' + start_date + '&end=' + end_date;
     //debugPrint(url);
     final response = await http.Client().get(Uri.parse(url));
     if (response.statusCode != 200){
@@ -109,14 +110,57 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final response = await http.Client().get(Uri.parse(GET_GENERAL_TRIP_ID + tripId + '/budget:blocking'));
     if (response.statusCode != 200){
         debugPrint('Cannot get data from cloud');
-        
+        return {'result': 'FAILED', 'message': 'Cannot create trip ID'};
       } else {
         Map<String, dynamic> objResponse = jsonDecode(response.body);
         debugPrint(objResponse.toString());
-
+        
         return objResponse;
       }
   }
+  //
+  _find_n_match_attractions(tripId, countryName, dayIndex) async{
+    //1. find all locations
+
+    //2. find possible locations in day 1
+    String dayUrl = glb_wonder_alias_uri + tripId + '/days/' + dayIndex.toString() + ':blocking';
+    final response = await http.Client().get(Uri.parse(dayUrl));
+    if (response.statusCode != 200){
+      debugPrint('Cannot get data from cloud');
+      return {};
+    } else {
+      Map<String, dynamic> objResponse = jsonDecode(response.body);
+      //debugPrint(objResponse.toString());
+      if (objResponse['activities'] != null){
+        String firstLocation = objResponse['activities'][0]['location'];
+
+        
+      }
+
+      return objResponse;
+    }
+  
+    //3. find all info of location
+  }
+  //
+  _findAttractionDetails(){
+    
+    //1.1 image list https://uk.trip.com/restapi/soa2/18066/searchMomentList
+
+    //2. list of reviews https://uk.trip.com/restapi/soa2/19707/getReviewSearch (with photos)
+
+    //(Things to do) day tours https://uk.trip.com/restapi/soa2/14580/json/getCrossRecommendProduct
+
+    //get tour details https://uk.trip.com/restapi/soa2/21052/getProductInfo
+
+    //4. related places (https://uk.trip.com/restapi/soa2/18762/getInternalLinkModuleList)
+
+    //(What to eat) https://www.trip.com/restapi/soa2/23044/getDestinationPageInfo.json
+
+    //recommend cities: saved in db with cities in a country
+
+  }
+
 
   @override
   void initState() {
@@ -124,7 +168,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       //_testGetCities('lond');
       //_generateNewTripPlanner("GB/ENG/London");
       //_getHotelList('london', '2025-02-20','2025-02-23');
-      _getGeneralInfo('v4-1739894726493-20387');
+      //_getGeneralInfo('v4-1739894726493-20387');
+      _find_n_match_attractions('v4-1739900073441-75474', 'United Kingdom', 1);
+
   } 
 
   @override
