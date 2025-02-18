@@ -77,7 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       return [];
     }
     String url = WONDER_PLAN_URI + GET_HOTEL_LIST + 'city=' + cityKeyword + '&start=' + start_date + '&end=' + end_date;
-    debugPrint(url);
+    //debugPrint(url);
     final response = await http.Client().get(Uri.parse(url));
     if (response.statusCode != 200){
         debugPrint('Cannot get data from cloud');
@@ -105,13 +105,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       }
   }
 
+  _getGeneralInfo(tripId) async{
+    final response = await http.Client().get(Uri.parse(GET_GENERAL_TRIP_ID + tripId + '/budget:blocking'));
+    if (response.statusCode != 200){
+        debugPrint('Cannot get data from cloud');
+        
+      } else {
+        Map<String, dynamic> objResponse = jsonDecode(response.body);
+        debugPrint(objResponse.toString());
+
+        return objResponse;
+      }
+  }
+
   @override
   void initState() {
       super.initState();
       //_testGetCities('lond');
       //_generateNewTripPlanner("GB/ENG/London");
       //_getHotelList('london', '2025-02-20','2025-02-23');
-      
+      _getGeneralInfo('v4-1739894726493-20387');
   } 
 
   @override
