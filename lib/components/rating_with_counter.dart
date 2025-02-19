@@ -7,11 +7,13 @@ class RatingWithCounter extends StatelessWidget {
   const RatingWithCounter({
     super.key,
     required this.rating,
-    required this.numOfRating,
+    required this.reviewCount,
+    required this.attractionCount
   });
 
   final double rating;
-  final int numOfRating;
+  final String reviewCount;
+  final String attractionCount;
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +37,14 @@ class RatingWithCounter extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        Text("$numOfRating+ Reviews",
+        Text("$reviewCount+ Reviews",
             style: Theme.of(context)
                 .textTheme
                 .labelSmall!
                 ,
         ),
         const SizedBox(width: 8),
-        Text("$numOfRating+ Attractions",
+        Text("$attractionCount+ Attractions",
             style: Theme.of(context)
                 .textTheme
                 .labelSmall!

@@ -49,7 +49,7 @@ class _MediumCardListState extends State<MediumCardList> {
                       image: data[index]['image'],
                       name: data[index]['name'],
                       location: data[index]['location'],
-                      delivertTime: 25,
+                      reviewCount: '12,345',
                       rating: 4.6,
                       press: () {
                         Navigator.push(

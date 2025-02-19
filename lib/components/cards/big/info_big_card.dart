@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
-import '../../price_range_and_food_type.dart';
+import '../../sub_list_info_item.dart';
 import '../../rating_with_counter.dart';
 import 'big_card_image_slide.dart';
 
 class InfoBigCard extends StatelessWidget {
-  final List<String> images, foodType;
+  final List<String> images;
   final String name;
   final double rating;
-  final int numOfRating, deliveryTime;
-  final bool isFreeDelivery;
+  final String reviewCount, attractionCount;
+  final List<String> subList;
   final VoidCallback press;
 
   const InfoBigCard({
     super.key,
     required this.name,
     required this.rating,
-    required this.numOfRating,
-    required this.deliveryTime,
-    this.isFreeDelivery = true,
+    required this.reviewCount,
+    required this.attractionCount,
     required this.images,
-    required this.foodType,
     required this.press,
+    required this.subList
   });
   @override
   Widget build(BuildContext context) {
@@ -36,11 +35,11 @@ class InfoBigCard extends StatelessWidget {
           const SizedBox(height: defaultPadding / 2),
           Text(name, style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: defaultPadding / 4),
-          PriceRangeAndFoodtype(foodType: foodType),
+          SubListInfoItem(subList: subList),
           const SizedBox(height: defaultPadding / 4),
           Row(
             children: [
-              RatingWithCounter(rating: rating, numOfRating: numOfRating),
+              RatingWithCounter(rating: rating, reviewCount: reviewCount, attractionCount: attractionCount),
               const SizedBox(width: defaultPadding / 2),
             ],
           ),

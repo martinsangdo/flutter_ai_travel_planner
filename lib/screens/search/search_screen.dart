@@ -68,9 +68,9 @@ class _SearchScreenState extends State<SearchScreen> {
                             images: homeSliderImages..shuffle(),
                             name: "McDonald's",
                             rating: 4.3,
-                            numOfRating: 200,
-                            deliveryTime: 25,
-                            foodType: const [
+                            reviewCount: '66,111',
+                            attractionCount: '125',
+                            subList: const [
                               "Chinese",
                               "American",
                               "Deshi food"

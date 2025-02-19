@@ -2,27 +2,25 @@ import 'package:flutter/material.dart';
 import '../components/small_dot.dart';
 
 import '../constants.dart';
-
-class PriceRangeAndFoodtype extends StatelessWidget {
-  const PriceRangeAndFoodtype({
+//used in the slider of homepage
+class SubListInfoItem extends StatelessWidget {
+  const SubListInfoItem({
     super.key,
-    this.priceRange = "\$\$",
-    required this.foodType,
+    required this.subList,
   });
 
-  final String priceRange;
-  final List<String> foodType;
+  final List<String> subList;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         ...List.generate(
-          foodType.length,
+          subList.length,
           (index) => Row(
             children: [
               buildSmallDot(),
-              Text(foodType[index],
+              Text(subList[index],
                   style: Theme.of(context).textTheme.bodyMedium),
             ],
           ),

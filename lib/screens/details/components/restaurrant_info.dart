@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../components/price_range_and_food_type.dart';
+import '../../../components/sub_list_info_item.dart';
 import '../../../components/rating_with_counter.dart';
 import '../../../constants.dart';
 
@@ -22,11 +22,11 @@ class RestaurantInfo extends StatelessWidget {
             maxLines: 1,
           ),
           const SizedBox(height: defaultPadding / 2),
-          const PriceRangeAndFoodtype(
-            foodType: ["Chinese", "American", "Deshi food"],
+          const SubListInfoItem(
+            subList: ["Chinese", "American", "Deshi food"],
           ),
           const SizedBox(height: defaultPadding / 2),
-          const RatingWithCounter(rating: 4.3, numOfRating: 200),
+          const RatingWithCounter(rating: 4.3, reviewCount: '12,988', attractionCount: '492',),
           const SizedBox(height: defaultPadding),
           Row(
             children: [

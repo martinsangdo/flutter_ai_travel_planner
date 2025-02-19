@@ -73,7 +73,7 @@ class HomeScreen extends StatelessWidget {
               const MediumCardList(),
               const SizedBox(height: defaultPadding),
               //part 4
-              SectionTitle(title: "Asia", press: () {}),
+              SectionTitle(title: "Random pick", press: () {}),
               const SizedBox(height: defaultPadding),
               Padding(
                   padding: const EdgeInsets.fromLTRB(
@@ -82,9 +82,9 @@ class HomeScreen extends StatelessWidget {
                     images: homeSliderImages..shuffle(),
                     name: "Paris",
                     rating: 4.3,
-                    numOfRating: 200,
-                    deliveryTime: 25,
-                    foodType: const ["Chinese", "American", "Deshi food"],
+                    reviewCount: '99,999',
+                    attractionCount: '345',
+                    subList: const ["London Eye", "Tower Bridge", "River Thames"],
                     press: () => Navigator.push(
                       context,
                       MaterialPageRoute(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/price_range_and_food_type.dart';
+import '../../../components/sub_list_info_item.dart';
 import '../../../constants.dart';
 
 class Info extends StatelessWidget {
@@ -34,8 +34,8 @@ class Info extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 16),
-              const PriceRangeAndFoodtype(
-                foodType: ["Chinese", "American", "Deshi food"],
+              const SubListInfoItem(
+                subList: ["Chinese", "American", "Deshi food"],
               ),
             ],
           ),

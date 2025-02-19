@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
 import '../../rating.dart';
-
+//item in homepage list
 class InfoMediumCard extends StatelessWidget {
   const InfoMediumCard({
     super.key,
@@ -10,13 +10,13 @@ class InfoMediumCard extends StatelessWidget {
     required this.name,
     required this.location,
     required this.rating,
-    required this.delivertTime,
+    required this.reviewCount,
     required this.press,
   });
 
   final String image, name, location;
   final double rating;
-  final int delivertTime;
+  final String reviewCount;
   final VoidCallback press;
 
   @override
@@ -55,7 +55,7 @@ class InfoMediumCard extends StatelessWidget {
               children: [
                 Rating(rating: rating),
                 Text(
-                  "12,369 reviews",
+                  "$reviewCount reviews",
                   style: Theme.of(context)
                       .textTheme
                       .labelLarge!
