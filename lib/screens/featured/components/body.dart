@@ -41,13 +41,12 @@ class _BodyState extends State<Body> {
             child: isLoading
                 ? const BigCardScalton()
                 : RestaurantInfoBigCard(
-                    // Images are List<String>
-                    images: demoBigImages..shuffle(),
+                    images: homeSliderImages..shuffle(),
                     name: "McDonald's",
                     rating: 4.3,
                     numOfRating: 200,
                     deliveryTime: 25,
-                    foodType: const ["Chinese", "American", "Deshi food"],
+                    foodType: const ["Westminster Abbey", "Buckingham Place", "London Eye"],
                     press: () {},
                   ),
           ),

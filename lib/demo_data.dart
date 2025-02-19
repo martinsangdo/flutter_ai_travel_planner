@@ -1,19 +1,20 @@
+//showing in homepage
 
-
-List<String> demoBigImages = [
-  "assets/images/big_1.png",
-  "assets/images/big_2.png",
-  "assets/images/big_3.png",
-  "assets/images/big_4.png",
+List<String> homeSliderImages = [
+  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/33/f5/de/london.jpg",
+  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/15/6d/d6/paris.jpg",
+  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/c2/87/c8/caption.jpg",  //San francisco
+  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0f/de/9a/17/ben-thanh-market-before.jpg",  //ho chi minh
 ];
 
 List<Map<String, dynamic>> demoMediumCardData = [
   {
-    "name": "Daylight Coffee",
-    "image": "assets/images/medium_1.png",
-    "location": "Colarodo, San Francisco",
+    "name": "London",
+    "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/33/f5/de/london.jpg",
+    "location": "United Kingdom",
     "rating": 4.6,
-    "delivertTime": 25,
+    "delivertTime": 12983,
+    "imageCount": 93453
   },
   {
     "name": "Mario Italiano",

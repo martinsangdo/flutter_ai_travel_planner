@@ -5,7 +5,6 @@ import '../../components/cards/big/restaurant_info_big_card.dart';
 import '../../components/section_title.dart';
 import '../../constants.dart';
 import '../../demo_data.dart';
-import '../../screens/filter/filter_screen.dart';
 import '../details/details_screen.dart';
 import '../featured/featurred_screen.dart';
 import 'components/medium_card_list.dart';
@@ -22,34 +21,18 @@ class HomeScreen extends StatelessWidget {
         title: Column(
           children: [
             Text(
-              "Delivery to".toUpperCase(),
+              "Explore".toUpperCase(),
               style: Theme.of(context)
                   .textTheme
                   .bodySmall!
                   .copyWith(color: primaryColor),
             ),
             const Text(
-              "San Francisco",
+              "Top destinations",
               style: TextStyle(color: Colors.black),
             )
           ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FilterScreen(),
-                ),
-              );
-            },
-            child: Text(
-              "Filter",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ),
-        ],
+        )
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -57,13 +40,28 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: defaultPadding),
+              //part 1
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: BigCardImageSlide(images: demoBigImages),
+                child: BigCardImageSlide(images: homeSliderImages),  //main slider
               ),
               const SizedBox(height: defaultPadding * 2),
+              //part 2
               SectionTitle(
-                title: "Featured Partners",
+                title: "Europe",
+                press: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FeaturedScreen(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: defaultPadding),
+              const MediumCardList(), //list
+              const SizedBox(height: defaultPadding),
+              //part 3
+              SectionTitle(
+                title: "America",
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -73,36 +71,16 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: defaultPadding),
               const MediumCardList(),
-              const SizedBox(height: 20),
-              // Banner
-              const PromotionBanner(),
-              const SizedBox(height: 20),
-              SectionTitle(
-                title: "Best Pick",
-                press: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FeaturedScreen(),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const MediumCardList(),
-              const SizedBox(height: 20),
-              SectionTitle(title: "All Restaurants", press: () {}),
-              const SizedBox(height: 16),
-
-              // Demo list of Big Cards
-              ...List.generate(
-                // For demo we use 4 items
-                3,
-                (index) => Padding(
+              const SizedBox(height: defaultPadding),
+              //part 4
+              SectionTitle(title: "Asia", press: () {}),
+              const SizedBox(height: defaultPadding),
+              Padding(
                   padding: const EdgeInsets.fromLTRB(
                       defaultPadding, 0, defaultPadding, defaultPadding),
                   child: RestaurantInfoBigCard(
-                    // Images are List<String>
-                    images: demoBigImages..shuffle(),
-                    name: "McDonald's",
+                    images: homeSliderImages..shuffle(),
+                    name: "Paris",
                     rating: 4.3,
                     numOfRating: 200,
                     deliveryTime: 25,
@@ -115,7 +93,33 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              const SizedBox(height: defaultPadding),
+              //part 5
+              SectionTitle(
+                title: "Australia",
+                press: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FeaturedScreen(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: defaultPadding),
+              const MediumCardList(),
+              const SizedBox(height: defaultPadding),
+              //part 6
+              SectionTitle(
+                title: "Africa",
+                press: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FeaturedScreen(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: defaultPadding),
+              const MediumCardList(),
+              const SizedBox(height: defaultPadding),
             ],
           ),
         ),

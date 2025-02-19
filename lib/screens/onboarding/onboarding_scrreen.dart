@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:ai_travel_planner/screens/home/home_screen.dart';
+import 'package:ai_travel_planner/entry_point.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 
-import '../../components/dot_indicators.dart';
 import 'components/onboard_content.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
@@ -100,7 +99,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               "url": item['url']  //todo replace our aid
             });
           }
-          //debugPrint(resultList.toString());
+          debugPrint(resultList.toString());
         }
         return resultList;
       }
@@ -169,8 +168,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       //_generateNewTripPlanner("GB/ENG/London");
       //_getHotelList('london', '2025-02-20','2025-02-23');
       //_getGeneralInfo('v4-1739894726493-20387');
-      _find_n_match_attractions('v4-1739900073441-75474', 'United Kingdom', 1);
-
+      //_find_n_match_attractions('v4-1739900073441-75474', 'United Kingdom', 1);
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      if (context.mounted) {
+        Future.delayed(const Duration(milliseconds: 3000*1000));  //delay screen 3 secs
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const EntryPoint()));
+      }
+    });
   } 
 
   @override
@@ -203,29 +207,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                demoData.length,
-                (index) => DotIndicator(isActive: index == currentPage),
-              ),
-            ),
-            const Spacer(flex: 2),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomeScreen(),
-                    ),
-                  );
-                },
-                child: Text("Test".toUpperCase()),
-              ),
-            ),
-            const Spacer(),
           ],
         ),
       ),
@@ -237,20 +218,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 List<Map<String, dynamic>> demoData = [
   {
     "illustration": "assets/Illustrations/Illustrations_1.svg",
-    "title": "...",
+    "title": "AI Travel Planner",
     "text":
-        "....",
-  },
-  {
-    "illustration": "assets/Illustrations/Illustrations_2.svg",
-    "title": "Free delivery offers",
-    "text":
-        "Free delivery for new customers via Apple Pay\nand others payment methods.",
-  },
-  {
-    "illustration": "assets/Illustrations/Illustrations_3.svg",
-    "title": "Choose your food",
-    "text":
-        "Easily find your type of food craving and\nyou’ll get delivery in wide range.",
-  },
+        "Loading ...",
+  }
 ];

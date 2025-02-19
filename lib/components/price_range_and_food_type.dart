@@ -17,7 +17,6 @@ class PriceRangeAndFoodtype extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(priceRange, style: Theme.of(context).textTheme.bodyMedium),
         ...List.generate(
           foodType.length,
           (index) => Row(

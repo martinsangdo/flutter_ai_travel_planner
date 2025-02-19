@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
 import '../../rating.dart';
-import '../../small_dot.dart';
 
 class RestaurantInfoMediumCard extends StatelessWidget {
   const RestaurantInfoMediumCard({
@@ -33,7 +32,7 @@ class RestaurantInfoMediumCard extends StatelessWidget {
               aspectRatio: 1.25,
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
-                child: Image.asset(image, fit: BoxFit.cover),
+                child: Image.network(image, fit: BoxFit.cover),
               ),
             ),
             const SizedBox(height: defaultPadding / 2),
@@ -52,24 +51,16 @@ class RestaurantInfoMediumCard extends StatelessWidget {
             const SizedBox(height: defaultPadding / 2),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Rating(rating: rating),
                 Text(
-                  "$delivertTime min",
+                  "12,369 reviews",
                   style: Theme.of(context)
                       .textTheme
                       .labelLarge!
                       .copyWith(color: titleColor.withOpacity(0.74)),
                 ),
-                const SmallDot(),
-                Text(
-                  "Free delivery",
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium!
-                      .copyWith(color: titleColor.withOpacity(0.74)),
-                )
               ],
             )
           ],
