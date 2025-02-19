@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/small_dot.dart';
 import '../../../constants.dart';
 
-class FeaturedItemCard extends StatelessWidget {
-  const FeaturedItemCard({
+class PhotoItemCard extends StatelessWidget {
+  const PhotoItemCard({
     super.key,
-    required this.foodType,
     required this.image,
-    required this.priceRange,
     required this.press,
-    required this.title,
   });
 
-  final String foodType, image, priceRange, title;
+  final String image;
   final VoidCallback press;
 
   @override
@@ -41,29 +37,6 @@ class FeaturedItemCard extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                title,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: titleColor, fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    priceRange,
-                    style: textStyle,
-                  ),
-                  const Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-                    child: SmallDot(),
-                  ),
-                  Text(foodType, style: textStyle)
-                ],
               ),
             ],
           ),

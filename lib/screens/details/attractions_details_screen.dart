@@ -2,33 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../constants.dart';
-import '../search/search_screen.dart';
 import 'components/featured_items.dart';
-import 'components/iteams.dart';
+import 'components/tab_items.dart';
 import 'components/restaurrant_info.dart';
 
-class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({super.key});
+class CityDetailsScreen extends StatelessWidget {
+  const CityDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: SvgPicture.asset("assets/icons/share.svg"),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: SvgPicture.asset("assets/icons/search.svg"),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SearchScreen(),
-              ),
-            ),
-          ),
-        ],
       ),
       body: const SafeArea(
         child: SingleChildScrollView(
@@ -38,8 +22,8 @@ class DetailsScreen extends StatelessWidget {
               SizedBox(height: defaultPadding / 2),
               RestaurantInfo(),
               SizedBox(height: defaultPadding),
-              FeaturedItems(),
-              Items(),
+              FeaturedItems(),  //photo list
+              TabItems(),  //including tabs
             ],
           ),
         ),

@@ -3,14 +3,14 @@ import '../../../components/cards/iteam_card.dart';
 import '../../../constants.dart';
 import '../../addToOrder/add_to_order_screen.dart';
 
-class Items extends StatefulWidget {
-  const Items({super.key});
+class TabItems extends StatefulWidget {
+  const TabItems({super.key});
 
   @override
-  State<Items> createState() => _ItemsState();
+  State<TabItems> createState() => _ItemsState();
 }
 
-class _ItemsState extends State<Items> {
+class _ItemsState extends State<TabItems> {
   
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ final List<Tab> demoTabs = <Tab>[
 ];
 
 final List<Map<String, dynamic>> demoData = List.generate(
-  3,
+  7,
   (index) => {
     "image": "assets/images/featured _items_${index + 1}.png",
     "title": "Cookie Sandwich",

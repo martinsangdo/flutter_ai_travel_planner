@@ -5,7 +5,7 @@ import '../../components/cards/big/info_big_card.dart';
 import '../../components/section_title.dart';
 import '../../constants.dart';
 import '../../demo_data.dart';
-import '../details/details_screen.dart';
+import '../details/city_details_screen.dart';
 import '../featured/featurred_screen.dart';
 import 'components/medium_card_list.dart';
 import 'components/promotion_banner.dart';
@@ -88,7 +88,7 @@ class HomeScreen extends StatelessWidget {
                     press: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const DetailsScreen(),
+                        builder: (context) => const CityDetailsScreen(),
                       ),
                     ),
                   ),

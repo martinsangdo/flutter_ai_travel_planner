@@ -1,3 +1,4 @@
+import 'package:ai_travel_planner/screens/details/city_details_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -29,7 +30,8 @@ class _EntryPointState extends State<EntryPoint> {
 
 // Screens
   final List<Widget> _screens = [
-    const HomeScreen(),
+    //const HomeScreen(),
+    const CityDetailsScreen(),
     const SearchScreen(),
     const OrderDetailsScreen(),
     const ProfileScreen(),

@@ -1,8 +1,10 @@
+import 'package:ai_travel_planner/screens/details/components/photo_item_card.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
 import 'featured_item_card.dart';
 
+//used in City detail screen
 class FeaturedItems extends StatelessWidget {
   const FeaturedItems({
     super.key,
@@ -15,7 +17,7 @@ class FeaturedItems extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-          child: Text("Featured Items",
+          child: Text("Photos",
               style: Theme.of(context).textTheme.titleLarge),
         ),
         const SizedBox(height: defaultPadding / 2),
@@ -24,14 +26,11 @@ class FeaturedItems extends StatelessWidget {
           child: Row(
             children: [
               ...List.generate(
-                3, // for demo we use 3
+                14, // for demo we use 3
                 (index) => Padding(
-                  padding: const EdgeInsets.only(left: defaultPadding),
-                  child: FeaturedItemCard(
-                    title: "Cookie Sandwich",
-                    image: "assets/images/featured _items_${index + 1}.png",
-                    foodType: "Chines",
-                    priceRange: "\$" * 2,
+                  padding: const EdgeInsets.only(left: 3),
+                  child: PhotoItemCard(
+                    image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/03/de/5d/c1/ho-chi-minh-square.jpg",
                     press: () {},
                   ),
                 ),

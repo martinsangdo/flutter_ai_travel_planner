@@ -4,7 +4,7 @@ import '../../../components/cards/medium/info_medium_card.dart';
 import '../../../components/scalton/medium_card_scalton.dart';
 import '../../../constants.dart';
 import '../../../demo_data.dart';
-import '../../details/details_screen.dart';
+import '../../details/city_details_screen.dart';
 
 class MediumCardList extends StatefulWidget {
   const MediumCardList({super.key});
@@ -55,7 +55,7 @@ class _MediumCardListState extends State<MediumCardList> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const DetailsScreen(),
+                            builder: (context) => const CityDetailsScreen(),
                           ),
                         );
                       },
