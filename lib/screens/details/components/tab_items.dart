@@ -1,7 +1,8 @@
+import 'package:ai_travel_planner/screens/photo_gallery_fullscreen.dart';
 import 'package:flutter/material.dart';
 import '../../../components/cards/iteam_card.dart';
 import '../../../constants.dart';
-import '../../addToOrder/add_to_order_screen.dart';
+import '../../addToOrder/planner_form.dart';
 
 class TabItems extends StatefulWidget {
   const TabItems({super.key});
@@ -42,10 +43,16 @@ class _ItemsState extends State<TabItems> {
               foodType: demoData[index]['foodType'],
               price: demoData[index]["price"],
               priceRange: demoData[index]["priceRange"],
+              
               press: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AddToOrderScrreen(),
+                  builder: (context) => 
+                  //const PlannerFormScreen(),
+                  PhotoGalleryFullscreen(
+                    imageUrls: photoGalleryUrls,
+                    initialIndex: 1, // Optional: start at a specific image
+                  ),
                 ),
               ),
             ),
@@ -79,3 +86,9 @@ final List<Map<String, dynamic>> demoData = List.generate(
     "priceRange": "\$" * 2,
   },
 );
+
+final List<String> photoGalleryUrls = [
+  'https://ak-d.tripcdn.com/images/01029120008fcnhm923E2_C_180_240_Q70.webp',
+  'https://ak-d.tripcdn.com/images/1lo4s12000dyhs5m47CE2_C_180_240_Q70.webp',
+  'https://ak-d.tripcdn.com/images/100b10000000o5v2z5A26_C_180_240_Q70.webp',
+];

@@ -7,14 +7,14 @@ import 'components/required_section_title.dart';
 import 'components/rounded_checkedbox_list_tile.dart';
 
 // ignore: must_be_immutable
-class AddToOrderScrreen extends StatefulWidget {
-  const AddToOrderScrreen({super.key});
+class PlannerFormScreen extends StatefulWidget {
+  const PlannerFormScreen({super.key});
 
   @override
-  State<AddToOrderScrreen> createState() => _AddToOrderScrreenState();
+  State<PlannerFormScreen> createState() => _AddToOrderScrreenState();
 }
 
-class _AddToOrderScrreenState extends State<AddToOrderScrreen> {
+class _AddToOrderScrreenState extends State<PlannerFormScreen> {
   // for demo we select 2nd one
   int choiceOfTopCookie = 1;
 
