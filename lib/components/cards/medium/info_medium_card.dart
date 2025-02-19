@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../constants.dart';
 import '../../rating.dart';
 
-class RestaurantInfoMediumCard extends StatelessWidget {
-  const RestaurantInfoMediumCard({
+class InfoMediumCard extends StatelessWidget {
+  const InfoMediumCard({
     super.key,
     required this.image,
     required this.name,

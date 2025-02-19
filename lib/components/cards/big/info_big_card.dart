@@ -5,7 +5,7 @@ import '../../price_range_and_food_type.dart';
 import '../../rating_with_counter.dart';
 import 'big_card_image_slide.dart';
 
-class RestaurantInfoBigCard extends StatelessWidget {
+class InfoBigCard extends StatelessWidget {
   final List<String> images, foodType;
   final String name;
   final double rating;
@@ -13,7 +13,7 @@ class RestaurantInfoBigCard extends StatelessWidget {
   final bool isFreeDelivery;
   final VoidCallback press;
 
-  const RestaurantInfoBigCard({
+  const InfoBigCard({
     super.key,
     required this.name,
     required this.rating,

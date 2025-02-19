@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../components/cards/big/restaurant_info_big_card.dart';
+import '../../components/cards/big/info_big_card.dart';
 import '../../components/scalton/big_card_scalton.dart';
 import '../../constants.dart';
 import '../../demo_data.dart';
@@ -63,7 +63,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     padding: const EdgeInsets.only(bottom: defaultPadding),
                     child: _isLoading
                         ? const BigCardScalton()
-                        : RestaurantInfoBigCard(
+                        : InfoBigCard(
                             // Images are List<String>
                             images: homeSliderImages..shuffle(),
                             name: "McDonald's",

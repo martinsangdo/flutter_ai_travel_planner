@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../components/cards/big/big_card_image_slide.dart';
-import '../../components/cards/big/restaurant_info_big_card.dart';
+import '../../components/cards/big/info_big_card.dart';
 import '../../components/section_title.dart';
 import '../../constants.dart';
 import '../../demo_data.dart';
@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
               Padding(
                   padding: const EdgeInsets.fromLTRB(
                       defaultPadding, 0, defaultPadding, defaultPadding),
-                  child: RestaurantInfoBigCard(
+                  child: InfoBigCard(
                     images: homeSliderImages..shuffle(),
                     name: "Paris",
                     rating: 4.3,

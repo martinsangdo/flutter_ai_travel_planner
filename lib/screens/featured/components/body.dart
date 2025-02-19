@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../components/cards/big/restaurant_info_big_card.dart';
+import '../../../components/cards/big/info_big_card.dart';
 import '../../../components/scalton/big_card_scalton.dart';
 import '../../../constants.dart';
 
@@ -40,7 +40,7 @@ class _BodyState extends State<Body> {
             padding: const EdgeInsets.only(bottom: defaultPadding),
             child: isLoading
                 ? const BigCardScalton()
-                : RestaurantInfoBigCard(
+                : InfoBigCard(
                     images: homeSliderImages..shuffle(),
                     name: "McDonald's",
                     rating: 4.3,

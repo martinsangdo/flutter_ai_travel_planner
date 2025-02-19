@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/cards/medium/restaurant_info_medium_card.dart';
+import '../../../components/cards/medium/info_medium_card.dart';
 import '../../../components/scalton/medium_card_scalton.dart';
 import '../../../constants.dart';
 import '../../../demo_data.dart';
@@ -45,7 +45,7 @@ class _MediumCardListState extends State<MediumCardList> {
                       left: defaultPadding,
                       right: (data.length - 1) == index ? defaultPadding : 0,
                     ),
-                    child: RestaurantInfoMediumCard(
+                    child: InfoMediumCard(
                       image: data[index]['image'],
                       name: data[index]['name'],
                       location: data[index]['location'],
