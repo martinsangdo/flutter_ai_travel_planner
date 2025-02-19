@@ -39,7 +39,7 @@ class ItemCard extends StatelessWidget {
                 aspectRatio: 1,
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: Image.asset(
+                  child: Image.network(
                     image!,
                     fit: BoxFit.cover,
                   ),

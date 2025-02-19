@@ -64,10 +64,11 @@ class DeliveryInfo extends StatelessWidget {
     super.key,
     required this.iconSrc,
     required this.text,
-    required this.subText,
+    this.subText
   });
 
-  final String iconSrc, text, subText;
+  final String iconSrc, text;
+  final String? subText;
 
   @override
   Widget build(BuildContext context) {

@@ -27,7 +27,7 @@ class CityDetailsScreen extends StatelessWidget {
                   children: [
                     Text(
                       "London, United Kingdom",
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: Theme.of(context).textTheme.headlineSmall,
                       maxLines: 1,
                     ),
                     const SizedBox(height: defaultPadding),
@@ -35,14 +35,12 @@ class CityDetailsScreen extends StatelessWidget {
                       children: [
                         const DeliveryInfo(
                           iconSrc: "assets/icons/delivery.svg",
-                          text: "Free",
-                          subText: "Delivery",
+                          text: "USD"
                         ),
                         const SizedBox(width: defaultPadding),
                         const DeliveryInfo(
-                          iconSrc: "assets/icons/date.svg",
-                          text: "25",
-                          subText: "Minutes",
+                          iconSrc: "assets/icons/fast-delivery.svg",
+                          text: "19/2/2025 - 23/4/2025",
                         ),
                         const Spacer(),
                         OutlinedButton(
@@ -60,6 +58,26 @@ class CityDetailsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: defaultPadding),
+              //description
+              const Padding(padding: const EdgeInsets.all(defaultPadding / 2),
+                child: Column(children: [
+                  Text(
+                    "London, the vibrant capital of England and the United Kingdom, is a global city renowned for its rich history, iconic landmarks, diverse culture, and modern advancements.",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+                ),
+              ),
+              //history
+              const Padding(padding: const EdgeInsets.all(defaultPadding / 2),
+                child: Column(children: [
+                  Text(
+                    "London's history stretches back over two millennia, from its Roman origins to its role as a pivotal center of the British Empire. Its landmarks, including the Tower of London and Buckingham Palace, bear witness to its long and fascinating past.",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+                ),
+              ),
               //Accommodation
               ExpandableWidget(
                 initialExpanded: true, // Set to true if you want it expanded initially

@@ -58,26 +58,20 @@ class _ItemsState extends State<TabItems> {
 
 final List<Tab> demoTabs = <Tab>[
   const Tab(
-    child: Text('Most Populars'),
+    child: Text('Day 1'),
   ),
   const Tab(
-    child: Text('Beef & Lamb'),
+    child: Text('Day 2'),
   ),
   const Tab(
-    child: Text('Seafood'),
-  ),
-  const Tab(
-    child: Text('Appetizers'),
-  ),
-  const Tab(
-    child: Text('Dim Sum'),
+    child: Text('Day 3'),
   ),
 ];
 
 final List<Map<String, dynamic>> demoData = List.generate(
   7,
   (index) => {
-    "image": "assets/images/featured _items_${index + 1}.png",
+    "image": "https://ak-d.tripcdn.com/images/01029120008fcnhm923E2_C_180_240_Q70.webp",
     "title": "Cookie Sandwich",
     "description": "Shortbread, chocolate turtle cookies, and red velvet.",
     "price": 7.4,
