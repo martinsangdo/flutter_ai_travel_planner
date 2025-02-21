@@ -51,11 +51,18 @@ class _SearchScreenState extends State<SearchScreen> {
               const SizedBox(height: defaultPadding),
               Text('Search', style: Theme.of(context).textTheme.headlineMedium),
               const SizedBox(height: defaultPadding),
+              //input box
               const SearchForm(),
               const SizedBox(height: defaultPadding),
               Text(_showSearchResult ? "Search Results" : "Top Restaurants",
                   style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: defaultPadding),
+
+
+
+
+
+
               Expanded(
                 child: ListView.builder(
                   itemCount: _isLoading ? 2 : 5, //5 is demo length of your data
@@ -117,19 +124,9 @@ class _SearchFormState extends State<SearchForm> {
         validator: requiredValidator.call,
         style: Theme.of(context).textTheme.labelLarge,
         textInputAction: TextInputAction.search,
-        decoration: InputDecoration(
-          hintText: "Search on foodly",
+        decoration: const InputDecoration(
+          hintText: "What is the city or country?",
           contentPadding: kTextFieldPadding,
-          prefixIcon: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SvgPicture.asset(
-              'assets/icons/search.svg',
-              colorFilter: const ColorFilter.mode(
-                bodyTextColor,
-                BlendMode.srcIn,
-              ),
-            ),
-          ),
         ),
       ),
     );

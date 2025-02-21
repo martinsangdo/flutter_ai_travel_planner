@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../constants.dart';
 
 class RequiredSectionTitle extends StatelessWidget {
-  const RequiredSectionTitle({
+  RequiredSectionTitle({
     super.key,
     required this.title,
+    this.isRequired = false
   });
 
   final String title;
+  bool isRequired = false;
 
   @override
   Widget build(BuildContext context) {
