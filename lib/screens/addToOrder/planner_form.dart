@@ -1,6 +1,8 @@
 import 'package:ai_travel_planner/screens/addToOrder/components/square_checkedbox.dart';
+import 'package:ai_travel_planner/screens/addToOrder/date_widget.dart';
 import 'package:ai_travel_planner/screens/search/search_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../constants.dart';
 import 'components/required_section_title.dart';
@@ -30,16 +32,35 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
 
   final List<String> _budgetType = ['0 - 1000 USD', '< 2500 USD', '2500 USD +'];
   int _selectedBudgetIndex = 0;
-
-  int choiceOfTopCookie = 1;
-
-  int choiceOfBottomCookie = 1;
-
-  int numOfItems = 1;
-
+  //
+  int _selectedTravelDays = 3;
+  String _selectedTravelDate = '';  //yyyy-mm-dd
+  //this is called after user chose the date
+  void onDateSelected(strSelectedDate){
+    //debugPrint(strSelectedDate);
+    setState(() {
+      _selectedTravelDate = strSelectedDate + 'T00:00:00.000Z';
+    });
+  }
   //
   _suggestThePlan() async{
 
+  }
+  //max days to travel is 7
+  _increaseDays(){
+    setState(() {
+      if (_selectedTravelDays < 7){
+        _selectedTravelDays = _selectedTravelDays + 1;
+      }
+    });
+  }
+  //min days to travel is 1
+  _decreaseDays(){
+    setState(() {
+      if (_selectedTravelDays > 1){
+        _selectedTravelDays = _selectedTravelDays - 1;
+      }
+    });
   }
 
   @override
@@ -72,8 +93,10 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
               const SizedBox(height: defaultPadding),
               const SearchForm(), //input the city keyword
               const SizedBox(height: defaultPadding),
-              //date
-
+              //travel date
+              DatePickerWidget(
+                onDateSelected: onDateSelected
+              ),
               //no. of days
               Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -89,7 +112,7 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
                           height: 40,
                           width: 40,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {_decreaseDays();},
                             style: ElevatedButton.styleFrom(
                               shape: const CircleBorder(),
                               padding: EdgeInsets.zero,
@@ -100,14 +123,16 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: defaultPadding),
-                          child: Text(numOfItems.toString().padLeft(2, "0"),
+                          child: Text(_selectedTravelDays.toString().padLeft(2, "0"),
                               style: Theme.of(context).textTheme.titleLarge),
                         ),
                         SizedBox(
                           height: 40,
                           width: 40,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _increaseDays();
+                            },
                             style: ElevatedButton.styleFrom(
                               shape: const CircleBorder(),
                               padding: EdgeInsets.zero,
