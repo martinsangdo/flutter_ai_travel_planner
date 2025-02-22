@@ -1,3 +1,4 @@
+import 'package:ai_travel_planner/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -24,7 +25,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     );
 
     if (picked != null && picked != _selectedDate) {
-      widget.onDateSelected(DateFormat('yyyy-MM-dd').format(picked));
+      widget.onDateSelected(DateFormat(appDateFormat).format(picked));
       setState(() {
         _selectedDate = picked;
       });
@@ -39,7 +40,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         Expanded(
           child: Text(
             _selectedDate != null
-                ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
+                ? DateFormat(appDateFormat).format(_selectedDate!)
                 : 'When do you want to travel?',
             style: Theme.of(context).textTheme.titleMedium
           ),

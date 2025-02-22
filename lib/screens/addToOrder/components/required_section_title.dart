@@ -22,22 +22,23 @@ class RequiredSectionTitle extends StatelessWidget {
           maxLines: 1,
           style: Theme.of(context).textTheme.titleLarge,
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: defaultPadding / 2,
-            vertical: defaultPadding / 4,
-          ),
-          decoration: BoxDecoration(
-              color: accentColor.withOpacity(0.2),
-              borderRadius: const BorderRadius.all(Radius.circular(4))),
-          child: Text(
-            "Required".toUpperCase(),
-            style: Theme.of(context)
-                .textTheme
-                .labelSmall!
-                .copyWith(color: accentColor),
-          ),
-        )
+        if (isRequired)
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: defaultPadding / 2,
+              vertical: defaultPadding / 4,
+            ),
+            decoration: BoxDecoration(
+                color: accentColor.withOpacity(0.2),
+                borderRadius: const BorderRadius.all(Radius.circular(4))),
+            child: Text(
+              "Required".toUpperCase(),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelSmall!
+                  .copyWith(color: accentColor),
+            ),
+          )
       ],
     );
   }

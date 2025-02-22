@@ -19,18 +19,18 @@ class PlannerFormScreen extends StatefulWidget {
 class _AddToOrderScrreenState extends State<PlannerFormScreen> {
   List<Map> _activityTypes = [
     { 'text': 'Sightseeing', 'selected': true, 'value': 1},
-    { 'text': 'Shopping', 'selected': false, 'value': 6},
+    { 'text': 'Shopping', 'selected': true, 'value': 6},
     { 'text': 'Beaches', 'selected': false, 'value': 0},
-    { 'text': 'Food exploration', 'selected': false, 'value': 4},
-    { 'text': 'Festivals', 'selected': false, 'value': 3},
+    { 'text': 'Food exploration', 'selected': true, 'value': 4},
+    { 'text': 'Festivals', 'selected': true, 'value': 3},
     { 'text': 'Spa', 'selected': false, 'value': 7},
     { 'text': 'Outdoor', 'selected': false, 'value': 2},
-    { 'text': 'Nightlife exploration', 'selected': false, 'value': 5},
+    { 'text': 'Nightlife exploration', 'selected': true, 'value': 5},
     ]; //list of selected activities
   final List<String> _whoGoWith = ['Solo', 'Couple', 'Family', 'Friend'];
   int _selectedWhoGoIndex = 0;
 
-  final List<String> _budgetType = ['0 - 1000 USD', '< 2500 USD', '2500 USD +'];
+  final List<String> _budgetType = ['0 - 1000 USD', '< 2500 USD', '2500+ USD'];
   int _selectedBudgetIndex = 0;
   //
   List<Map> _searchResults = [];  //list of search results of cities

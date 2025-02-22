@@ -52,6 +52,8 @@ int getCurrentTimestampInSeconds() {
 final Center kOrText = Center(
     child: Text("Or", style: TextStyle(color: titleColor.withOpacity(0.7))));
 //my customization
+String appDateFormat = 'dd/MM/yyyy';
+//global variables
 String glb_booking_aid = '';  //todo replace our aid
 String glb_wonder_uri = 'https://wonderplan.ai/api/';
 String glb_wonder_alias_uri = 'https://sonderback-us-6h6yp6ucpq-uc.a.run.app/v4/trips/';
