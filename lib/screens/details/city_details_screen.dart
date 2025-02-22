@@ -1,4 +1,5 @@
 import 'package:ai_travel_planner/components/expandable_widget.dart';
+import 'package:ai_travel_planner/functions.dart';
 import 'package:ai_travel_planner/screens/orderDetails/components/price_row.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -32,7 +33,8 @@ class _State extends State<CityDetailsScreen> {
     } else {
       Map<String, dynamic> objFromCloud = jsonDecode(response.body);
       if (objFromCloud['nodes'] != null){
-        debugPrint(objFromCloud['nodes'][1]['data'].toString());
+        Map<String, dynamic> parsedData = parseRawTripDetails(objFromCloud['nodes'][1]['data']);
+        debugPrint(parsedData.toString());
       }
       return {'result': 'OK', 'id': objFromCloud['id']};
     }

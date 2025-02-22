@@ -48,6 +48,11 @@ String generateUuid() {
 int getCurrentTimestampInSeconds() {
   return DateTime.now().millisecondsSinceEpoch ~/ 1000;
 }
+
+bool isPrimitive(dynamic value) {
+  return value is num || value is int || value is bool || value is String || value == null;
+}
+
 // Common Text
 final Center kOrText = Center(
     child: Text("Or", style: TextStyle(color: titleColor.withOpacity(0.7))));
