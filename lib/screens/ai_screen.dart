@@ -86,7 +86,15 @@ class _AiChatScreenState extends State<AiChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AI Assistant'),
+        title: const Center(
+          child: Column(
+            children: [
+              Text(
+                "AI Assistant"
+              )
+            ],
+          )
+        )
       ),
       body: Column(
         children: [

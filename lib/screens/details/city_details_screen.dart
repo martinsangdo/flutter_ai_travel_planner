@@ -157,8 +157,9 @@ class _State extends State<CityDetailsScreen> {
                           iconSrc: "assets/icons/fast-delivery.svg",
                           text: _cityDetails['travelDate']??'...',
                         ),
-                        const Spacer(),
-                        OutlinedButton(
+                      ],
+                    ),
+                    OutlinedButton(
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
@@ -167,8 +168,6 @@ class _State extends State<CityDetailsScreen> {
                           ),
                           child: const Text("Save"),
                         ),
-                      ],
-                    ),
                   ],
                 ),
               ),

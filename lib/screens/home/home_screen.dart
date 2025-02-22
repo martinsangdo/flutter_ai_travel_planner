@@ -16,21 +16,22 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const SizedBox(),
-        title: Column(
-          children: [
-            Text(
-              "Explore".toUpperCase(),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: primaryColor),
-            ),
-            const Text(
-              "Top destinations",
-              style: TextStyle(color: Colors.black),
-            )
-          ],
+        title: Center(
+          child: Column(
+            children: [
+              Text(
+                "Explore".toUpperCase(),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall!
+                    .copyWith(color: primaryColor),
+              ),
+              const Text(
+                "Top destinations",
+                style: TextStyle(color: Colors.black),
+              )
+            ],
+          )
         )
       ),
       body: SafeArea(

@@ -69,13 +69,14 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const SizedBox(),
-        title: Column(
-          children: [
-            Text(
-              "AI Travel Planner".toUpperCase(),
-            )
-          ],
+        title: const Center(
+          child: Column(
+            children: [
+              Text(
+                "AI Travel Planner"
+              )
+            ],
+          )
         )
       ),
       body: SafeArea(
@@ -118,6 +119,7 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
                 onDateSelected: onDateSelected
               ),
               //no. of days
+              /*
               Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -163,6 +165,7 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
                       ],
                     ),
                     const SizedBox(height: defaultPadding),
+                    */
               //activities types
               RequiredSectionTitle(
                         title: "Which activities do you prefer?", isRequired: true,),
