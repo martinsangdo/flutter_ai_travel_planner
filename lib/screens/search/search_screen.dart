@@ -1,3 +1,4 @@
+import 'package:ai_travel_planner/screens/auto_complete_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -42,6 +43,19 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: const SizedBox(),
+        title: Column(
+          children: [
+            Text(
+              "AI Planner".toUpperCase(),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: primaryColor),
+            )
+          ],
+        )),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
@@ -53,6 +67,10 @@ class _SearchScreenState extends State<SearchScreen> {
               const SizedBox(height: defaultPadding),
               //input box
               const SearchForm(),
+              
+
+
+
               const SizedBox(height: defaultPadding),
               Text(_showSearchResult ? "Search Results" : "Top Restaurants",
                   style: Theme.of(context).textTheme.titleLarge),
@@ -94,7 +112,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
-
+//input keyword to find cities
 class SearchForm extends StatefulWidget {
   const SearchForm({super.key});
 
@@ -108,6 +126,7 @@ class _SearchFormState extends State<SearchForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
+      //text box
       child: TextFormField(
         onChanged: (value) {
           // get data while typing
@@ -125,10 +144,26 @@ class _SearchFormState extends State<SearchForm> {
         style: Theme.of(context).textTheme.labelLarge,
         textInputAction: TextInputAction.search,
         decoration: const InputDecoration(
-          hintText: "What is the city or country?",
+          hintText: "What is the city or country that you want to go?",
           contentPadding: kTextFieldPadding,
         ),
       ),
+      //result list
+      
+
     );
   }
 }
+
+List<String> myItems = [
+  'Apple',
+  'Banana',
+  'Orange',
+  'Grape',
+  'Mango',
+  'Pineapple',
+  'Watermelon',
+  'Kiwi',
+  'Strawberry',
+  'Blueberry',
+];

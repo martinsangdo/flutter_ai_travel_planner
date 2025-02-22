@@ -33,6 +33,8 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
   final List<String> _budgetType = ['0 - 1000 USD', '< 2500 USD', '2500 USD +'];
   int _selectedBudgetIndex = 0;
   //
+  List<Map> _searchResults = [];  //list of search results of cities
+  //
   int _selectedTravelDays = 3;
   String _selectedTravelDate = '';  //yyyy-mm-dd
   //this is called after user chose the date
@@ -42,7 +44,7 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
       _selectedTravelDate = strSelectedDate + 'T00:00:00.000Z';
     });
   }
-  //
+  //begin planning
   _suggestThePlan() async{
 
   }
@@ -66,22 +68,15 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(100))),
-              backgroundColor: Colors.black.withOpacity(0.5),
-              padding: EdgeInsets.zero,
-            ),
-            child: const Icon(Icons.close, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
+        leading: const SizedBox(),
+        title: Column(
+          children: [
+            Text(
+              "AI Travel Planner".toUpperCase(),
+            )
+          ],
+        )
       ),
       body: SafeArea(
         top: false,
@@ -92,6 +87,31 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
             children: [
               const SizedBox(height: defaultPadding),
               const SearchForm(), //input the city keyword
+              //list of results
+              if (_searchResults.isNotEmpty)
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Material(
+                    elevation: 4.0,
+                    child: SizedBox(
+                      height: 200.0, // Set a maximum height for the dropdown
+                      child: ListView(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        children: myItems.map((option) {
+                          return InkWell(
+                            onTap: () {
+                              
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(option),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                ),
               const SizedBox(height: defaultPadding),
               //travel date
               DatePickerWidget(
