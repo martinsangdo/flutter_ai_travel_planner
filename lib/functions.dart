@@ -90,6 +90,7 @@ Map<String, dynamic> parseRawTripDetails(rawData){
           }
           results['dayResults'] = dayResults;
         }
+        //todo get hotel list
       }
     } else if (item is String){
       //this can be key or value

@@ -23,27 +23,94 @@ class _State extends State<CityDetailsScreen> {
   //call to get details of city
   _fetchRawCityDetails() async {
     String rawTripDetailsUrl = glb_wonder_uri + 'v4/plan/' + test_trip_id + '/__data.json';
-    final headers = {'Content-Type': 'application/json'}; // Important for JSON requests
     final response = await http.Client().post(Uri.parse(rawTripDetailsUrl), 
-        headers: headers, body: jsonEncode({
-          "org_url": rawTripDetailsUrl
-        }));
+        headers: COMMON_HEADER);
     if (response.statusCode != 200){
       debugPrint('Cannot get content from cloud');
     } else {
       Map<String, dynamic> objFromCloud = jsonDecode(response.body);
       if (objFromCloud['nodes'] != null){
         Map<String, dynamic> parsedData = parseRawTripDetails(objFromCloud['nodes'][1]['data']);
-        debugPrint(parsedData.toString());
+        //debugPrint(parsedData.toString());
+        String country = parsedData['country'];
+        debugPrint(country);
+        for (List<Map> oneDayActivities in parsedData['dayResults']){
+          for (Map activity in oneDayActivities){
+            Map searchResult = await _searchLocations(activity['name'], country);
+            if (searchResult['result'] == 'FAILED'){
+              debugPrint(activity['name']);
+              debugPrint(searchResult.toString());
+            }
+          }
+        }
       }
       return {'result': 'OK', 'id': objFromCloud['id']};
     }
+  }
+  //search city id in trip (which could be same country)
+  _searchLocations(orgPlaceName, country) async{
+    String placeName = orgPlaceName.toLowerCase().replaceAll("'", '').replaceAll(".", '');
+    country = country.toLowerCase();
+    final response = await http.Client().post(Uri.parse(glb_trip_uri + SEARCH_LOCATIONS), 
+        headers: COMMON_HEADER, body: jsonEncode({
+            "keyword": placeName,
+            "lang": "en",
+            "head": {
+                "locale": "en-US",
+                "extension": [
+                    {
+                        "name": "locale",
+                        "value": "en-US"
+                    },
+                    {
+                        "name": "platform",
+                        "value": "Online"
+                    },
+                    {
+                        "name": "currency",
+                        "value": "USD"
+                    },
+                    {
+                        "name": "user-agent",
+                        "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+                    }
+                ]
+            }
+        }));
+    if (response.statusCode != 200){
+      return {'result': 'FAILED', 'message': 'Cannot get content from cloud'};
+    } else {
+      Map objFromCloud = jsonDecode(response.body);
+      // debugPrint(objFromCloud.toString());
+      if (objFromCloud['data'] != null){
+        List data = objFromCloud['data'];
+        for (Map item in data){
+          if (item['type'] == 'sight' && item['word'] != null){
+            String word = item['word'].replaceAll('<em>', '').replaceAll('</em>', '').toLowerCase().replaceAll("'", '').replaceAll(".", '');
+            //debugPrint(word.toString());
+            if (word == placeName && item['districtName'] != null && 
+                item['districtName'].toLowerCase().contains(country)){
+              //this location matched
+              return {'result': 'OK', 'id': item['id'], 'name': orgPlaceName};
+            }
+          }
+        }
+      }
+
+      return {'result': 'FAILED', 'message': 'Not found'};
+    }
+  }
+  //
+  _test() async{
+    Map searchResult = await _searchLocations('Buckingham Palace', 'United Kingdom');
+    debugPrint(searchResult.toString());
   }
   //
   @override
   void initState() {
     super.initState();
     _fetchRawCityDetails();
+    //_test();
   }
   @override
   Widget build(BuildContext context) {

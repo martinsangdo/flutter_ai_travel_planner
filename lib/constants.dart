@@ -57,9 +57,8 @@ bool isPrimitive(dynamic value) {
 final Center kOrText = Center(
     child: Text("Or", style: TextStyle(color: titleColor.withOpacity(0.7))));
 //my customization
-Map<String, String> GET_HEADER = {
+Map<String, String> COMMON_HEADER = {
   'Content-Type': 'application/json',
-  "origin": "https://wonderplan.ai",
   "User-Agent": 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
 };
 
@@ -71,6 +70,7 @@ String glb_wonder_alias_uri = 'https://sonderback-us-6h6yp6ucpq-uc.a.run.app/v4/
 String glb_backend_uri = 'http://10.115.138.56:8080/';  //our internal BE
 String postGetChatboxContent = '';
 String postGetRawData = 'post_query_raw_url';
+String glb_trip_uri = 'https://us.trip.com/restapi/soa2/';
 //message
 String CHATBOT_UNAVAILABLE = 'The AI service is unavailable now. Please try in another time.';
 //
@@ -79,7 +79,8 @@ const GENERATE_NEW_TRIP_PLANNER = 'v4/trips/generate';
 const GET_HOTEL_LIST = 'v4/trips/accommondation?';
 const GET_GENERAL_TRIP_ID = '/v4/plan/v4-1739922077865-80005/__data.json';
 const GET_DAILY_ACTIVITIES = '';
-
+//trip
+const SEARCH_LOCATIONS = '20400/getGsMainSuggestForTripOnline';
 //for debugging
 bool isDebug = true;  //todo remove this flag when releasing
 String test_trip_id = 'v4-1739922077865-80005';   //to test the fixed city, avoid creating many trip ID
