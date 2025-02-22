@@ -4,6 +4,7 @@
     <application
         android:label="AI Travel Planner"
         android:name="${applicationName}"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name="com.xufagroup.ai_travel_planner.MainActivity"

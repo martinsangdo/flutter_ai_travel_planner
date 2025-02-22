@@ -94,4 +94,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-#run in Chrome: flutter run -d chrome
+#run in Chrome: flutter run -d chrome --web-browser-flag "--disable-web-security"

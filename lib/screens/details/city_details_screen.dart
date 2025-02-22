@@ -1,14 +1,48 @@
 import 'package:ai_travel_planner/components/expandable_widget.dart';
 import 'package:ai_travel_planner/screens/orderDetails/components/price_row.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 import '../../constants.dart';
 import 'components/tab_items.dart';
 import 'components/restaurrant_info.dart';
+import 'package:http/http.dart' as http;
+
 //display results after using AI planner
-class CityDetailsScreen extends StatelessWidget {
+class CityDetailsScreen extends StatefulWidget {
   const CityDetailsScreen({super.key});
 
+  @override
+  State<CityDetailsScreen> createState() =>
+      _State();
+}
+
+class _State extends State<CityDetailsScreen> {
+  List<Map<String, dynamic>> _rawCityDetails = [];  //will fetch data into this later
+  //call to get details of city
+  _fetchRawCityDetails() async {
+    String rawTripDetailsUrl = glb_wonder_uri + 'v4/plan/' + test_trip_id + '/__data.json';
+    final headers = {'Content-Type': 'application/json'}; // Important for JSON requests
+    final response = await http.Client().post(Uri.parse(rawTripDetailsUrl), 
+        headers: headers, body: jsonEncode({
+          "org_url": rawTripDetailsUrl
+        }));
+    if (response.statusCode != 200){
+      debugPrint('Cannot get content from cloud');
+    } else {
+      Map<String, dynamic> objFromCloud = jsonDecode(response.body);
+      if (objFromCloud['nodes'] != null){
+        debugPrint(objFromCloud['nodes'][1]['data'].toString());
+      }
+      return {'result': 'OK', 'id': objFromCloud['id']};
+    }
+  }
+  //
+  @override
+  void initState() {
+    super.initState();
+    _fetchRawCityDetails();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
