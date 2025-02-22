@@ -140,7 +140,7 @@ class _SearchFormState extends State<SearchForm> {
             // Once user pree on submit
           } else {}
         },
-        validator: requiredValidator.call,
+        // validator: requiredValidator.call,
         style: Theme.of(context).textTheme.labelLarge,
         textInputAction: TextInputAction.search,
         decoration: const InputDecoration(

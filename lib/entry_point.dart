@@ -1,4 +1,5 @@
 import 'package:ai_travel_planner/screens/addToOrder/planner_form.dart';
+import 'package:ai_travel_planner/screens/ai_screen.dart';
 import 'package:ai_travel_planner/screens/details/city_details_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +32,11 @@ class _EntryPointState extends State<EntryPoint> {
 
 // Screens
   final List<Widget> _screens = [
-    //const HomeScreen(),
+    const HomeScreen(),
     //const CityDetailsScreen(),
+    //const PlannerFormScreen(),
     const PlannerFormScreen(),
-    const SearchScreen(),
-    const OrderDetailsScreen(),
+    const AiChatScreen(),
     const ProfileScreen(),
   ];
 

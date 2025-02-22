@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:uuid/uuid.dart';
 
 // clolors that we use in our app
 const titleColor = Color(0xFF010F07);
@@ -38,26 +39,15 @@ const InputDecoration otpInputDecoration = InputDecoration(
 
 const kErrorBorderSide = BorderSide(color: Colors.red, width: 1);
 
-// Validator
-final passwordValidator = MultiValidator([
-  RequiredValidator(errorText: 'Password is required'),
-  MinLengthValidator(8, errorText: 'Password must be at least 8 digits long'),
-  PatternValidator(r'(?=.*?[#?!@$%^&*-/])',
-      errorText: 'Passwords must have at least one special character')
-]);
+//
+String generateUuid() {
+    const uuid = Uuid();
+    return uuid.v4(); // Generate a version 4 (random) UUID
+  }
 
-final emailValidator = MultiValidator([
-  RequiredValidator(errorText: 'Email is required'),
-  EmailValidator(errorText: 'Enter a valid email address')
-]);
-
-final requiredValidator =
-    RequiredValidator(errorText: 'This field is required');
-final matchValidator = MatchValidator(errorText: 'passwords do not match');
-
-final phoneNumberValidator = MinLengthValidator(10,
-    errorText: 'Phone Number must be at least 10 digits long');
-
+int getCurrentTimestampInSeconds() {
+  return DateTime.now().millisecondsSinceEpoch ~/ 1000;
+}
 // Common Text
 final Center kOrText = Center(
     child: Text("Or", style: TextStyle(color: titleColor.withOpacity(0.7))));
@@ -65,6 +55,10 @@ final Center kOrText = Center(
 String glb_booking_aid = '';  //todo replace our aid
 String glb_wonder_uri = 'https://wonderplan.ai/api/';
 String glb_wonder_alias_uri = 'https://sonderback-us-6h6yp6ucpq-uc.a.run.app/v4/trips/';
+String glb_backend_uri = '';  //our internal BE
+String postGetChatboxContent = '';
+//message
+String CHATBOT_UNAVAILABLE = 'The AI service is unavailable now. Please try in another time.';
 //
 const SEARCH_LOCATION = "v1/destinations?q=";
 const GENERATE_NEW_TRIP_PLANNER = 'v4/trips/generate';
