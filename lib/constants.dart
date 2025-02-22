@@ -62,7 +62,7 @@ Map<String, String> COMMON_HEADER = {
   "User-Agent": 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
 };
 
-String appDateFormat = 'dd/MM/yyyy';
+String APP_DATE_FORMAT = 'dd/MM/yyyy';
 //global variables
 String glb_booking_aid = '';  //todo replace our aid
 String glb_wonder_uri = 'https://wonderplan.ai/';

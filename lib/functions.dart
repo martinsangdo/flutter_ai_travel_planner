@@ -5,6 +5,37 @@ import 'dart:convert';
 
 import 'package:ai_travel_planner/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+//convert from "2025-02-27T00:00:00Z" to 'dd-MM-yyyy'
+String formatDate(String inputDate) {
+  // Parse the input date string, handling the 'Z' for UTC
+  DateTime dateTime = DateTime.parse(inputDate).toLocal(); // Convert to local time
+
+  // Format the date as 'dd-MM-yyyy'
+  DateFormat formatter = DateFormat(APP_DATE_FORMAT);
+  return formatter.format(dateTime);
+}
+
+//find all details of 1 place
+  Map findAttractionDetails(intAttractionId){
+    Map finalResult = {};
+    //1.1 image list https://uk.trip.com/restapi/soa2/18066/searchMomentList
+    
+    //2. list of reviews https://uk.trip.com/restapi/soa2/19707/getReviewSearch (with photos)
+
+    //(Things to do) day tours https://uk.trip.com/restapi/soa2/14580/json/getCrossRecommendProduct
+
+    //get tour details https://uk.trip.com/restapi/soa2/21052/getProductInfo
+
+    //4. related places (https://uk.trip.com/restapi/soa2/18762/getInternalLinkModuleList)
+
+    //(What to eat) https://www.trip.com/restapi/soa2/23044/getDestinationPageInfo.json
+
+    //recommend cities: saved in db with cities in a country
+
+    return finalResult;
+  }
 
 /*
 return:
@@ -35,12 +66,18 @@ Map<String, dynamic> parseRawTripDetails(rawData){
         if (item['countryMeta'] != null){
           results['country'] = rawData[rawData[item['countryMeta']]['name']];
         }
+        results['locationName'] = (results['city']!=null) ? results['city'] + ', ' + results['country'] : '';
         //begin date
         if (item['travelAt'] != null){
           results['travelAt'] = rawData[item['travelAt']];
+          results['travelDate'] = formatDate(results['travelAt']);
         }
         //currency
-
+        if (item['currency'] != null){
+          results['currency_name'] = rawData[rawData[item['currency']]['name']];
+          results['currency_code'] = rawData[rawData[item['currency']]['code']];
+          results['currency_detail'] = results['currency_name']!=null? results['currency_name'] + ' (' +results['currency_code'] +')' : '';
+        }
         //
         if (item['description'] != null){
           results['description'] = rawData[item['description']];
@@ -98,7 +135,5 @@ Map<String, dynamic> parseRawTripDetails(rawData){
     }
     index++;
   }
-    
-
   return results;
 }

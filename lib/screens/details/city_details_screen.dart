@@ -19,7 +19,9 @@ class CityDetailsScreen extends StatefulWidget {
 }
 
 class _State extends State<CityDetailsScreen> {
-  List<Map<String, dynamic>> _rawCityDetails = [];  //will fetch data into this later
+  Map<String, dynamic> _cityDetails = {};  //will fetch data into this later
+  bool _isLoading = true;
+
   //call to get details of city
   _fetchRawCityDetails() async {
     String rawTripDetailsUrl = glb_wonder_uri + 'v4/plan/' + test_trip_id + '/__data.json';
@@ -31,15 +33,24 @@ class _State extends State<CityDetailsScreen> {
       Map<String, dynamic> objFromCloud = jsonDecode(response.body);
       if (objFromCloud['nodes'] != null){
         Map<String, dynamic> parsedData = parseRawTripDetails(objFromCloud['nodes'][1]['data']);
-        //debugPrint(parsedData.toString());
+        if (parsedData['dayResults'] != null){
+          //we had data of this city, save it details in state
+          setState((){
+            _cityDetails = parsedData;
+            //debugPrint(_cityDetails.toString());
+            _isLoading = false;
+          });
+          //
+        }
+        
         String country = parsedData['country'];
-        debugPrint(country);
         for (List<Map> oneDayActivities in parsedData['dayResults']){
           for (Map activity in oneDayActivities){
             Map searchResult = await _searchLocations(activity['name'], country);
             if (searchResult['result'] == 'FAILED'){
-              debugPrint(activity['name']);
-              debugPrint(searchResult.toString());
+              //debugPrint('Cannot find this place: ' + activity['name']);
+            } else {
+              //debugPrint(searchResult.toString());
             }
           }
         }
@@ -101,16 +112,11 @@ class _State extends State<CityDetailsScreen> {
     }
   }
   //
-  _test() async{
-    Map searchResult = await _searchLocations('Buckingham Palace', 'United Kingdom');
-    debugPrint(searchResult.toString());
-  }
-  //
   @override
   void initState() {
     super.initState();
     _fetchRawCityDetails();
-    //_test();
+    findAttractionDetails(78699); //buckingham palace
   }
   @override
   Widget build(BuildContext context) {
@@ -122,28 +128,34 @@ class _State extends State<CityDetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: defaultPadding / 2),
+              if (_isLoading)
+                const Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "London, United Kingdom",
+                      _cityDetails['locationName']??'...',
                       style: Theme.of(context).textTheme.headlineSmall,
                       maxLines: 1,
                     ),
                     const SizedBox(height: defaultPadding),
                     Row(
                       children: [
-                        const DeliveryInfo(
+                        DeliveryInfo(
                           iconSrc: "assets/icons/delivery.svg",
-                          text: "USD"
+                          text: _cityDetails['currency_detail']??'...'
                         ),
                         const SizedBox(width: defaultPadding),
-                        const DeliveryInfo(
+                        DeliveryInfo(
                           iconSrc: "assets/icons/fast-delivery.svg",
-                          text: "19/2/2025 - 23/4/2025",
+                          text: _cityDetails['travelDate']??'...',
                         ),
                         const Spacer(),
                         OutlinedButton(

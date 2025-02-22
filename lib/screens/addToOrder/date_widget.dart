@@ -25,7 +25,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     );
 
     if (picked != null && picked != _selectedDate) {
-      widget.onDateSelected(DateFormat(appDateFormat).format(picked));
+      widget.onDateSelected(DateFormat(APP_DATE_FORMAT).format(picked));
       setState(() {
         _selectedDate = picked;
       });
@@ -40,7 +40,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         Expanded(
           child: Text(
             _selectedDate != null
-                ? DateFormat(appDateFormat).format(_selectedDate!)
+                ? DateFormat(APP_DATE_FORMAT).format(_selectedDate!)
                 : 'When do you want to travel?',
             style: Theme.of(context).textTheme.titleMedium
           ),

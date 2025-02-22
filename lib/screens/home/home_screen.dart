@@ -8,7 +8,6 @@ import '../../demo_data.dart';
 import '../details/city_details_screen.dart';
 import '../featured/featurred_screen.dart';
 import 'components/medium_card_list.dart';
-import 'components/promotion_banner.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

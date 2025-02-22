@@ -65,13 +65,10 @@ class _ItemsState extends State<TabItems> {
 
 final List<Tab> demoTabs = <Tab>[
   const Tab(
-    child: Text('Day 1'),
+    child: Text('Activities'),
   ),
   const Tab(
-    child: Text('Day 2'),
-  ),
-  const Tab(
-    child: Text('Day 3'),
+    child: Text('Hotels'),
   ),
 ];
 

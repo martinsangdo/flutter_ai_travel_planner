@@ -141,25 +141,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   
     //3. find all info of location
   }
-  //
-  _findAttractionDetails(){
-    
-    //1.1 image list https://uk.trip.com/restapi/soa2/18066/searchMomentList
-
-    //2. list of reviews https://uk.trip.com/restapi/soa2/19707/getReviewSearch (with photos)
-
-    //(Things to do) day tours https://uk.trip.com/restapi/soa2/14580/json/getCrossRecommendProduct
-
-    //get tour details https://uk.trip.com/restapi/soa2/21052/getProductInfo
-
-    //4. related places (https://uk.trip.com/restapi/soa2/18762/getInternalLinkModuleList)
-
-    //(What to eat) https://www.trip.com/restapi/soa2/23044/getDestinationPageInfo.json
-
-    //recommend cities: saved in db with cities in a country
-
-  }
-
 
   @override
   void initState() {
