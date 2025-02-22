@@ -34,7 +34,7 @@ class _PromotionBannerState extends State<PromotionBanner> {
             )
           : ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(12)),
-              child: Image.asset("assets/images/Banner.png"),
+              child: Image.network("https://ak-d.tripcdn.com/images/01A3g120008vy6sj89D8E_C_1200_800_Q70.jpg"),
             ),
     );
   }

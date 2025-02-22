@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class OnboardContent extends StatelessWidget {
   const OnboardContent({
@@ -18,7 +17,7 @@ class OnboardContent extends StatelessWidget {
         Expanded(
           child: AspectRatio(
             aspectRatio: 1,
-            child: SvgPicture.asset(illustration!),
+            child: Image.asset(illustration!),
           ),
         ),
         const SizedBox(height: 16),

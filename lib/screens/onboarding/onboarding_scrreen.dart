@@ -198,8 +198,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 // Demo data for our Onboarding screen
 List<Map<String, dynamic>> demoData = [
   {
-    "illustration": "assets/Illustrations/Illustrations_1.svg",
-    "title": "AI Travel Planner",
+    "illustration": "assets/images/ai_travel_logo_1024.png",
+    "title": "TravelGen AI Travel Planner",
     "text":
         "Loading ...",
   }

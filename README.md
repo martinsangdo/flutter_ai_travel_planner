@@ -1,1 +1,1 @@
-# AI Travel Planner
+# TravelGen AI Travel Planner
