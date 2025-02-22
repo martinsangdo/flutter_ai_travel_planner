@@ -2,47 +2,61 @@ import 'package:ai_travel_planner/screens/photo_gallery_fullscreen.dart';
 import 'package:flutter/material.dart';
 import '../../../components/cards/iteam_card.dart';
 import '../../../constants.dart';
-import '../../addToOrder/planner_form.dart';
 
 class TabItems extends StatefulWidget {
-  const TabItems({super.key});
+  List hotelList;
+
+  TabItems({super.key, required this.hotelList});
 
   @override
   State<TabItems> createState() => _ItemsState();
 }
 
 class _ItemsState extends State<TabItems> {
-  
+  int _currentTabIndex = 0;
+  //
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        //tab headers
         DefaultTabController(
-          length: demoTabs.length,
+          length: tabHeaders.length,
           child: TabBar(
             isScrollable: true,
             unselectedLabelColor: titleColor,
             labelStyle: Theme.of(context).textTheme.titleLarge,
-            onTap: (value) {
+            onTap: (tabIndex) {
               // you will get selected tab index
+              setState(() {
+                _currentTabIndex = tabIndex;
+              });
             },
-            tabs: demoTabs,
+            tabs: tabHeaders,
           ),
         ),
-        // SizedBox(height: defaultPadding),
+        //list in tab body
+        if (_currentTabIndex == 0 && widget.hotelList.isNotEmpty)
         ...List.generate(
-          demoData.length,
+          widget.hotelList.length,
           (index) => Padding(
             padding: const EdgeInsets.symmetric(
                 horizontal: defaultPadding, vertical: defaultPadding / 2),
             child: ItemCard(
-              title: demoData[index]["title"],
-              description: demoData[index]["description"],
-              image: demoData[index]["image"],
-              foodType: demoData[index]['foodType'],
-              price: demoData[index]["price"],
-              priceRange: demoData[index]["priceRange"],
+              title: widget.hotelList[index]["name"],
+              description: widget.hotelList[index]["description"],
+              image: widget.hotelList[index]["image"],
+              price: widget.hotelList[index]["price"],
+              url: widget.hotelList[index]["url"],
+              rating: widget.hotelList[index]["rating"],
               
               press: () => Navigator.push(
                 context,
@@ -63,9 +77,9 @@ class _ItemsState extends State<TabItems> {
   }
 }
 
-final List<Tab> demoTabs = <Tab>[
+final List<Tab> tabHeaders = <Tab>[
   const Tab(
-    child: Text('Activities'),
+    child: Text('Attractions'),
   ),
   const Tab(
     child: Text('Hotels'),

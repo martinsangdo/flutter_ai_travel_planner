@@ -23,7 +23,7 @@ class CityDetailsScreen extends StatelessWidget {
               RestaurantInfo(),
               SizedBox(height: defaultPadding),
               FeaturedItems(),  //photo list
-              TabItems(),  //including tabs
+              // TabItems(),  //including tabs
             ],
           ),
         ),

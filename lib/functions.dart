@@ -6,7 +6,26 @@ import 'dart:convert';
 import 'package:ai_travel_planner/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
+//add X days to the org date
+String addDaysToDate(String dateString, int daysToAdd) {
+  try {
+    // 1. Parse the input date string (ISO 8601 format).
+    DateTime dateTime = DateTime.parse(dateString);
+
+    // 2. Add the specified number of days.
+    DateTime newDateTime = dateTime.add(Duration(days: daysToAdd));
+
+    // 3. Format the new date to "yyyy-MM-dd".
+    String formattedDate = DateFormat('yyyy-MM-dd').format(newDateTime);
+
+    return formattedDate;
+  } catch (e) {
+    // Handle parsing errors (e.g., invalid date format).
+    return 'Invalid date format'; // Or throw an exception if you prefer.
+  }
+}
 //convert from "2025-02-27T00:00:00Z" to 'dd-MM-yyyy'
 String formatDate(String inputDate) {
   // Parse the input date string, handling the 'Z' for UTC
@@ -45,7 +64,7 @@ return:
 - currency
 - 
 */
-Map<String, dynamic> parseRawTripDetails(rawData){
+Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
   Map<String, dynamic> results = {};
   int index = 0;
   for (dynamic item in rawData){
@@ -128,7 +147,6 @@ Map<String, dynamic> parseRawTripDetails(rawData){
           }
           results['dayResults'] = dayResults;
         }
-        //todo get hotel list
       }
     } else if (item is String){
       //this can be key or value
@@ -136,5 +154,38 @@ Map<String, dynamic> parseRawTripDetails(rawData){
     }
     index++;
   }
+  //get hotel list
+  results['hotelList'] = await _getHotelList(results['city'], results['travelAt']);
+  //
   return results;
+}
+//query hotel list in city
+Future<List> _getHotelList(city, travelDate) async {
+  String endDate = addDaysToDate(travelDate, DURATION_DAYS);  //add 5 days as default
+  travelDate = travelDate.replaceAll('T00:00:00Z', '');
+  String hotelListUrl = glb_wonder_uri + 'api/v4/trips/accommondation?city='+city+'&start='+
+        travelDate+'&end='+endDate;
+  //debugPrint(hotelListUrl);
+  final response = await http.Client().get(Uri.parse(hotelListUrl), 
+        headers: COMMON_HEADER);
+  if (response.statusCode != 200){
+    debugPrint('Cannot get content from cloud');
+    return [];
+  } else {
+    Map<String, dynamic> objFromCloud = jsonDecode(response.body);
+    //debugPrint(objFromCloud.toString());
+    List rawData = objFromCloud['data'];
+    List transformedList = [];  
+    for (Map item in rawData){
+      transformedList.add({
+        'name': item["name"],
+        'description': item['location']['address'],
+        'image': item["images"][0],
+        'price': item["price"].isNotEmpty?item["price"]+' /night': '',
+        'rating': item['ratingScore'],
+        'url': item["url"]
+      });
+    }
+    return transformedList;
+  }
 }

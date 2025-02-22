@@ -22,6 +22,7 @@ class _State extends State<CityDetailsScreen> {
   Map<String, dynamic> _cityDetails = {};  //will fetch data into this later
   bool _isLoading = true;
   Map _budgets = {};
+  List _hotelList = [];
 
   //call to get details of city
   _fetchRawCityDetails() async {
@@ -33,13 +34,13 @@ class _State extends State<CityDetailsScreen> {
     } else {
       Map<String, dynamic> objFromCloud = jsonDecode(response.body);
       if (objFromCloud['nodes'] != null){
-        Map<String, dynamic> parsedData = parseRawTripDetails(objFromCloud['nodes'][1]['data']);
+        Map<String, dynamic> parsedData = await parseRawTripDetails(objFromCloud['nodes'][1]['data']);
         if (parsedData['dayResults'] != null){
           //we had data of this city, save it details in state
           setState((){
             _cityDetails = parsedData;
             _budgets = _cityDetails['budgets'];
-            // debugPrint(_budgets.toString());
+            _hotelList = _cityDetails['hotelList'];
             _isLoading = false;
           });
           //
@@ -238,7 +239,7 @@ class _State extends State<CityDetailsScreen> {
               const SizedBox(height: defaultPadding / 2),
               ],
               //including tabs inside
-              const TabItems(),
+              TabItems(hotelList: _hotelList,),
             ],
           ),
         ),

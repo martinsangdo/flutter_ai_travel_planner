@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../constants.dart';
 
 import '../small_dot.dart';
 
+//used to show hotel or attractions in city detail page (tab region)
 class ItemCard extends StatelessWidget {
   const ItemCard({
     super.key,
     required this.title,
     required this.description,
     required this.image,
-    required this.foodType,
     required this.price,
-    required this.priceRange,
     required this.press,
+    this.url,
+    this.rating
   });
 
-  final String? title, description, image, foodType, priceRange;
-  final double? price;
+  final String? title, description, image, url, price;
+  final double? rating;
   final VoidCallback press;
 
   @override
@@ -57,7 +59,7 @@ class ItemCard extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge!
-                          .copyWith(fontSize: 18),
+                          .copyWith(fontSize: 14),
                     ),
                     Text(
                       description!,
@@ -67,19 +69,20 @@ class ItemCard extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Text(
-                          priceRange!,
-                          style: textStyle,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: defaultPadding / 2),
-                          child: SmallDot(),
-                        ),
-                        Text(foodType!, style: textStyle),
+                        SvgPicture.asset(
+                            "assets/icons/rating.svg",
+                            height: 20,
+                            width: 20,
+                            colorFilter: const ColorFilter.mode(
+                              primaryColor,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        const SizedBox(width: 8),
+                        Text("Rating: $rating", style: const TextStyle(color: Colors.black),),
                         const Spacer(),
                         Text(
-                          "USD$price",
+                          price??'',
                           style: Theme.of(context)
                               .textTheme
                               .labelLarge!

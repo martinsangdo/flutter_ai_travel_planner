@@ -63,6 +63,7 @@ Map<String, String> COMMON_HEADER = {
 };
 
 String APP_DATE_FORMAT = 'dd/MM/yyyy';
+int DURATION_DAYS = 5;   //no. of days that user will travel
 //global variables
 String glb_booking_aid = '';  //todo replace our aid
 String glb_wonder_uri = 'https://wonderplan.ai/';
