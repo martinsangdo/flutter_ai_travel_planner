@@ -87,18 +87,19 @@ Map<String, dynamic> parseRawTripDetails(rawData){
         }
         // budgets
         if (item['budget'] != null){
+          results['budgets'] = {};  //all budget info
           int budgetMetaIndex = item['budget'];
           Map<String, dynamic> budgetMeta = rawData[budgetMetaIndex];
           for (String key in budgetMeta.keys){
-            if (key == 'summary'){
+            if (key == 'summary' || key == ''){
               continue;
             }
-            results[key] = [];
+            results['budgets'][key] = [];
             //get list of budget types
             for (int accommodationIndex in rawData[budgetMeta[key]]){
-              results[key].add({
+              results['budgets'][key].add({
                 'type': rawData[rawData[accommodationIndex]['type']],
-                'priceUsd': rawData[rawData[accommodationIndex]['priceUsd']]
+                'priceUsd': double.parse(rawData[rawData[accommodationIndex]['priceUsd']])
               });
             }
           }

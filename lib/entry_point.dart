@@ -30,8 +30,8 @@ class _EntryPointState extends State<EntryPoint> {
 
 // Screens
   final List<Widget> _screens = [
-    const HomeScreen(),
-    //const CityDetailsScreen(),
+    //const HomeScreen(),
+    const CityDetailsScreen(),
     const PlannerFormScreen(),
     const AiChatScreen(),
     const ProfileScreen(),

@@ -72,7 +72,7 @@ class _PhotoGalleryFullscreenState extends State<PhotoGalleryFullscreen> {
             top: 40,
             left: 20,
             child: IconButton(
-              icon: const Icon(Icons.close, color: Colors.white),
+              icon: const Icon(Icons.close, color: Colors.blue),
               onPressed: () {
                 Navigator.pop(context); // Close the fullscreen gallery
               },
@@ -85,7 +85,7 @@ class _PhotoGalleryFullscreenState extends State<PhotoGalleryFullscreen> {
             bottom: 0,
             child: Center(
               child: IconButton(
-                icon: const Icon(Icons.chevron_left, color: Colors.white),
+                icon: const Icon(Icons.chevron_left, color: Colors.blue),
                 onPressed: () {
                   _pageController.previousPage(
                     duration: const Duration(milliseconds: 300),
@@ -101,7 +101,7 @@ class _PhotoGalleryFullscreenState extends State<PhotoGalleryFullscreen> {
             bottom: 0,
             child: Center(
               child: IconButton(
-                icon: const Icon(Icons.chevron_right, color: Colors.white),
+                icon: const Icon(Icons.chevron_right, color: Colors.blue),
                 onPressed: () {
                   _pageController.nextPage(
                     duration: const Duration(milliseconds: 300),

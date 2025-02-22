@@ -43,7 +43,7 @@ class _BigCardImageSlideState extends State<BigCardImageSlide> {
                 widget.images.length,
                 (index) => DotIndicator(
                   isActive: intialIndex == index,
-                  activeColor: Colors.white,
+                  activeColor: Colors.yellow,
                   inActiveColor: Colors.white,
                 ),
               ),

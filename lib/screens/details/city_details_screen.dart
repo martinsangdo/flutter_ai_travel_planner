@@ -21,6 +21,7 @@ class CityDetailsScreen extends StatefulWidget {
 class _State extends State<CityDetailsScreen> {
   Map<String, dynamic> _cityDetails = {};  //will fetch data into this later
   bool _isLoading = true;
+  Map _budgets = {};
 
   //call to get details of city
   _fetchRawCityDetails() async {
@@ -37,7 +38,8 @@ class _State extends State<CityDetailsScreen> {
           //we had data of this city, save it details in state
           setState((){
             _cityDetails = parsedData;
-            //debugPrint(_cityDetails.toString());
+            _budgets = _cityDetails['budgets'];
+            // debugPrint(_budgets.toString());
             _isLoading = false;
           });
           //
@@ -173,101 +175,68 @@ class _State extends State<CityDetailsScreen> {
               ),
               const SizedBox(height: defaultPadding),
               //description
-              const Padding(padding: const EdgeInsets.all(defaultPadding / 2),
+              Padding(padding: const EdgeInsets.all(defaultPadding / 2),
                 child: Column(children: [
                   Text(
-                    "London, the vibrant capital of England and the United Kingdom, is a global city renowned for its rich history, iconic landmarks, diverse culture, and modern advancements.",
-                    style: TextStyle(color: Colors.black),
+                    _cityDetails['description']??'',
+                    style: const TextStyle(color: Colors.black),
                   ),
                 ],
                 ),
               ),
               //history
-              const Padding(padding: const EdgeInsets.all(defaultPadding / 2),
+              Padding(padding: const EdgeInsets.all(defaultPadding / 2),
                 child: Column(children: [
                   Text(
-                    "London's history stretches back over two millennia, from its Roman origins to its role as a pivotal center of the British Empire. Its landmarks, including the Tower of London and Buckingham Palace, bear witness to its long and fascinating past.",
-                    style: TextStyle(color: Colors.black),
+                    _cityDetails['history']??'',
+                    style: const TextStyle(color: Colors.black),
                   ),
                 ],
                 ),
               ),
-              //Accommodation
-              ExpandableWidget(
-                initialExpanded: true, // Set to true if you want it expanded initially
-                header: Container(
-                  padding: const EdgeInsets.all(defaultPadding / 2),
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(155, 194, 222, 162),
+              //Budgets
+              Padding(
+                padding: const EdgeInsets.all(defaultPadding/2),
+                child:
+                  Text(
+                    "Budgets",
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Accommodation',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Icon(Icons.arrow_downward, color: Colors.white), // or use an animated icon
-                    ],
-                  ),
-                ),
-                content: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: defaultPadding),
-                  child: Column(
-                    children: [
-                      PriceRow(text: "Hostel", price: 30),
-                      SizedBox(height: defaultPadding / 2),
-                      PriceRow(text: "Budget Hotel", price: 80),
-                      SizedBox(height: defaultPadding / 2),
-                      PriceRow(text: "Mid-range Hotel", price: 150),
-                      SizedBox(height: defaultPadding / 2),
-                      PriceRow(text: "Boutique Hotel", price: 250),
-                      SizedBox(height: defaultPadding / 2),
-                      PriceRow(text: "Airbnb (private room)", price: 70),
-                      SizedBox(height: defaultPadding / 2),
-                    ]
-                  ),
-                ),
               ),
               const SizedBox(height: defaultPadding / 2),
-              //Transportation
-              ExpandableWidget(
-                initialExpanded: true, // Set to true if you want it expanded initially
-                header: Container(
-                  padding: const EdgeInsets.all(defaultPadding / 2),
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(155, 194, 222, 162),
+              for (String budgetKey in _budgets.keys.toList())...[
+                ExpandableWidget(
+                  initialExpanded: true, // Set to true if you want it expanded initially
+                  header: Container(
+                    padding: const EdgeInsets.all(defaultPadding / 2),
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(155, 194, 222, 162),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          budgetKey.toUpperCase(),
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        const Icon(Icons.arrow_downward, color: Colors.white), // or use an animated icon
+                      ],
+                    ),
                   ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Transportation',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Icon(Icons.arrow_downward, color: Colors.white), // or use an animated icon
-                    ],
-                  ),
-                ),
-                content: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: defaultPadding),
-                  child: Column(
-                    children: [
-                      PriceRow(text: "Hostel", price: 30),
-                      SizedBox(height: defaultPadding / 2),
-                      PriceRow(text: "Budget Hotel", price: 80),
-                      SizedBox(height: defaultPadding / 2),
-                      PriceRow(text: "Mid-range Hotel", price: 150),
-                      SizedBox(height: defaultPadding / 2),
-                      PriceRow(text: "Boutique Hotel", price: 250),
-                      SizedBox(height: defaultPadding / 2),
-                      PriceRow(text: "Airbnb (private room)", price: 70),
-                      SizedBox(height: defaultPadding / 2),
-                    ]
+                  content: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                    child: Column(
+                      children: [
+                        for (Map budgetInfo in _budgets[budgetKey]) ...[
+                          PriceRow(text: budgetInfo['type'], price: budgetInfo['priceUsd']),
+                          const SizedBox(height: defaultPadding / 2),
+                        ],
+                      ]
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: defaultPadding),
+              const SizedBox(height: defaultPadding / 2),
+              ],
               //including tabs inside
               const TabItems(),
             ],
