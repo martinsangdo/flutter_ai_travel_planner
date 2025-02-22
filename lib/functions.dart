@@ -48,21 +48,48 @@ Map<String, dynamic> parseRawTripDetails(rawData){
         if (item['history'] != null){
           results['history'] = rawData[item['history']];
         }
-        //accommodation budget
+        // budgets
         if (item['budget'] != null){
-          int accommodationsBudgetIndex = item['budget'];
-          results['accommodations'] = [];
-          //get list of accommodations
-          Map acommodationMetaIndexes = rawData[accommodationsBudgetIndex];
-          debugPrint(acommodationMetaIndexes.toString());
-          for (int accommodationIndex in rawData[acommodationMetaIndexes['accommodations']]){
-            results['accommodations'].add({
-              'type': rawData[rawData[accommodationIndex]['type']],
-              'priceUsd': rawData[rawData[accommodationIndex]['priceUsd']]
-            });
+          int budgetMetaIndex = item['budget'];
+          Map<String, dynamic> budgetMeta = rawData[budgetMetaIndex];
+          for (String key in budgetMeta.keys){
+            if (key == 'summary'){
+              continue;
+            }
+            results[key] = [];
+            //get list of budget types
+            for (int accommodationIndex in rawData[budgetMeta[key]]){
+              results[key].add({
+                'type': rawData[rawData[accommodationIndex]['type']],
+                'priceUsd': rawData[rawData[accommodationIndex]['priceUsd']]
+              });
+            }
           }
         }
-
+        /*
+        {days 80} -> 
+        list of days [81, 160, 254] -> 
+        {days: 8 -> day index, activities: 82 -> [83, 100, ] -> 
+        {'location': 84 -> location name, 'durationMin': 105 -> mins, 'description': 91}}
+        */
+        //get list of activities in each day
+        if (item['tripResult'] != null){
+          List<dynamic> daysMetaIndexes = rawData[rawData[item['tripResult']]['days']]; //[81, 160, 254]
+          List dayResults = [];
+          for (int dayMetaIndex in daysMetaIndexes){  //dayMetaIndex: day 1, 2, ...
+            List<Map> dayActivities = []; //activities in 1 day
+            List<dynamic> activityMetaIndexes = rawData[rawData[dayMetaIndex]['activities']];
+            for (int activityMetaIndex in activityMetaIndexes){
+              dayActivities.add({
+                'name': rawData[rawData[activityMetaIndex]['location']], //activity name
+                'description': rawData[rawData[activityMetaIndex]['description']],  //activity description
+                'duration': rawData[rawData[activityMetaIndex]['durationMin']]  //activity duration, in minutes
+              });
+            }
+            dayResults.add(dayActivities);
+          }
+          results['dayResults'] = dayResults;
+        }
       }
     } else if (item is String){
       //this can be key or value
