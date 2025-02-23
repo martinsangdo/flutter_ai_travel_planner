@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../constants.dart';
-
-import '../small_dot.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 //used to show hotel or attractions in city detail page (tab region)
 class ItemCard extends StatelessWidget {
@@ -13,14 +11,20 @@ class ItemCard extends StatelessWidget {
     required this.description,
     required this.image,
     required this.price,
-    required this.press,
     this.url,
     this.rating
   });
 
   final String? title, description, image, url, price;
   final double? rating;
-  final VoidCallback press;
+  //
+  _openWebBrowser() async{
+    if (url!.isNotEmpty){
+      if (!await launchUrlString(url!, mode: LaunchMode.externalApplication)) {
+        throw Exception('Could not launch $url');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +34,7 @@ class ItemCard extends StatelessWidget {
         );
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(8)),
-      onTap: press,
+      onTap: _openWebBrowser,
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: SizedBox(

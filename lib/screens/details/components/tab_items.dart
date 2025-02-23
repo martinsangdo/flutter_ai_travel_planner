@@ -57,18 +57,17 @@ class _ItemsState extends State<TabItems> {
               price: widget.hotelList[index]["price"],
               url: widget.hotelList[index]["url"],
               rating: widget.hotelList[index]["rating"],
-              
-              press: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => 
-                  //const PlannerFormScreen(),
-                  PhotoGalleryFullscreen(
-                    imageUrls: photoGalleryUrls,
-                    initialIndex: 1, // Optional: start at a specific image
-                  ),
-                ),
-              ),
+              // press: () => Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => 
+              //       //const PlannerFormScreen(),
+              //       PhotoGalleryFullscreen(
+              //         imageUrls: photoGalleryUrls,
+              //         initialIndex: 1, // Optional: start at a specific image
+              //       ),
+              //     ),
+              // ),
             ),
           ),
         ),
