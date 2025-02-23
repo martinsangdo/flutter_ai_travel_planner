@@ -103,8 +103,11 @@ const GET_DAILY_ACTIVITIES = '';
 //trip
 const SEARCH_LOCATIONS = '20400/getGsMainSuggestForTripOnline';
 const GET_ATTRACTION_OFFICIAL_PHOTOS = '19913/getTripPoiPhotoGallery';
+const GET_THINGS_TODO = '14580/json/getCrossRecommendProduct';
+
 //for debugging
 bool isDebug = true;  //todo remove this flag when releasing
 String test_trip_id = 'v4-1739922077865-80005';   //to test the fixed city, avoid creating many trip ID
 int test_attraction_id = 78699;
 int test_city_id = 309; //london
+String test_currency = 'USD';

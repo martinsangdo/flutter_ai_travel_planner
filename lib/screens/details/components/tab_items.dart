@@ -1,8 +1,8 @@
-import 'package:ai_travel_planner/screens/photo_gallery_fullscreen.dart';
 import 'package:flutter/material.dart';
 import '../../../components/cards/item_card.dart';
 import '../../../constants.dart';
 
+//show tabs in city detail page
 class TabItems extends StatefulWidget {
   List hotelList;
   List attractions;
@@ -19,8 +19,6 @@ class _ItemsState extends State<TabItems> {
   @override
   void initState() {
     super.initState();
-      setState(() {
-    });
   }
 
   @override
@@ -57,6 +55,7 @@ class _ItemsState extends State<TabItems> {
               description: widget.attractions[index]["description"],
               image: widget.attractions[index]["image"],
               duration: widget.attractions[index]["duration"],
+              itemType: 'attraction',
             ),
           ),
         ),  //end attraction list
@@ -72,7 +71,8 @@ class _ItemsState extends State<TabItems> {
               image: widget.hotelList[index]["image"],
               price: widget.hotelList[index]["price"],
               url: widget.hotelList[index]["url"],
-              rating: widget.hotelList[index]["rating"]
+              rating: widget.hotelList[index]["rating"],
+              itemType: 'hotel'
             ),
           ),
         ), //end hotel list
@@ -89,15 +89,3 @@ final List<Tab> tabHeaders = <Tab>[
     child: Text('Hotels'),
   ),
 ];
-
-final List<Map<String, dynamic>> demoData = List.generate(
-  7,
-  (index) => {
-    "image": "https://ak-d.tripcdn.com/images/01029120008fcnhm923E2_C_180_240_Q70.webp",
-    "title": "Cookie Sandwich",
-    "description": "Shortbread, chocolate turtle cookies, and red velvet.",
-    "price": 7.4,
-    "foodType": "Chinese",
-    "priceRange": "\$" * 2,
-  },
-);

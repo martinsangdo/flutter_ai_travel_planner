@@ -1,5 +1,4 @@
 import 'package:ai_travel_planner/screens/details/components/photo_item_card.dart';
-import 'package:ai_travel_planner/screens/details/components/tab_items.dart';
 import 'package:ai_travel_planner/screens/photo_gallery_fullscreen.dart';
 import 'package:flutter/material.dart';
 

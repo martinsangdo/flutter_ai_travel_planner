@@ -6,21 +6,26 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 //used to show hotel or attractions in city detail page (tab region)
 class ItemCard extends StatefulWidget {
-  const ItemCard({
+  ItemCard({
     super.key,
     required this.title,
-    required this.description,
     required this.image,
+    required this.itemType, //attraction, hotel, thing to do, etc.
+    this.description,
     this.price,
     this.url,
     this.rating,
     this.duration,
-    this.trip_id
+    this.trip_id,
+    this.currency,
+    this.reviews
   });
 
-  final String? title, description, image, url, price;
+  final String? title, description, image, url, price, currency, reviews;
   final int? duration, trip_id;
   final double? rating;
+  String itemType;
+
   @override
   State<ItemCard> createState() => _OnboardingScreenState();
 }
@@ -37,17 +42,17 @@ class _OnboardingScreenState extends State<ItemCard> {
   }
   //depend on which tab, we process when user clicks on each item
   _processItemClicked() async{
-    if (widget.url != null){
+    if (widget.url != null && widget.itemType == 'hotel'){
       //open new web browser
       if (!await launchUrlString(widget.url!, mode: LaunchMode.externalApplication)) {
         throw Exception('Could not launch $widget.url');
       }
-    } else {
+    } else if (widget.itemType == 'attraction'){
       if (context.mounted) {
         //navigate to attraction detail page
         Navigator.pushReplacement(context, 
           MaterialPageRoute(builder: (context) => 
-          AttractionDetailsScreen(trip_id: widget.trip_id!, name: widget.title!)));
+          AttractionDetailsScreen(trip_id: widget.trip_id!, name: widget.title!, currency: widget.currency!,)));
       }
     }
   }
@@ -92,7 +97,7 @@ class _OnboardingScreenState extends State<ItemCard> {
                           .copyWith(fontSize: 14),
                     ),
                     Text(
-                      widget.description!,
+                      widget.description??'',
                       style: Theme.of(context).textTheme.bodyMedium,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -111,7 +116,7 @@ class _OnboardingScreenState extends State<ItemCard> {
                           ),
                           const SizedBox(width: 8),
                           Text("Rating: $widget.rating", style: const TextStyle(color: Colors.black),),
-                        ],
+                        ],//end rating
                         if (widget.duration != null)...[
                           SvgPicture.asset(
                             "assets/icons/clock.svg",
@@ -124,7 +129,20 @@ class _OnboardingScreenState extends State<ItemCard> {
                           ),
                           const SizedBox(width: 8),
                           Text("$widget.duration min", style: const TextStyle(color: Colors.black),),
-                        ],
+                        ],//end duration
+                        if (widget.reviews != null)...[
+                          SvgPicture.asset(
+                            "assets/icons/profile.svg",
+                            height: 20,
+                            width: 20,
+                            colorFilter: const ColorFilter.mode(
+                              primaryColor,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(widget.reviews??'', style: const TextStyle(color: Colors.black),),
+                        ],//end reviews
                         const Spacer(),
                         Text(
                           widget.price??'',
@@ -132,7 +150,7 @@ class _OnboardingScreenState extends State<ItemCard> {
                               .textTheme
                               .labelLarge!
                               .copyWith(color: primaryColor),
-                        )
+                        ) //end price
                       ],
                     ),
                   ],

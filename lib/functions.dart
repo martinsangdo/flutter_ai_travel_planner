@@ -245,7 +245,8 @@ _searchLocations(orgPlaceName, country) async{
       return {'result': 'FAILED', 'message': 'Not found'};
     }
   }
-  //some functions for attraction details, return list of photo urls
+  //========== some functions for attraction details
+  //return list of photo urls
   getAttractionPhotos(trip_id) async{
     if (trip_id == null){
       return [];
@@ -270,4 +271,44 @@ _searchLocations(orgPlaceName, country) async{
       }
     }
     return photoUrls;
+  }
+  //get tours
+  getAttractionThings2Do(trip_id, currency) async{
+    if (trip_id == null){
+      return [];
+    }
+    List thingsTodoList = [];
+    //
+    final response = await http.Client().post(Uri.parse(glb_trip_uri + GET_THINGS_TODO), 
+        headers: COMMON_HEADER, body: jsonEncode({
+          "clientInfo": {
+              "currency": currency,
+              "locale": "en-US",
+              "channelId": 116,
+              "platformId": 24
+          },
+          "enviroment": "PROD",
+          "sceneId": trip_id,
+          "sourcePageType": 11,
+          "head": {
+              "cid": "09034019213961169233"
+          }
+      }));
+    if (response.statusCode != 200){
+      return {'result': 'FAILED', 'message': 'Cannot get content from cloud'};
+    } else {
+      Map objFromCloud = jsonDecode(response.body);
+      if (objFromCloud['data'] != null && objFromCloud['data']['recommends'] != null && objFromCloud['data']['recommends'].length > 0){
+        for (Map item in objFromCloud['data']['recommends'][0]["newProducts"]){
+          thingsTodoList.add({
+            'name': item['name'],
+            'reviews': item['reviews'],
+            'price': item['minPrice']['price'].toString() + ' ' + item['minPrice']['currency'],
+            'imgUrl': item['imgInfo']['imgUrl'],
+            'imgUrls': item['mediaInfo']['images'].map((name) => name['url']).toList()
+          });
+        }
+      }
+    }
+    return thingsTodoList;
   }
