@@ -134,16 +134,16 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
           List<dynamic> daysMetaIndexes = rawData[rawData[item['tripResult']]['days']]; //[81, 160, 254]
           List dayResults = [];
           for (int dayMetaIndex in daysMetaIndexes){  //dayMetaIndex: day 1, 2, ...
-            List<Map> dayActivities = []; //activities in 1 day
             List<dynamic> activityMetaIndexes = rawData[rawData[dayMetaIndex]['activities']];
             for (int activityMetaIndex in activityMetaIndexes){
-              dayActivities.add({
+              //add all, no follow by each day
+              dayResults.add({
                 'name': rawData[rawData[activityMetaIndex]['location']], //activity name
                 'description': rawData[rawData[activityMetaIndex]['description']],  //activity description
-                'duration': rawData[rawData[activityMetaIndex]['durationMin']]  //activity duration, in minutes
+                'duration': rawData[rawData[activityMetaIndex]['durationMin']],  //activity duration, in minutes
+                'image': rawData[rawData[activityMetaIndex]['imageUrl']]
               });
             }
-            dayResults.add(dayActivities);
           }
           results['dayResults'] = dayResults;
         }
@@ -156,6 +156,8 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
   }
   //get hotel list
   results['hotelList'] = await _getHotelList(results['city'], results['travelAt']);
+  //get attraction list
+  results['attractions'] = await _findMatchedAttractions(results['country'], results['dayResults']);
   //
   return results;
 }
@@ -189,3 +191,77 @@ Future<List> _getHotelList(city, travelDate) async {
     return transformedList;
   }
 }
+//query another service to find attraction detail (optionsl)
+_findMatchedAttractions(String country, List orgAttractions) async{
+  List attractions = [];  //init
+  for (Map item in orgAttractions){
+    Map searchResult = await _searchLocations(item['name'], country);
+    if (searchResult['result'] == 'FAILED'){
+      //debugPrint('Cannot find this place: ' + item['name']);
+    } else {
+      //debugPrint(searchResult.toString());
+      //add into the final list
+      attractions.add({
+        'trip_id': searchResult['id'],
+        'name': item['name'],
+        'description': item['description'],
+        'duration': item['duration'],
+        'image': item['image']
+      });
+    }
+  }
+  return attractions;
+}
+//search city id in trip (which could be same country)
+_searchLocations(orgPlaceName, country) async{
+    String placeName = orgPlaceName.toLowerCase().replaceAll("'", '').replaceAll(".", '');
+    country = country.toLowerCase();
+    final response = await http.Client().post(Uri.parse(glb_trip_uri + SEARCH_LOCATIONS), 
+        headers: COMMON_HEADER, body: jsonEncode({
+            "keyword": placeName,
+            "lang": "en",
+            "head": {
+                "locale": "en-US",
+                "extension": [
+                    {
+                        "name": "locale",
+                        "value": "en-US"
+                    },
+                    {
+                        "name": "platform",
+                        "value": "Online"
+                    },
+                    {
+                        "name": "currency",
+                        "value": "USD"
+                    },
+                    {
+                        "name": "user-agent",
+                        "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+                    }
+                ]
+            }
+        }));
+    if (response.statusCode != 200){
+      return {'result': 'FAILED', 'message': 'Cannot get content from cloud'};
+    } else {
+      Map objFromCloud = jsonDecode(response.body);
+      // debugPrint(objFromCloud.toString());
+      if (objFromCloud['data'] != null){
+        List data = objFromCloud['data'];
+        for (Map item in data){
+          if (item['type'] == 'sight' && item['word'] != null){
+            String word = item['word'].replaceAll('<em>', '').replaceAll('</em>', '').toLowerCase().replaceAll("'", '').replaceAll(".", '');
+            //debugPrint(word.toString());
+            if (word == placeName && item['districtName'] != null && 
+                item['districtName'].toLowerCase().contains(country)){
+              //this location matched
+              return {'result': 'OK', 'id': item['id'], 'name': orgPlaceName};
+            }
+          }
+        }
+      }
+
+      return {'result': 'FAILED', 'message': 'Not found'};
+    }
+  }

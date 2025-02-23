@@ -10,12 +10,14 @@ class ItemCard extends StatelessWidget {
     required this.title,
     required this.description,
     required this.image,
-    required this.price,
+    this.price,
     this.url,
-    this.rating
+    this.rating,
+    this.duration
   });
 
   final String? title, description, image, url, price;
+  final int? duration;
   final double? rating;
   //
   _openWebBrowser() async{
@@ -73,7 +75,8 @@ class ItemCard extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        SvgPicture.asset(
+                        if (rating != null)...[
+                          SvgPicture.asset(
                             "assets/icons/rating.svg",
                             height: 20,
                             width: 20,
@@ -82,8 +85,22 @@ class ItemCard extends StatelessWidget {
                               BlendMode.srcIn,
                             ),
                           ),
-                        const SizedBox(width: 8),
-                        Text("Rating: $rating", style: const TextStyle(color: Colors.black),),
+                          const SizedBox(width: 8),
+                          Text("Rating: $rating", style: const TextStyle(color: Colors.black),),
+                        ],
+                        if (duration != null)...[
+                          SvgPicture.asset(
+                            "assets/icons/clock.svg",
+                            height: 20,
+                            width: 20,
+                            colorFilter: const ColorFilter.mode(
+                              primaryColor,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text("$duration min", style: const TextStyle(color: Colors.black),),
+                        ],
                         const Spacer(),
                         Text(
                           price??'',
