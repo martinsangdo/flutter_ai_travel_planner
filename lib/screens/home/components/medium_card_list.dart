@@ -55,7 +55,7 @@ class _MediumCardListState extends State<MediumCardList> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const CityDetailsScreen(),
+                            builder: (context) => CityDetailsScreen(tripInfo: {}),
                           ),
                         );
                       },

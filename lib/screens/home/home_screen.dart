@@ -19,7 +19,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<HomeScreen> {
+  bool _isLoading = true;
   List<String> _homeSliderImages = [];
+  Map _topBannerInfo = {};
 
   _loadHomeCities(){
     //load banner
@@ -33,7 +35,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
   _loadBanner(city_uuid) async{
     final dbData = await DatabaseHelper.instance.rawQuery("SELECT * FROM tb_city WHERE uuid='"+city_uuid+"'", []);
     if (dbData.isNotEmpty){
-      debugPrint(dbData[0].toString());
+      //debugPrint(dbData[0].toString());
       setState(() {
         List<dynamic> imgUrls = jsonDecode(dbData[0]['imgUrls']);
         List<String> imgList = [];
@@ -41,10 +43,27 @@ class _OnboardingScreenState extends State<HomeScreen> {
           imgList.add(imgUrl);
         }
         _homeSliderImages = imgList;
+        //
+        _topBannerInfo = {
+          "wonder_id": dbData[0]['wonder_id'],
+          "cache_trip_date": dbData[0]['cache_trip_date'],
+          "wonder_trip_id": dbData[0]['wonder_trip_id']
+        };
+        //
+        _isLoading = false;
       });
     } else {
       //no city in top banner
     }
+  }
+  //user pressed the top banner
+  _pressedTopBanner(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CityDetailsScreen(tripInfo: _topBannerInfo),
+      ),
+    );
   }
 
   @override
@@ -84,11 +103,23 @@ class _OnboardingScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (_isLoading)
+                const Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
               const SizedBox(height: defaultPadding),
-              //part 1
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: BigCardImageSlide(images: _homeSliderImages),  //main slider
+              //part 1 (top banner)
+              InkWell(
+                onTap: () {
+                  _pressedTopBanner();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                  child: BigCardImageSlide(images: _homeSliderImages),  //main slider
+                )
               ),
               const SizedBox(height: defaultPadding * 2),
               //part 2
@@ -133,7 +164,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                     press: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CityDetailsScreen(),
+                        builder: (context) => CityDetailsScreen(tripInfo: {}),
                       ),
                     ),
                   ),

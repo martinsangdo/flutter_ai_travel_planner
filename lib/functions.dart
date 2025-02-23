@@ -27,13 +27,21 @@ String addDaysToDate(String dateString, int daysToAdd) {
   }
 }
 //convert from "2025-02-27T00:00:00Z" to 'dd-MM-yyyy'
-String formatDate(String inputDate) {
+String formatDateForUI(String inputDate) {
   // Parse the input date string, handling the 'Z' for UTC
   DateTime dateTime = DateTime.parse(inputDate).toLocal(); // Convert to local time
 
   // Format the date as 'dd-MM-yyyy'
   DateFormat formatter = DateFormat(APP_DATE_FORMAT);
   return formatter.format(dateTime);
+}
+
+String getTomorrowDateFormatted() {
+  DateTime now = DateTime.now();
+  DateTime tomorrow = now.add(const Duration(days: 1)); // Add one day
+
+  var formatter = DateFormat('yyyy-MM-ddTHH:mm:ssZ'); // ISO 8601 format with Z for UTC
+  return formatter.format(tomorrow);
 }
 
 /*
@@ -69,7 +77,10 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
         //begin date
         if (item['travelAt'] != null){
           results['travelAt'] = rawData[item['travelAt']];
-          results['travelDate'] = formatDate(results['travelAt']);
+          if (results['travelAt'] == null){
+            results['travelAt'] = getTomorrowDateFormatted();
+          }
+          results['travelDate'] = formatDateForUI(results['travelAt']);
         }
         //currency
         if (item['currency'] != null){
@@ -135,14 +146,14 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
     index++;
   }
   //get hotel list
-  results['hotelList'] = await _getHotelList(results['city'], results['travelAt']);
+  results['hotelList'] = await _getHotelList(results['city'], results['travelAt'], results['currency_code']);
   //get attraction list
   results['attractions'] = await _findMatchedAttractions(results['country'], results['dayResults']);
   //
   return results;
 }
 //query hotel list in city
-Future<List> _getHotelList(city, travelDate) async {
+Future<List> _getHotelList(city, travelDate, currency) async {
   String endDate = addDaysToDate(travelDate, DURATION_DAYS);  //add 5 days as default
   travelDate = travelDate.replaceAll('T00:00:00Z', '');
   String hotelListUrl = glb_wonder_uri + 'api/v4/trips/accommondation?city='+city+'&start='+
@@ -163,7 +174,7 @@ Future<List> _getHotelList(city, travelDate) async {
         'name': item["name"],
         'description': item['location']['address'],
         'image': item["images"][0],
-        'price': item["price"].isNotEmpty?item["price"]+' /night': '',
+        'price': item["price"].isNotEmpty?item["price"]+' ' + currency + '/night': '',
         'rating': item['ratingScore'],
         'url': item["url"]
       });

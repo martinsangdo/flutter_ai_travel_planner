@@ -11,7 +11,9 @@ import 'package:http/http.dart' as http;
 
 //display results after using AI planner
 class CityDetailsScreen extends StatefulWidget {
-  const CityDetailsScreen({super.key});
+  Map tripInfo = {};
+
+  CityDetailsScreen({super.key, required this.tripInfo});
 
   @override
   State<CityDetailsScreen> createState() =>
@@ -26,8 +28,8 @@ class _State extends State<CityDetailsScreen> {
   List _hotelList = [];
 
   //call to get details of city
-  _fetchRawCityDetails() async {
-    String rawTripDetailsUrl = glb_wonder_uri + 'v4/plan/' + test_trip_id + '/__data.json';
+  _fetchRawCityDetails(wonder_trip_id) async {
+    String rawTripDetailsUrl = glb_wonder_uri + 'v4/plan/' + wonder_trip_id + '/__data.json';
     final response = await http.Client().post(Uri.parse(rawTripDetailsUrl), 
         headers: COMMON_HEADER);
     if (response.statusCode != 200){
@@ -35,6 +37,7 @@ class _State extends State<CityDetailsScreen> {
     } else {
       Map<String, dynamic> objFromCloud = jsonDecode(response.body);
       if (objFromCloud['nodes'] != null){
+        //debugPrint(objFromCloud['nodes'][1]['data'].toString());
         Map<String, dynamic> parsedData = await parseRawTripDetails(objFromCloud['nodes'][1]['data']);
         if (parsedData['dayResults'] != null){
           //we had data of this city, save it details in state
@@ -43,6 +46,7 @@ class _State extends State<CityDetailsScreen> {
             _budgets = _cityDetails['budgets'];
             _hotelList = _cityDetails['hotelList'];
             _attractionList = _cityDetails['attractions'];
+            debugPrint(_attractionList.toString());
             _isLoading = false;
           });
         }
@@ -54,7 +58,12 @@ class _State extends State<CityDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchRawCityDetails();
+    if (widget.tripInfo.isNotEmpty){
+      _fetchRawCityDetails(widget.tripInfo['wonder_trip_id']);
+    } else {
+      //todo generate new trip id
+
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -79,7 +88,7 @@ class _State extends State<CityDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _cityDetails['locationName']??'...',
+                      _cityDetails['locationName']??'Loading data ...',
                       style: Theme.of(context).textTheme.headlineSmall,
                       maxLines: 1,
                     ),
@@ -97,6 +106,7 @@ class _State extends State<CityDetailsScreen> {
                         ),
                       ],
                     ),
+                    /*
                     OutlinedButton(
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
@@ -105,7 +115,7 @@ class _State extends State<CityDetailsScreen> {
                             ),
                           ),
                           child: const Text("Save"),
-                        ),
+                        ),*/
                   ],
                 ),
               ),

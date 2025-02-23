@@ -129,7 +129,7 @@ class _OnboardingScreenState extends State<ItemCard> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text("$widget.duration min", style: const TextStyle(color: Colors.black),),
+                          Text(widget.duration.toString() + " min", style: const TextStyle(color: Colors.black),),
                         ],//end duration
                         if (widget.reviews != null)...[
                           SvgPicture.asset(
