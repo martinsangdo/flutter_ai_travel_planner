@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
 import 'screens/onboarding/onboarding_screen.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart'; //this is for Web project
+import 'package:flutter/foundation.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (kIsWeb) {
+    // Initialize FFI
+    // sqfliteFfiInit();
+    // Change the default factory. On iOS/Android, if not using `sqlite_flutter_lib` you can forget
+    // this step, it will use the sqlite version available on the system.
+      databaseFactory = databaseFactoryFfiWeb;  //run this in terminal: dart run sqflite_common_ffi_web:setup
+  }
   runApp(const MyApp());
 }
 
