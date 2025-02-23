@@ -18,10 +18,11 @@ class ItemCard extends StatefulWidget {
     this.duration,
     this.trip_id,
     this.currency,
-    this.reviews
+    this.reviews,
+    this.commentNum
   });
 
-  final String? title, description, image, url, price, currency, reviews;
+  final String? title, description, image, url, price, currency, reviews, commentNum;
   final int? duration, trip_id;
   final double? rating;
   String itemType;
@@ -141,8 +142,21 @@ class _OnboardingScreenState extends State<ItemCard> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text(widget.reviews??'', style: const TextStyle(color: Colors.black),),
+                          Text(widget.reviews!, style: const TextStyle(color: Colors.black),),
                         ],//end reviews
+                        if (widget.commentNum != null)...[
+                          SvgPicture.asset(
+                            "assets/icons/profile.svg",
+                            height: 20,
+                            width: 20,
+                            colorFilter: const ColorFilter.mode(
+                              primaryColor,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text('${widget.commentNum} comments', style: const TextStyle(color: Colors.black),),
+                        ],//end comment num
                         const Spacer(),
                         Text(
                           widget.price??'',

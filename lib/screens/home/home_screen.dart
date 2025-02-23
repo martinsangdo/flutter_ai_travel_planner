@@ -9,9 +9,29 @@ import '../details/city_details_screen.dart';
 import '../featured/featurred_screen.dart';
 import 'components/medium_card_list.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<HomeScreen> {
+
+  _loadHomeCities(){
+    debugPrint(glb_home_cities.toString());
+  }
+
+  @override
+  void initState() {
+      super.initState();
+      _loadHomeCities();
+  } 
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

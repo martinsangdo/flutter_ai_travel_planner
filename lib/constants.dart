@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:uuid/uuid.dart';
 
 // clolors that we use in our app
@@ -56,6 +55,8 @@ bool isPrimitive(dynamic value) {
 // Common Text
 final Center kOrText = Center(
     child: Text("Or", style: TextStyle(color: titleColor.withOpacity(0.7))));
+const METADATA_URL = 'https://api.npoint.io/01b40aa06334cf1fb7aa';
+
 //my customization
 Map<String, String> COMMON_HEADER = { //used when scraping
   'Content-Type': 'application/json',
@@ -85,13 +86,17 @@ Map<String, dynamic> COMMON_TRIP_HEAD = {
 String APP_DATE_FORMAT = 'dd/MM/yyyy';
 int DURATION_DAYS = 5;   //no. of days that user will travel
 //global variables
-String glb_booking_aid = '';  //todo replace our aid
-String glb_wonder_uri = 'https://wonderplan.ai/';
-String glb_wonder_alias_uri = 'https://sonderback-us-6h6yp6ucpq-uc.a.run.app/v4/trips/';
-String glb_backend_uri = 'http://10.115.138.56:8080/';  //our internal BE
+String glb_gem_key = "";
+String glb_gem_uri = "";
+String glb_hotel_booking_aff_id = '';  //todo replace our aid
+String glb_wonder_uri = '';
+String glb_wonder_alias_uri = '';
+String glb_backend_uri = '';  //our internal BE
+String glb_trip_uri = '';
+Map glb_home_cities = {}; //cities to show in homepage
+//
 String postGetChatboxContent = '';
 String postGetRawData = 'post_query_raw_url';
-String glb_trip_uri = 'https://us.trip.com/restapi/soa2/';
 //message
 String CHATBOT_UNAVAILABLE = 'The AI service is unavailable now. Please try in another time.';
 //
@@ -104,6 +109,7 @@ const GET_DAILY_ACTIVITIES = '';
 const SEARCH_LOCATIONS = '20400/getGsMainSuggestForTripOnline';
 const GET_ATTRACTION_OFFICIAL_PHOTOS = '19913/getTripPoiPhotoGallery';
 const GET_THINGS_TODO = '14580/json/getCrossRecommendProduct';
+const GET_THINGS_2_EAT_N_VISIT = '23044/getDestinationPageInfo.json';
 
 //for debugging
 bool isDebug = true;  //todo remove this flag when releasing

@@ -273,6 +273,7 @@ _searchLocations(orgPlaceName, country) async{
     return photoUrls;
   }
   //get tours
+  /*
   getAttractionThings2Do(trip_id, currency) async{
     if (trip_id == null){
       return [];
@@ -311,4 +312,45 @@ _searchLocations(orgPlaceName, country) async{
       }
     }
     return thingsTodoList;
+  }
+  */
+  //get restaurants
+  getAttractionThings2EatNVisit(city_id, currency) async{
+    if (city_id == null){
+      return {};
+    }
+    List places2Visit = [];
+    List what2Eat = [];
+    //
+    final response = await http.Client().post(Uri.parse(glb_trip_uri + GET_THINGS_2_EAT_N_VISIT), 
+        headers: COMMON_HEADER, body: jsonEncode({
+          "districtId": city_id,
+          "moduleList": [
+              "classicRecommendSight",
+              "classicRecommendRestaurant"
+          ],
+          "head": COMMON_TRIP_HEAD
+      }));
+    if (response.statusCode != 200){
+      return {'result': 'FAILED', 'message': 'Cannot get content from cloud'};
+    } else {
+      Map objFromCloud = jsonDecode(response.body);
+      if (objFromCloud['moduleList'] != null && objFromCloud['moduleList'].length > 0){
+        for (Map module in objFromCloud['moduleList']){
+          if (module['typeName'] == 'classicRecommendSight' && module['classicRecommendSightModule']['sightList'] != null && module['classicRecommendSightModule']['sightList'].length > 0){
+            for (Map item in module['classicRecommendSightModule']['sightList'][0]['sightList']){
+              places2Visit.add({
+                'name': item['name'],
+                'commentNum': item['commentNum'],
+                'imgUrl': item['imageUrl']
+              });
+            }
+          } //end if module
+        }
+      }
+    }
+    return {
+      'places2Visit': places2Visit,
+      'what2Eat': what2Eat
+    };
   }

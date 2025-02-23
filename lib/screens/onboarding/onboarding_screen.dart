@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ai_travel_planner/db/database_helper.dart';
+import 'package:ai_travel_planner/db/metadata_model.dart';
 import 'package:ai_travel_planner/entry_point.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
@@ -141,6 +143,72 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   
     //3. find all info of location
   }
+  //1. load metadata of project
+    void fetchMetadata() async {
+      final response = await http.Client().get(Uri.parse(METADATA_URL));
+      if (response.statusCode != 200){
+        debugPrint('Cannot get metadata from cloud');
+        //display something or check if we had metadata in sqlite
+        refreshMetaDataWithCloudData(MetaDataModel.empty(uuid: ""));
+      } else {
+        final metadataObjFromCloud = MetaDataModel.fromJson(jsonDecode(response.body));
+        //Query db & compare with latest data from cloud
+        refreshMetaDataWithCloudData(metadataObjFromCloud);
+      }
+    }
+    //
+  void refreshMetaDataWithCloudData(MetaDataModel metadataObjFromCloud) async{
+    //check if table metadata existed
+      final metadataInDB = await DatabaseHelper.instance.rawQuery('SELECT * FROM metadata', []);
+        if (metadataInDB.isEmpty){
+          //there is no metadata in db
+          if (metadataObjFromCloud.uuid != ""){
+            //insert new
+            DatabaseHelper.instance.insertMetadata(metadataObjFromCloud).then((id){
+              debugPrint('Inserted metadata into db');
+              move2HomePage(metadataObjFromCloud);
+            });
+          } else {
+            //todo: no data from db neither cloud -> should tell them to close app & try again
+          }
+        } else if (metadataObjFromCloud.uuid != ""){
+          debugPrint('Metadata existed in db time: ${metadataInDB[0]['update_time']}');
+          //compare update_time
+          var updateTimeInDB =  metadataInDB[0]['update_time'];
+          var updateTimeInCloud =  metadataObjFromCloud.update_time;
+          if (updateTimeInDB != updateTimeInCloud){
+            //update metadata in db
+            DatabaseHelper.instance.updateMetadata(metadataObjFromCloud).then((id){
+              debugPrint('Updated new metadata into db');
+              //update cities
+
+              move2HomePage(metadataObjFromCloud);
+            });
+          } else {
+            //do nothing because there is no new info from cloud
+            move2HomePage(metadataObjFromCloud);
+          }
+        } else {
+          //do nothing because metadata existed in db & has nothing new from cloud
+          move2HomePage(metadataInDB[0]);
+        }
+  }
+  Future<void> move2HomePage(metadataObj) async {
+    //save variables to global space
+    glb_gem_key = metadataObj.gem_key;
+    glb_gem_uri = metadataObj.gem_uri;
+    glb_hotel_booking_aff_id = metadataObj.hotel_booking_aff_id;
+    glb_wonder_uri = metadataObj.wonder_uri;
+    glb_wonder_alias_uri = metadataObj.wonder_alias_uri;
+    glb_trip_uri = metadataObj.trip_uri;
+    glb_home_cities = jsonDecode(metadataObj.home_cities);
+    //todo check version of android app
+    //
+    if (context.mounted) {
+      Future.delayed(const Duration(milliseconds: 3000*1000));  //delay screen 3 secs
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const EntryPoint()));
+    }
+  }
 
   @override
   void initState() {
@@ -150,12 +218,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       //_getHotelList('london', '2025-02-20','2025-02-23');
       //_getGeneralInfo('v4-1739894726493-20387');
       //_find_n_match_attractions('v4-1739900073441-75474', 'United Kingdom', 1);
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      if (context.mounted) {
-        Future.delayed(const Duration(milliseconds: 3000*1000));  //delay screen 3 secs
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const EntryPoint()));
-      }
-    });
+    fetchMetadata();
   } 
 
   @override
@@ -199,7 +262,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 List<Map<String, dynamic>> demoData = [
   {
     "illustration": "assets/images/ai_travel_logo_1024.png",
-    "title": "TravelGen AI Travel Planner",
+    "title": "",
     "text":
         "Loading ...",
   }

@@ -7,11 +7,13 @@ import 'components/tab_items.dart';
 import 'components/attraction_info.dart';
 
 class AttractionDetailsScreen extends StatefulWidget {
-  int trip_id;  //default for testing
+  int? trip_id;  //default for testing
+  int? city_id;
   String currency;
   String name;
 
-  AttractionDetailsScreen({super.key, required this.trip_id, required this.name, required this.currency});
+  AttractionDetailsScreen({super.key, this.trip_id, this.city_id,
+  required this.name, required this.currency});
 
   @override
   State<AttractionDetailsScreen> createState() =>
@@ -20,13 +22,11 @@ class AttractionDetailsScreen extends StatefulWidget {
 
 class _State extends State<AttractionDetailsScreen> {
   List<String> _photoUrls = [];
-  List _thingsTodoList = [];
-
+  Map _things2DoNEat = {};
 
   //find all details of 1 place
   Map findAttractionDetails(intAttractionId){
     Map finalResult = {};
-    //(Things to do) day tours https://uk.trip.com/restapi/soa2/14580/json/getCrossRecommendProduct
 
     //get tour details https://uk.trip.com/restapi/soa2/21052/getProductInfo
 
@@ -41,17 +41,19 @@ class _State extends State<AttractionDetailsScreen> {
   }
   //call another service to get attraction details
   _fetchAttractionDetails() async{
-    if (widget.trip_id <= 0){
+    if (widget.trip_id! <= 0 && widget.city_id! <= 0){
       return;
     }
     //1. get image list
     List<String> photoUrls = await getAttractionPhotos(widget.trip_id);
-    //2. get tours
-    List thingsTodoList = await getAttractionThings2Do(widget.trip_id, widget.currency);
     setState(() {
       _photoUrls = photoUrls;
-      _thingsTodoList = thingsTodoList;
-      debugPrint(thingsTodoList[0].toString());
+    });
+    //2. get tours (things to do) & restaurants
+    Map things2DoNEat = await getAttractionThings2EatNVisit(widget.city_id, widget.currency);
+    debugPrint(things2DoNEat['places2Visit'][0].toString());
+    setState(() {
+      _things2DoNEat = things2DoNEat;
     });
   }
   //
@@ -77,7 +79,7 @@ class _State extends State<AttractionDetailsScreen> {
               const SizedBox(height: defaultPadding),
               AttractionPhotos(photoUrls: _photoUrls,),  //photo list
               const SizedBox(height: defaultPadding),
-              AttractionTabItems(thingsTodoList: _thingsTodoList,)
+              AttractionTabItems(things2DoNEat: _things2DoNEat,)
             ],
           ),
         ),
