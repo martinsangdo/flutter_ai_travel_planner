@@ -56,17 +56,6 @@ class _ItemsState extends State<TabItems> {
               description: widget.attractions[index]["description"],
               image: widget.attractions[index]["image"],
               duration: widget.attractions[index]["duration"],
-              // press: () => Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => 
-              //       //const PlannerFormScreen(),
-              //       PhotoGalleryFullscreen(
-              //         imageUrls: photoGalleryUrls,
-              //         initialIndex: 1, // Optional: start at a specific image
-              //       ),
-              //     ),
-              // ),
             ),
           ),
         ),  //end attraction list

@@ -1,10 +1,11 @@
+import 'package:ai_travel_planner/screens/details/attractions_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../constants.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 //used to show hotel or attractions in city detail page (tab region)
-class ItemCard extends StatelessWidget {
+class ItemCard extends StatefulWidget {
   const ItemCard({
     super.key,
     required this.title,
@@ -19,11 +20,32 @@ class ItemCard extends StatelessWidget {
   final String? title, description, image, url, price;
   final int? duration;
   final double? rating;
-  //
-  _openWebBrowser() async{
-    if (url!.isNotEmpty){
-      if (!await launchUrlString(url!, mode: LaunchMode.externalApplication)) {
-        throw Exception('Could not launch $url');
+  @override
+  State<ItemCard> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<ItemCard> {
+  @override
+  void initState() {
+      super.initState();
+  } 
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+  //depend on which tab, we process when user clicks on each item
+  _processItemClicked() async{
+    if (widget.url != null){
+      //open new web browser
+      if (!await launchUrlString(widget.url!, mode: LaunchMode.externalApplication)) {
+        throw Exception('Could not launch $widget.url');
+      }
+    } else {
+      debugPrint('aaa');
+      if (context.mounted) {
+        //navigate to attraction detail page
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AttractionDetailsScreen()));
       }
     }
   }
@@ -36,7 +58,7 @@ class ItemCard extends StatelessWidget {
         );
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(8)),
-      onTap: _openWebBrowser,
+      onTap: _processItemClicked,
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: SizedBox(
@@ -48,7 +70,7 @@ class ItemCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                   child: Image.network(
-                    image!,
+                    widget.image!,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -60,7 +82,7 @@ class ItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title!,
+                      widget.title!,
                       maxLines: 1,
                       style: Theme.of(context)
                           .textTheme
@@ -68,14 +90,14 @@ class ItemCard extends StatelessWidget {
                           .copyWith(fontSize: 14),
                     ),
                     Text(
-                      description!,
+                      widget.description!,
                       style: Theme.of(context).textTheme.bodyMedium,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Row(
                       children: [
-                        if (rating != null)...[
+                        if (widget.rating != null)...[
                           SvgPicture.asset(
                             "assets/icons/rating.svg",
                             height: 20,
@@ -86,9 +108,9 @@ class ItemCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text("Rating: $rating", style: const TextStyle(color: Colors.black),),
+                          Text("Rating: $widget.rating", style: const TextStyle(color: Colors.black),),
                         ],
-                        if (duration != null)...[
+                        if (widget.duration != null)...[
                           SvgPicture.asset(
                             "assets/icons/clock.svg",
                             height: 20,
@@ -99,11 +121,11 @@ class ItemCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text("$duration min", style: const TextStyle(color: Colors.black),),
+                          Text("$widget.duration min", style: const TextStyle(color: Colors.black),),
                         ],
                         const Spacer(),
                         Text(
-                          price??'',
+                          widget.price??'',
                           style: Theme.of(context)
                               .textTheme
                               .labelLarge!
