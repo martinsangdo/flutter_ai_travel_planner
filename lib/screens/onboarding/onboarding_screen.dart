@@ -4,6 +4,7 @@ import 'package:ai_travel_planner/db/city_model.dart';
 import 'package:ai_travel_planner/db/database_helper.dart';
 import 'package:ai_travel_planner/db/metadata_model.dart';
 import 'package:ai_travel_planner/entry_point.dart';
+import 'package:ai_travel_planner/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 
@@ -198,19 +199,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
   //
   //upsert cities data from cloud
-  void refreshCitiesWithCloudData(List<City> cites) async{
+  void refreshCitiesWithCloudData(List<City> cities) async{
     //check if there is any city in db or not
     List<Map> result = await DatabaseHelper.instance.rawQuery('SELECT COUNT(*) FROM tb_city', []);
     if (result.isEmpty){
       //no data in db
-      if (cites.isEmpty){
+      if (cities.isEmpty){
         //todo: no data from db neither cloud -> should tell them to close app & try again
       } else {
-        updateCityDataAndOpenHome(cites);
+        updateCityDataAndOpenHome(cities);
       }
     } else {
       //there is city data in db -> insert all
-      updateCityDataAndOpenHome(cites);
+      updateCityDataAndOpenHome(cities);
     }
   }
   //get cities data from cloud
@@ -227,8 +228,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  void updateCityDataAndOpenHome(List<City> cities){
-    DatabaseHelper.instance.upsertBatch(cities);
+  void updateCityDataAndOpenHome(List<City> cities) async{
+    await DatabaseHelper.instance.upsertBatch(cities);  //ensure data is inserted or update with "await"
     move2HomePage();
   }
   //update app global variables from metadata
@@ -249,7 +250,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   move2HomePage(){
     if (context.mounted) {
       Future.delayed(const Duration(milliseconds: 3000*1000));  //delay screen 3 secs
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const EntryPoint()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     }
   }
 

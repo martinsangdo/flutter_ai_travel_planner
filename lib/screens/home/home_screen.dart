@@ -33,6 +33,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
   _loadBanner(city_uuid) async{
     final dbData = await DatabaseHelper.instance.rawQuery("SELECT * FROM tb_city WHERE uuid='"+city_uuid+"'", []);
     if (dbData.isNotEmpty){
+      debugPrint(dbData[0].toString());
       setState(() {
         List<dynamic> imgUrls = jsonDecode(dbData[0]['imgUrls']);
         List<String> imgList = [];
@@ -42,7 +43,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
         _homeSliderImages = imgList;
       });
     } else {
-      //no city in for top banner
+      //no city in top banner
     }
   }
 

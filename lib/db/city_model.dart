@@ -11,8 +11,11 @@ class City {
     late String continent;
     late int review;
     late String img;
-    late int city_id;
+    late int city_id; //ID in trip
     late String imgUrls;  //list of image urls
+    late String wonder_id;  //ID in wonder, used to generate the trip id
+    late String cache_trip_date;  //cache the date of latest generated Trip (dd-MM-yyyy)
+    late String wonder_trip_id; //cache the trip id in 1 day
 
   City({
     required this.uuid,
@@ -22,7 +25,10 @@ class City {
     required this.review,
     required this.img,
     required this.city_id,
-    required this.imgUrls
+    required this.imgUrls,
+    required this.wonder_id,
+    required this.cache_trip_date,
+    required this.wonder_trip_id
   });
 
   City.empty({
@@ -38,7 +44,10 @@ class City {
       review: json['review'] as int,
       img: json['img'] as String,
       city_id: json['city_id'] as int,
-      imgUrls: jsonEncode(json['imgUrls'])
+      imgUrls: jsonEncode(json['imgUrls']),
+      wonder_id: json['wonder_id'] as String,
+      cache_trip_date: json['cache_trip_date'] as String,
+      wonder_trip_id: json['wonder_trip_id'] as String,
     );
   }
 
@@ -51,7 +60,10 @@ class City {
       'review': review,
       'img': img,
       'city_id': city_id,
-      'imgUrls': imgUrls
+      'imgUrls': imgUrls,
+      'wonder_id': wonder_id,
+      'cache_trip_date': cache_trip_date,
+      'wonder_trip_id': wonder_trip_id,
       };
   }
 
@@ -64,7 +76,10 @@ class City {
       review: map['review'],
       img: map['img'],
       city_id: map['city_id'],
-      imgUrls: map['imgUrls']
+      imgUrls: map['imgUrls'],
+      wonder_id: map['wonder_id'],
+      cache_trip_date: map['cache_trip_date'],
+      wonder_trip_id: map['wonder_trip_id']
     );
   }
 }

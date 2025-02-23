@@ -52,7 +52,10 @@ class DatabaseHelper {
         review INTEGER,
         img TINYTEXT,
         city_id INTEGER,
-        imgUrls TEXT
+        imgUrls TEXT,
+        wonder_id TINYTEXT,
+        cache_trip_date TINYTEXT,
+        wonder_trip_id TINYTEXT
       )
     ''');
   }
