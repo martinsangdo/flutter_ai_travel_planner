@@ -90,7 +90,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         ? const BigCardScalton()
                         : InfoBigCard(
                             // Images are List<String>
-                            images: homeSliderImages..shuffle(),
+                            images: []..shuffle(),
                             name: "McDonald's",
                             rating: 4.3,
                             reviewCount: '66,111',

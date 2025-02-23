@@ -3,9 +3,7 @@ import '../../../components/cards/big/info_big_card.dart';
 import '../../../components/scalton/big_card_scalton.dart';
 import '../../../constants.dart';
 
-import '../../../demo_data.dart';
-
-/// Just for show the scalton we use [StatefulWidget]
+//Show in list screen
 class Body extends StatefulWidget {
   const Body({super.key});
 
@@ -14,7 +12,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  
+  List<String> _imgList = [];
   bool isLoading = true;
   int demoDataLength = 4;
 
@@ -41,7 +39,7 @@ class _BodyState extends State<Body> {
             child: isLoading
                 ? const BigCardScalton()
                 : InfoBigCard(
-                    images: homeSliderImages..shuffle(),
+                    images: _imgList..shuffle(),
                     name: "McDonald's",
                     rating: 4.3,
                     reviewCount: '33,444',

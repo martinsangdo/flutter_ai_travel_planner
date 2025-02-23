@@ -16,6 +16,7 @@ class MetaDataModel {
     late String trip_uri;
     late String android_version;
     late String ios_version;
+    late String cities_url; //link to get city data
 
   MetaDataModel({
     required this.uuid,
@@ -29,7 +30,8 @@ class MetaDataModel {
     required this.wonder_alias_uri,
     required this.trip_uri,
     required this.android_version,
-    required this.ios_version
+    required this.ios_version,
+    required this.cities_url
   });
 
   MetaDataModel.empty({
@@ -49,7 +51,8 @@ class MetaDataModel {
       wonder_alias_uri: json['wonder_alias_uri'] as String,
       trip_uri: json['trip_uri'] as String,
       android_version: json['android_version'] as String,
-      ios_version: json['ios_version'] as String
+      ios_version: json['ios_version'] as String,
+      cities_url: json['cities_url'] as String
     );
   }
 
@@ -66,7 +69,8 @@ class MetaDataModel {
       'wonder_alias_uri': wonder_alias_uri,
       'trip_uri': trip_uri,
       'android_version': android_version,
-      'ios_version': ios_version
+      'ios_version': ios_version,
+      'cities_url': cities_url
       };
   }
 
@@ -83,7 +87,8 @@ class MetaDataModel {
       wonder_alias_uri: map['wonder_alias_uri'],
       trip_uri: map['trip_uri'],
       android_version: map['android_version'],
-      ios_version: map['ios_version']
+      ios_version: map['ios_version'],
+      cities_url: map['cities_url']
     );
   }
 }

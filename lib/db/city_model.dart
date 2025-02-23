@@ -2,7 +2,9 @@
 // ignore_for_file: non_constant_identifier_names
 //basic info about cities over the world
 
-class CityModel {
+import 'dart:convert';
+
+class City {
     String uuid;  //random unique ID because Metadata has only 1 record
     late String name;
     late String country;
@@ -12,7 +14,7 @@ class CityModel {
     late int city_id;
     late String imgUrls;  //list of image urls
 
-  CityModel({
+  City({
     required this.uuid,
     required this.name,
     required this.country,
@@ -23,12 +25,12 @@ class CityModel {
     required this.imgUrls
   });
 
-  CityModel.empty({
+  City.empty({
     required this.uuid
   });
 
-  factory CityModel.fromJson(Map<String, dynamic> json) {
-    return CityModel(
+  factory City.fromJson(Map<String, dynamic> json) {
+    return City(
       uuid: json['uuid'] as String,
       name: json['name'] as String,
       country: json['country'] as String,
@@ -36,7 +38,7 @@ class CityModel {
       review: json['review'] as int,
       img: json['img'] as String,
       city_id: json['city_id'] as int,
-      imgUrls: json['imgUrls'] as String
+      imgUrls: jsonEncode(json['imgUrls'])
     );
   }
 
@@ -53,8 +55,8 @@ class CityModel {
       };
   }
 
-  factory CityModel.fromMap(Map<String, dynamic> map) {
-    return CityModel(
+  factory City.fromMap(Map<String, dynamic> map) {
+    return City(
       uuid: map['uuid'],
       name : map['name'],
       country : map['country'],

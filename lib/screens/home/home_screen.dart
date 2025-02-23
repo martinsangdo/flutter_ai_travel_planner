@@ -1,10 +1,12 @@
+import 'dart:convert';
+
+import 'package:ai_travel_planner/db/database_helper.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/cards/big/big_card_image_slide.dart';
 import '../../components/cards/big/info_big_card.dart';
 import '../../components/section_title.dart';
 import '../../constants.dart';
-import '../../demo_data.dart';
 import '../details/city_details_screen.dart';
 import '../featured/featurred_screen.dart';
 import 'components/medium_card_list.dart';
@@ -17,9 +19,31 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<HomeScreen> {
+  List<String> _homeSliderImages = [];
 
   _loadHomeCities(){
-    debugPrint(glb_home_cities.toString());
+    //load banner
+    _loadBanner(glb_home_cities['top_banner']);
+    for (String key in glb_home_cities.keys.toList()){
+      //debugPrint(key.toString());
+      
+    }
+  }
+  //get images of top banner
+  _loadBanner(city_uuid) async{
+    final dbData = await DatabaseHelper.instance.rawQuery("SELECT * FROM tb_city WHERE uuid='"+city_uuid+"'", []);
+    if (dbData.isNotEmpty){
+      setState(() {
+        List<dynamic> imgUrls = jsonDecode(dbData[0]['imgUrls']);
+        List<String> imgList = [];
+        for (dynamic imgUrl in imgUrls){
+          imgList.add(imgUrl);
+        }
+        _homeSliderImages = imgList;
+      });
+    } else {
+      //no city in for top banner
+    }
   }
 
   @override
@@ -63,7 +87,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
               //part 1
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: BigCardImageSlide(images: homeSliderImages),  //main slider
+                child: BigCardImageSlide(images: _homeSliderImages),  //main slider
               ),
               const SizedBox(height: defaultPadding * 2),
               //part 2
@@ -99,7 +123,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.fromLTRB(
                       defaultPadding, 0, defaultPadding, defaultPadding),
                   child: InfoBigCard(
-                    images: homeSliderImages..shuffle(),
+                    images: _homeSliderImages..shuffle(),
                     name: "Paris",
                     rating: 4.3,
                     reviewCount: '99,999',

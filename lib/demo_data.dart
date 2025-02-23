@@ -1,11 +1,5 @@
 //showing in homepage
 
-List<String> homeSliderImages = [
-  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/33/f5/de/london.jpg",
-  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/15/6d/d6/paris.jpg",
-  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/c2/87/c8/caption.jpg",  //San francisco
-  "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0f/de/9a/17/ben-thanh-market-before.jpg",  //ho chi minh
-];
 
 List<Map<String, dynamic>> demoMediumCardData = [
   {

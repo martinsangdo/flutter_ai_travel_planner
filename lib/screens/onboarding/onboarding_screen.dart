@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ai_travel_planner/db/city_model.dart';
 import 'package:ai_travel_planner/db/database_helper.dart';
 import 'package:ai_travel_planner/db/metadata_model.dart';
 import 'package:ai_travel_planner/entry_point.dart';
@@ -166,7 +167,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             //insert new
             DatabaseHelper.instance.insertMetadata(metadataObjFromCloud).then((id){
               debugPrint('Inserted metadata into db');
-              move2HomePage(metadataObjFromCloud);
+              updateGlobalVariablesNMove2Home(metadataObjFromCloud, false);
+              //insert cities into db
+              fetchCities(metadataObjFromCloud.cities_url);
             });
           } else {
             //todo: no data from db neither cloud -> should tell them to close app & try again
@@ -180,21 +183,57 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             //update metadata in db
             DatabaseHelper.instance.updateMetadata(metadataObjFromCloud).then((id){
               debugPrint('Updated new metadata into db');
-              //update cities
-
-              move2HomePage(metadataObjFromCloud);
+              updateGlobalVariablesNMove2Home(metadataObjFromCloud, false);
+              //update cities to db
+              fetchCities(metadataObjFromCloud.cities_url);
             });
           } else {
             //do nothing because there is no new info from cloud
-            move2HomePage(metadataObjFromCloud);
+            updateGlobalVariablesNMove2Home(metadataObjFromCloud, true);
           }
         } else {
           //do nothing because metadata existed in db & has nothing new from cloud
-          move2HomePage(metadataInDB[0]);
+          updateGlobalVariablesNMove2Home(metadataInDB[0], true);
         }
   }
-  Future<void> move2HomePage(metadataObj) async {
-    //save variables to global space
+  //
+  //upsert cities data from cloud
+  void refreshCitiesWithCloudData(List<City> cites) async{
+    //check if there is any city in db or not
+    List<Map> result = await DatabaseHelper.instance.rawQuery('SELECT COUNT(*) FROM tb_city', []);
+    if (result.isEmpty){
+      //no data in db
+      if (cites.isEmpty){
+        //todo: no data from db neither cloud -> should tell them to close app & try again
+      } else {
+        updateCityDataAndOpenHome(cites);
+      }
+    } else {
+      //there is city data in db -> insert all
+      updateCityDataAndOpenHome(cites);
+    }
+  }
+  //get cities data from cloud
+  void fetchCities(String cityUrl) async {
+    final response = await http.Client().get(Uri.parse(cityUrl));
+    if (response.statusCode != 200){
+      debugPrint('Cannot get cities from cloud');
+      move2HomePage();
+    } else {
+      final parsed =
+        (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();
+      List<City> list = parsed.map<City>((json) => City.fromJson(json)).toList();
+      refreshCitiesWithCloudData(list);
+    }
+  }
+
+  void updateCityDataAndOpenHome(List<City> cities){
+    DatabaseHelper.instance.upsertBatch(cities);
+    move2HomePage();
+  }
+  //update app global variables from metadata
+  updateGlobalVariablesNMove2Home(metadataObj, isMove2Home){
+  //save variables to global space
     glb_gem_key = metadataObj.gem_key;
     glb_gem_uri = metadataObj.gem_uri;
     glb_hotel_booking_aff_id = metadataObj.hotel_booking_aff_id;
@@ -202,8 +241,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     glb_wonder_alias_uri = metadataObj.wonder_alias_uri;
     glb_trip_uri = metadataObj.trip_uri;
     glb_home_cities = jsonDecode(metadataObj.home_cities);
-    //todo check version of android app
-    //
+    if (isMove2Home){
+      move2HomePage();
+    }
+  }
+  //
+  move2HomePage(){
     if (context.mounted) {
       Future.delayed(const Duration(milliseconds: 3000*1000));  //delay screen 3 secs
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const EntryPoint()));

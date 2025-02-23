@@ -6,6 +6,7 @@ import '../../../components/cards/big/info_big_card.dart';
 import '../../../components/scalton/big_card_scalton.dart';
 import '../../../demo_data.dart';
 
+//Body of search screen
 class Body extends StatefulWidget {
   const Body({super.key});
 
@@ -66,7 +67,7 @@ class _BodyState extends State<Body> {
                       ? const BigCardScalton()
                       : InfoBigCard(
                           // Images are List<String>
-                          images: homeSliderImages..shuffle(),
+                          images: [],
                           name: "McDonald's",
                           rating: 4.3,
                           reviewCount: '66,111',
