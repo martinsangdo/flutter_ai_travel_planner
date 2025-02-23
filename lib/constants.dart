@@ -57,11 +57,31 @@ bool isPrimitive(dynamic value) {
 final Center kOrText = Center(
     child: Text("Or", style: TextStyle(color: titleColor.withOpacity(0.7))));
 //my customization
-Map<String, String> COMMON_HEADER = {
+Map<String, String> COMMON_HEADER = { //used when scraping
   'Content-Type': 'application/json',
   "User-Agent": 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
 };
-
+Map<String, dynamic> COMMON_TRIP_HEAD = {
+                "locale": "en-US",
+                "extension": [
+                    {
+                        "name": "locale",
+                        "value": "en-US"
+                    },
+                    {
+                        "name": "platform",
+                        "value": "Online"
+                    },
+                    {
+                        "name": "currency",
+                        "value": "USD"
+                    },
+                    {
+                        "name": "user-agent",
+                        "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+                    }
+                ]
+            };
 String APP_DATE_FORMAT = 'dd/MM/yyyy';
 int DURATION_DAYS = 5;   //no. of days that user will travel
 //global variables
@@ -82,7 +102,9 @@ const GET_GENERAL_TRIP_ID = '/v4/plan/v4-1739922077865-80005/__data.json';
 const GET_DAILY_ACTIVITIES = '';
 //trip
 const SEARCH_LOCATIONS = '20400/getGsMainSuggestForTripOnline';
+const GET_ATTRACTION_OFFICIAL_PHOTOS = '19913/getTripPoiPhotoGallery';
 //for debugging
 bool isDebug = true;  //todo remove this flag when releasing
 String test_trip_id = 'v4-1739922077865-80005';   //to test the fixed city, avoid creating many trip ID
+int test_attraction_id = 78699;
 int test_city_id = 309; //london

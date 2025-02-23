@@ -14,11 +14,12 @@ class ItemCard extends StatefulWidget {
     this.price,
     this.url,
     this.rating,
-    this.duration
+    this.duration,
+    this.trip_id
   });
 
   final String? title, description, image, url, price;
-  final int? duration;
+  final int? duration, trip_id;
   final double? rating;
   @override
   State<ItemCard> createState() => _OnboardingScreenState();
@@ -42,10 +43,11 @@ class _OnboardingScreenState extends State<ItemCard> {
         throw Exception('Could not launch $widget.url');
       }
     } else {
-      debugPrint('aaa');
       if (context.mounted) {
         //navigate to attraction detail page
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AttractionDetailsScreen()));
+        Navigator.pushReplacement(context, 
+          MaterialPageRoute(builder: (context) => 
+          AttractionDetailsScreen(trip_id: widget.trip_id!, name: widget.title!)));
       }
     }
   }

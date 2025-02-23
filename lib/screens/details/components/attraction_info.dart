@@ -4,10 +4,24 @@ import '../../../components/sub_list_info_item.dart';
 import '../../../components/rating_with_counter.dart';
 import '../../../constants.dart';
 
-class RestaurantInfo extends StatelessWidget {
-  const RestaurantInfo({
+class AttractionInfo extends StatefulWidget {
+  String name;
+
+  AttractionInfo({
     super.key,
+    required this.name
   });
+
+  @override
+  State<AttractionInfo> createState() =>
+      _State();
+}
+
+class _State extends State<AttractionInfo> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,41 +31,9 @@ class RestaurantInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Mayfield Bakery & Cafe",
+            widget.name,
             style: Theme.of(context).textTheme.headlineMedium,
             maxLines: 1,
-          ),
-          const SizedBox(height: defaultPadding / 2),
-          const SubListInfoItem(
-            subList: ["Chinese", "American", "Deshi food"],
-          ),
-          const SizedBox(height: defaultPadding / 2),
-          const RatingWithCounter(rating: 4.3, reviewCount: '12,988', attractionCount: '492',),
-          const SizedBox(height: defaultPadding),
-          Row(
-            children: [
-              const DeliveryInfo(
-                iconSrc: "assets/icons/delivery.svg",
-                text: "Free",
-                subText: "Delivery",
-              ),
-              const SizedBox(width: defaultPadding),
-              const DeliveryInfo(
-                iconSrc: "assets/icons/clock.svg",
-                text: "25",
-                subText: "Minutes",
-              ),
-              const Spacer(),
-              OutlinedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text("Save"),
-              ),
-            ],
           ),
         ],
       ),

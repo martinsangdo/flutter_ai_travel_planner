@@ -6,7 +6,7 @@ import 'dart:convert';
 
 import '../../constants.dart';
 import 'components/tab_items.dart';
-import 'components/restaurrant_info.dart';
+import 'components/attraction_info.dart';
 import 'package:http/http.dart' as http;
 
 //display results after using AI planner
@@ -55,7 +55,6 @@ class _State extends State<CityDetailsScreen> {
   void initState() {
     super.initState();
     _fetchRawCityDetails();
-    findAttractionDetails(78699); //buckingham palace
   }
   @override
   Widget build(BuildContext context) {

@@ -19,7 +19,7 @@ class _ItemsState extends State<TabItems> {
   @override
   void initState() {
     super.initState();
-    setState(() {
+      setState(() {
     });
   }
 
@@ -52,6 +52,7 @@ class _ItemsState extends State<TabItems> {
             padding: const EdgeInsets.symmetric(
                 horizontal: defaultPadding, vertical: defaultPadding / 2),
             child: ItemCard(
+              trip_id: widget.attractions[index]["trip_id"],
               title: widget.attractions[index]["name"],
               description: widget.attractions[index]["description"],
               image: widget.attractions[index]["image"],
@@ -100,9 +101,3 @@ final List<Map<String, dynamic>> demoData = List.generate(
     "priceRange": "\$" * 2,
   },
 );
-
-final List<String> photoGalleryUrls = [
-  'https://ak-d.tripcdn.com/images/01029120008fcnhm923E2_C_180_240_Q70.webp',
-  'https://ak-d.tripcdn.com/images/1lo4s12000dyhs5m47CE2_C_180_240_Q70.webp',
-  'https://ak-d.tripcdn.com/images/100b10000000o5v2z5A26_C_180_240_Q70.webp',
-];

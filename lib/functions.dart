@@ -36,26 +36,6 @@ String formatDate(String inputDate) {
   return formatter.format(dateTime);
 }
 
-//find all details of 1 place
-  Map findAttractionDetails(intAttractionId){
-    Map finalResult = {};
-    //1.1 image list https://uk.trip.com/restapi/soa2/18066/searchMomentList
-    
-    //2. list of reviews https://uk.trip.com/restapi/soa2/19707/getReviewSearch (with photos)
-
-    //(Things to do) day tours https://uk.trip.com/restapi/soa2/14580/json/getCrossRecommendProduct
-
-    //get tour details https://uk.trip.com/restapi/soa2/21052/getProductInfo
-
-    //4. related places (https://uk.trip.com/restapi/soa2/18762/getInternalLinkModuleList)
-
-    //(What to eat) https://www.trip.com/restapi/soa2/23044/getDestinationPageInfo.json
-
-    //recommend cities: saved in db with cities in a country
-
-    return finalResult;
-  }
-
 /*
 return:
 - city
@@ -264,4 +244,30 @@ _searchLocations(orgPlaceName, country) async{
 
       return {'result': 'FAILED', 'message': 'Not found'};
     }
+  }
+  //some functions for attraction details, return list of photo urls
+  getAttractionPhotos(trip_id) async{
+    if (trip_id == null){
+      return [];
+    }
+    List<String> photoUrls = [];
+    //
+    final response = await http.Client().post(Uri.parse(glb_trip_uri + GET_ATTRACTION_OFFICIAL_PHOTOS), 
+        headers: COMMON_HEADER, body: jsonEncode({
+            "poiId": trip_id,
+            "index": 1, //page index
+            "count": 20,
+            "head": COMMON_TRIP_HEAD
+        }));
+    if (response.statusCode != 200){
+      return {'result': 'FAILED', 'message': 'Cannot get content from cloud'};
+    } else {
+      Map objFromCloud = jsonDecode(response.body);
+      if (objFromCloud['recommendPhoto'] != null && objFromCloud['recommendPhoto']['photoList'] != null){
+        for (Map photo in objFromCloud['recommendPhoto']['photoList']){
+          photoUrls.add(photo['imageUrl']);
+        }
+      }
+    }
+    return photoUrls;
   }
