@@ -84,7 +84,7 @@ Map<String, dynamic> COMMON_TRIP_HEAD = {
                 ]
             };
 String APP_DATE_FORMAT = 'dd/MM/yyyy';
-int DURATION_DAYS = 5;   //no. of days that user will travel
+int DEFAULT_DURATION_DAYS = 5;   //no. of days that user will travel
 //global variables
 String glb_gem_key = "";
 String glb_gem_uri = "";
@@ -101,8 +101,8 @@ String postGetRawData = 'post_query_raw_url';
 String CHATBOT_UNAVAILABLE = 'The AI service is unavailable now. Please try in another time.';
 //
 const SEARCH_LOCATION = "v1/destinations?q=";
-const GENERATE_NEW_TRIP_PLANNER = 'v4/trips/generate';
-const GET_HOTEL_LIST = 'v4/trips/accommondation?';
+const GENERATE_NEW_TRIP_PLANNER = 'api/v4/trips/generate';
+const GET_HOTEL_LIST = 'api/v4/trips/accommondation?';
 const GET_GENERAL_TRIP_ID = '/v4/plan/v4-1739922077865-80005/__data.json';
 const GET_DAILY_ACTIVITIES = '';
 //trip

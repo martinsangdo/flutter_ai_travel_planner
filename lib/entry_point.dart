@@ -26,7 +26,7 @@ class _EntryPointState extends State<EntryPoint> {
     {"icon": "assets/icons/home.svg", "title": "Home"},
     {"icon": "assets/icons/search.svg", "title": "AI Planner"},
     {"icon": "assets/icons/order.svg", "title": "AI Assistant"},
-    {"icon": "assets/icons/profile.svg", "title": "Saved Plans"},
+    // {"icon": "assets/icons/profile.svg", "title": "Saved Plans"},
   ];
 
 // Screens
@@ -36,7 +36,7 @@ class _EntryPointState extends State<EntryPoint> {
     //AttractionDetailsScreen(trip_id: test_attraction_id, city_id: test_city_id, currency: test_currency, name: 'aa'),
     const PlannerFormScreen(),
     const AiChatScreen(),
-    const ProfileScreen(),
+    // const ProfileScreen(),
   ];
 
   @override

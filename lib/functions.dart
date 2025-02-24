@@ -8,6 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
+//  Gets the current date in UTC and formats it as "YYYY-MM-DDTHH:MM:SS.000Z" -> used to generate the trip
+String getCurrentDateInISO8601() {
+  DateTime nowUtc = DateTime.now().toUtc(); // Get current time and convert to UTC
+  String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss.000Z').format(nowUtc);
+  return formattedDate;
+}
 //add X days to the org date
 String addDaysToDate(String dateString, int daysToAdd) {
   try {
@@ -53,6 +59,7 @@ return:
 - 
 */
 Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
+  //debugPrint(rawData.toString());
   Map<String, dynamic> results = {};
   int index = 0;
   for (dynamic item in rawData){
@@ -98,18 +105,18 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
         // budgets
         if (item['budget'] != null){
           results['budgets'] = {};  //all budget info
-          int budgetMetaIndex = item['budget'];
-          Map<String, dynamic> budgetMeta = rawData[budgetMetaIndex];
+          int budgetMetaIndex = item['budget']; //331
+          Map<String, dynamic> budgetMeta = rawData[budgetMetaIndex]; //{accommodations, transportations, ...}
           for (String key in budgetMeta.keys){
             if (key == 'summary' || key == ''){
               continue;
             }
             results['budgets'][key] = [];
             //get list of budget types
-            for (int accommodationIndex in rawData[budgetMeta[key]]){
+            for (int keyIndex in rawData[budgetMeta[key]]){
               results['budgets'][key].add({
-                'type': rawData[rawData[accommodationIndex]['type']],
-                'priceUsd': double.parse(rawData[rawData[accommodationIndex]['priceUsd']])
+                'type': rawData[rawData[keyIndex]['type']],
+                'priceUsd': double.parse(rawData[rawData[keyIndex]['priceUsd']])
               });
             }
           }
@@ -122,21 +129,25 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
         */
         //get list of activities in each day
         if (item['tripResult'] != null){
-          List<dynamic> daysMetaIndexes = rawData[rawData[item['tripResult']]['days']]; //[81, 160, 254]
-          List dayResults = [];
-          for (int dayMetaIndex in daysMetaIndexes){  //dayMetaIndex: day 1, 2, ...
-            List<dynamic> activityMetaIndexes = rawData[rawData[dayMetaIndex]['activities']];
-            for (int activityMetaIndex in activityMetaIndexes){
-              //add all, no follow by each day
-              dayResults.add({
-                'name': rawData[rawData[activityMetaIndex]['location']], //activity name
-                'description': rawData[rawData[activityMetaIndex]['description']],  //activity description
-                'duration': rawData[rawData[activityMetaIndex]['durationMin']],  //activity duration, in minutes
-                'image': rawData[rawData[activityMetaIndex]['imageUrl']]
-              });
+          List<dynamic> daysMetaIndexes = rawData[rawData[item['tripResult']]['days']]; //[84, 195, 278, 340, 397]
+          if (daysMetaIndexes != null){
+            List dayResults = [];
+            for (int dayMetaIndex in daysMetaIndexes){  //dayMetaIndex: day 1, 2, ...
+              List<dynamic> activityMetaIndexes = rawData[rawData[dayMetaIndex]['activities']];
+              for (int activityMetaIndex in activityMetaIndexes){
+                //add all, no follow by each day
+                if (rawData[activityMetaIndex]['imageUrl'] != null){
+                  dayResults.add({
+                    'name': rawData[rawData[activityMetaIndex]['location']], //activity name
+                    'description': rawData[rawData[activityMetaIndex]['description']],  //activity description
+                    'duration': rawData[rawData[activityMetaIndex]['durationMin']],  //activity duration, in minutes
+                    'image': rawData[rawData[activityMetaIndex]['imageUrl']]
+                  });
+                }
+              }
             }
+            results['dayResults'] = dayResults;
           }
-          results['dayResults'] = dayResults;
         }
       }
     } else if (item is String){
@@ -148,13 +159,15 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
   //get hotel list
   results['hotelList'] = await _getHotelList(results['city'], results['travelAt'], results['currency_code']);
   //get attraction list
-  results['attractions'] = await _findMatchedAttractions(results['country'], results['dayResults']);
+  if (results['dayResults'] != null){
+    results['attractions'] = await _findMatchedAttractions(results['country'], results['dayResults']);
+  }
   //
   return results;
 }
 //query hotel list in city
 Future<List> _getHotelList(city, travelDate, currency) async {
-  String endDate = addDaysToDate(travelDate, DURATION_DAYS);  //add 5 days as default
+  String endDate = addDaysToDate(travelDate, DEFAULT_DURATION_DAYS);  //add 5 days as default
   travelDate = travelDate.replaceAll('T00:00:00Z', '');
   String hotelListUrl = glb_wonder_uri + 'api/v4/trips/accommondation?city='+city+'&start='+
         travelDate+'&end='+endDate;
@@ -184,21 +197,23 @@ Future<List> _getHotelList(city, travelDate, currency) async {
 }
 //query another service to find attraction detail (optionsl)
 _findMatchedAttractions(String country, List orgAttractions) async{
-  List attractions = [];  //init
-  for (Map item in orgAttractions){
-    Map searchResult = await _searchLocations(item['name'], country);
-    if (searchResult['result'] == 'FAILED'){
-      //debugPrint('Cannot find this place: ' + item['name']);
-    } else {
-      //debugPrint(searchResult.toString());
-      //add into the final list
-      attractions.add({
-        'trip_id': searchResult['id'],
-        'name': item['name'],
-        'description': item['description'],
-        'duration': item['duration'],
-        'image': item['image']
-      });
+  List attractions = [];  //init it empty
+  if (orgAttractions.isNotEmpty){
+    for (Map item in orgAttractions){
+      Map searchResult = await _searchLocations(item['name'], country);
+      if (searchResult['result'] == 'FAILED'){
+        //debugPrint('Cannot find this place: ' + item['name']);
+      } else {
+        //debugPrint(searchResult.toString());
+        //add into the final list
+        attractions.add({
+          'trip_id': searchResult['id'],
+          'name': item['name'],
+          'description': item['description'],
+          'duration': item['duration'],
+          'image': item['image']
+        });
+      }
     }
   }
   return attractions;

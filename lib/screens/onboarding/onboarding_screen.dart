@@ -48,34 +48,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         return locationList;
       }
   }
-  _generateNewTripPlanner(locationId) async{
-    final headers = {'Content-Type': 'application/json'}; // Important for JSON requests
-    
-    final response = await http.Client().post(Uri.parse(glb_wonder_uri + GENERATE_NEW_TRIP_PLANNER), 
-        headers: headers, body: jsonEncode({
-          "destinationDestinationId": locationId,
-          "travelAt": "2025-03-20T00:00:00.000Z",
-          "days": 3,
-          "budgetType": 2,
-          "groupType": 1,
-          "activityTypes": [
-            1,
-            5
-          ],
-          "isVegan": false,
-          "isHalal": false
-        }));
-    //debugPrint(response.body.toString());
-    if (response.statusCode != 200){
-      //debugPrint('Cannot get content from cloud');
-      return {'result': 'FAILED', 'message': 'Cannot create trip ID'};
-    } else {
-      Map<String, dynamic> objFromCloud = jsonDecode(response.body);
-      //debugPrint(objFromCloud.toString());
-      return {'result': 'OK', 'id': objFromCloud['id']};
-    }
-  }
-
   _getHotelList(cityKeyword, start_date, end_date) async{
     if (cityKeyword.length < 2){
       return [];
@@ -247,9 +219,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
   //
-  move2HomePage(){
+  move2HomePage() async{
     if (context.mounted) {
-      Future.delayed(const Duration(milliseconds: 3000*1000));  //delay screen 3 secs
+      await Future.delayed(const Duration(seconds: 2));  //delay screen 2 secs
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     }
   }

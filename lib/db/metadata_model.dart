@@ -38,6 +38,7 @@ class MetaDataModel {
     required this.uuid
   });
 
+  //parse JSON data from cloud to local db (we need to check key definitions)
   factory MetaDataModel.fromJson(Map<String, dynamic> json) {
     return MetaDataModel(
       uuid: json['uuid'] as String,
@@ -55,7 +56,7 @@ class MetaDataModel {
       cities_url: json['cities_url'] as String
     );
   }
-
+  //convert from object to JSON before insert/update to local db
   Map<String, dynamic> toMap() {
     return {
       'uuid': uuid,

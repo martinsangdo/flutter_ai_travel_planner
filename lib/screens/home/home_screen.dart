@@ -21,19 +21,20 @@ class HomeScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<HomeScreen> {
   bool _isLoading = true;
   List<String> _homeSliderImages = [];
-  Map _topBannerInfo = {};
+  Map<dynamic, dynamic> _topBannerInfo = {};
 
   _loadHomeCities(){
     //load banner
     _loadBanner(glb_home_cities['top_banner']);
+    //load other continents
     for (String key in glb_home_cities.keys.toList()){
       //debugPrint(key.toString());
       
     }
   }
   //get images of top banner
-  _loadBanner(city_uuid) async{
-    final dbData = await DatabaseHelper.instance.rawQuery("SELECT * FROM tb_city WHERE uuid='"+city_uuid+"'", []);
+  _loadBanner(Map topBannerCity) async{
+    final dbData = await DatabaseHelper.instance.rawQuery("SELECT * FROM tb_city WHERE name='"+topBannerCity['n']+"' AND country='"+topBannerCity['c']+"'", []);
     if (dbData.isNotEmpty){
       //debugPrint(dbData[0].toString());
       setState(() {
@@ -44,16 +45,12 @@ class _OnboardingScreenState extends State<HomeScreen> {
         }
         _homeSliderImages = imgList;
         //
-        _topBannerInfo = {
-          "wonder_id": dbData[0]['wonder_id'],
-          "cache_trip_date": dbData[0]['cache_trip_date'],
-          "wonder_trip_id": dbData[0]['wonder_trip_id']
-        };
+        _topBannerInfo = dbData[0];
         //
         _isLoading = false;
       });
     } else {
-      //no city in top banner
+      //no city in top banner (our local db)
     }
   }
   //user pressed the top banner
@@ -61,7 +58,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CityDetailsScreen(tripInfo: _topBannerInfo),
+        builder: (context) => CityDetailsScreen(cityInfo: _topBannerInfo),
       ),
     );
   }
@@ -164,7 +161,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                     press: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CityDetailsScreen(tripInfo: {}),
+                        builder: (context) => CityDetailsScreen(cityInfo: {}),
                       ),
                     ),
                   ),

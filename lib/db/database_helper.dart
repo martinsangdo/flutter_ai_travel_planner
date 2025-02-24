@@ -54,7 +54,7 @@ class DatabaseHelper {
         city_id INTEGER,
         imgUrls TEXT,
         wonder_id TINYTEXT,
-        cache_trip_date TINYTEXT,
+        travel_date TINYTEXT,
         wonder_trip_id TINYTEXT
       )
     ''');
@@ -76,6 +76,10 @@ class DatabaseHelper {
     return await db.update('metadata', newMetadata.toMap(), where: 'uuid = ?', whereArgs: [newMetadata.uuid]);
   }
   /////////////// CITY DATA (saved in the local app, not cloud)
+  Future<int> updateCitydata(City cityData) async {
+    Database db = await instance.db;
+    return await db.update('tb_city', cityData.toMap(), where: 'uuid = ?', whereArgs: [cityData.uuid]);
+  }
   //get cities by uuids
   Future<List<Map>> queryCitiesIn(List<dynamic> uuids) async {
     Database db = await instance.db;
