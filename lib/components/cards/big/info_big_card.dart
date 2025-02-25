@@ -8,20 +8,20 @@ import 'big_card_image_slide.dart';
 class InfoBigCard extends StatelessWidget {
   final List<String> images;
   final String name;
-  final double rating;
-  final String reviewCount, attractionCount;
-  final List<String> subList;
+  final double? rating;
+  final String? reviewCount, attractionCount;
+  final List<String>? subList;
   final VoidCallback press;
 
   const InfoBigCard({
     super.key,
     required this.name,
-    required this.rating,
-    required this.reviewCount,
-    required this.attractionCount,
+    this.rating,
+    this.reviewCount,
+    this.attractionCount,
     required this.images,
     required this.press,
-    required this.subList
+    this.subList
   });
   @override
   Widget build(BuildContext context) {
@@ -35,11 +35,11 @@ class InfoBigCard extends StatelessWidget {
           const SizedBox(height: defaultPadding / 2),
           Text(name, style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: defaultPadding / 4),
-          SubListInfoItem(subList: subList),
+          SubListInfoItem(subList: subList??[]),
           const SizedBox(height: defaultPadding / 4),
           Row(
             children: [
-              RatingWithCounter(rating: rating, reviewCount: reviewCount, attractionCount: attractionCount),
+              RatingWithCounter(rating: rating??0, reviewCount: reviewCount??'dd', attractionCount: attractionCount??''),
               const SizedBox(width: defaultPadding / 2),
             ],
           ),

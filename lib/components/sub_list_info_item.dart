@@ -15,16 +15,17 @@ class SubListInfoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ...List.generate(
-          subList.length,
-          (index) => Row(
-            children: [
-              buildSmallDot(),
-              Text(subList[index],
-                  style: Theme.of(context).textTheme.bodyMedium),
-            ],
+        if (subList.isNotEmpty)
+          ...List.generate(
+            subList.length,
+            (index) => Row(
+              children: [
+                buildSmallDot(),
+                Text(subList[index],
+                    style: Theme.of(context).textTheme.bodyMedium),
+              ],
+            ),
           ),
-        ),
       ],
     );
   }

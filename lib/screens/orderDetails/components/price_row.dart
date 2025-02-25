@@ -10,7 +10,7 @@ class PriceRow extends StatelessWidget {
   });
 
   final String text;
-  final double price;
+  final String price;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class PriceRow extends StatelessWidget {
           style: const TextStyle(color: titleColor),
         ),
         Text(
-          "$price",
+          price,
           style: const TextStyle(color: titleColor),
         )
       ],

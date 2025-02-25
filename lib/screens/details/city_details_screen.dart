@@ -142,6 +142,7 @@ class _State extends State<CityDetailsScreen> {
     if (widget.cityInfo.isNotEmpty && widget.cityInfo['wonder_trip_id'].isNotEmpty){
       //check cache date to avoid generating so many trip in 1 date
       if (_isExpiredTravelDate(widget.cityInfo['travel_date'])){
+        debugPrint('_isExpiredTravelDate: ' + widget.cityInfo['travel_date']);
         _generateNewTripID();
       } else {
         //get data based on old trip (existing wonder trip id)

@@ -19,36 +19,42 @@ class RatingWithCounter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
+        if (rating > 0)...[
+          Text(
           rating.toString(),
           style: Theme.of(context)
               .textTheme
               .labelSmall!
               .copyWith(color: titleColor.withOpacity(0.74)),
-        ),
-        const SizedBox(width: 8),
-        SvgPicture.asset(
-          "assets/icons/rating.svg",
-          height: 20,
-          width: 20,
-          colorFilter: const ColorFilter.mode(
-            primaryColor,
-            BlendMode.srcIn,
           ),
-        ),
-        const SizedBox(width: 8),
-        Text("$reviewCount+ Reviews",
+          const SizedBox(width: 8),
+          SvgPicture.asset(
+            "assets/icons/rating.svg",
+            height: 20,
+            width: 20,
+            colorFilter: const ColorFilter.mode(
+              primaryColor,
+              BlendMode.srcIn,
+            ),
+          ),
+        ],
+        if (reviewCount.isNotEmpty)...[
+          const SizedBox(width: 8),
+          Text("$reviewCount+ Reviews",
             style: Theme.of(context)
                 .textTheme
                 .labelSmall!
                 ,
-        ),
-        const SizedBox(width: 8),
-        Text("$attractionCount+ Attractions",
+          ),
+        ],
+        if (attractionCount.isNotEmpty)...[
+          const SizedBox(width: 8),
+          Text("$attractionCount+ Attractions",
             style: Theme.of(context)
                 .textTheme
                 .labelSmall!
                 .copyWith(color: titleColor.withOpacity(0.74))),
+        ],
       ],
     );
   }

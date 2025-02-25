@@ -116,7 +116,7 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
             for (int keyIndex in rawData[budgetMeta[key]]){
               results['budgets'][key].add({
                 'type': rawData[rawData[keyIndex]['type']],
-                'priceUsd': double.parse(rawData[rawData[keyIndex]['priceUsd']])
+                'priceUsd': rawData[rawData[keyIndex]['priceUsd']]  //sometimes it is not double
               });
             }
           }

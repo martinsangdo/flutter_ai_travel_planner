@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:ai_travel_planner/db/database_helper.dart';
 import 'package:flutter/material.dart';
 
-import '../../components/cards/big/big_card_image_slide.dart';
 import '../../components/cards/big/info_big_card.dart';
 import '../../components/section_title.dart';
 import '../../constants.dart';
@@ -20,23 +19,27 @@ class HomeScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<HomeScreen> {
   bool _isLoading = true;
+  //
   List<String> _homeSliderImages = [];
   Map<dynamic, dynamic> _topBannerInfo = {};
+  //
+  List<String> _randomPickImages = [];
+  Map<dynamic, dynamic> _randomPickInfo = {};
+
+
 
   _loadHomeCities(){
     //load banner
     _loadBanner(glb_home_cities['top_banner']);
+    //load Random Pick city
+    _loadRandomPick(glb_home_cities['random_pick']);
     //load other continents
-    for (String key in glb_home_cities.keys.toList()){
-      //debugPrint(key.toString());
-      
-    }
+    
   }
   //get images of top banner
   _loadBanner(Map topBannerCity) async{
     final dbData = await DatabaseHelper.instance.rawQuery("SELECT * FROM tb_city WHERE name='"+topBannerCity['n']+"' AND country='"+topBannerCity['c']+"'", []);
     if (dbData.isNotEmpty){
-      //debugPrint(dbData[0].toString());
       setState(() {
         List<dynamic> imgUrls = jsonDecode(dbData[0]['imgUrls']);
         List<String> imgList = [];
@@ -51,6 +54,27 @@ class _OnboardingScreenState extends State<HomeScreen> {
       });
     } else {
       //no city in top banner (our local db)
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+  //
+  _loadRandomPick(Map cityInfo) async{
+    final dbData = await DatabaseHelper.instance.rawQuery(
+      "SELECT * FROM tb_city WHERE name='"+cityInfo['n']+"' AND country='"+cityInfo['c']+"'", []);
+    // debugPrint(dbData[0].toString());
+    if (dbData.isNotEmpty){
+      setState(() {
+        List<dynamic> imgUrls = jsonDecode(dbData[0]['imgUrls']);
+        List<String> imgList = [];
+        for (dynamic imgUrl in imgUrls){
+          imgList.add(imgUrl);
+        }
+        _randomPickImages = imgList;
+        //
+        _randomPickInfo = dbData[0];
+      });
     }
   }
   //user pressed the top banner
@@ -63,10 +87,19 @@ class _OnboardingScreenState extends State<HomeScreen> {
     );
   }
 
+  _pressedRandomPick(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CityDetailsScreen(cityInfo: _randomPickInfo),
+      ),
+    );
+  }
+
   @override
   void initState() {
       super.initState();
-      _loadHomeCities();
+      _loadHomeCities();  //load all parts
   } 
 
   @override
@@ -109,15 +142,20 @@ class _OnboardingScreenState extends State<HomeScreen> {
                 ),
               const SizedBox(height: defaultPadding),
               //part 1 (top banner)
-              InkWell(
-                onTap: () {
-                  _pressedTopBanner();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                  child: BigCardImageSlide(images: _homeSliderImages),  //main slider
-                )
-              ),
+              if (_homeSliderImages.isNotEmpty)...[
+                const SizedBox(height: defaultPadding),
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                        defaultPadding, 0, defaultPadding, defaultPadding),
+                    child: InfoBigCard(
+                      images: _homeSliderImages..shuffle(),
+                      name: _topBannerInfo['name'] + ', ' + _topBannerInfo['country'],
+                      reviewCount: _topBannerInfo['review'].toString(),
+                      press: _pressedTopBanner
+                    ),
+                  ),
+                const SizedBox(height: defaultPadding),
+              ],
               const SizedBox(height: defaultPadding * 2),
               //part 2
               SectionTitle(
@@ -146,27 +184,21 @@ class _OnboardingScreenState extends State<HomeScreen> {
               const MediumCardList(),
               const SizedBox(height: defaultPadding),
               //part 4
-              SectionTitle(title: "Random pick", press: () {}),
-              const SizedBox(height: defaultPadding),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                      defaultPadding, 0, defaultPadding, defaultPadding),
-                  child: InfoBigCard(
-                    images: _homeSliderImages..shuffle(),
-                    name: "Paris",
-                    rating: 4.3,
-                    reviewCount: '99,999',
-                    attractionCount: '345',
-                    subList: const ["London Eye", "Tower Bridge", "River Thames"],
-                    press: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CityDetailsScreen(cityInfo: {}),
-                      ),
+              if (_randomPickImages.isNotEmpty)...[
+                SectionTitle(title: "Random pick", press: () {}),
+                const SizedBox(height: defaultPadding),
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                        defaultPadding, 0, defaultPadding, defaultPadding),
+                    child: InfoBigCard(
+                      images: _randomPickImages..shuffle(),
+                      name: _randomPickInfo['name'] + ', ' + _randomPickInfo['country'],
+                      reviewCount: _randomPickInfo['review'].toString(),
+                      press: _pressedRandomPick
                     ),
                   ),
-                ),
-              const SizedBox(height: defaultPadding),
+                const SizedBox(height: defaultPadding),
+              ],
               //part 5
               SectionTitle(
                 title: "Australia",
