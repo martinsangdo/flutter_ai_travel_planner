@@ -50,7 +50,7 @@ class _MediumCardListState extends State<MediumCardList> {
                         right: (_dataList.length - 1) == index ? defaultPadding : 0,
                       ),
                       child: InfoMediumCard(
-                        image: _dataList[index]['img'],
+                        image: fullImgUrl(_dataList[index]['img']),
                         name: _dataList[index]['name'],
                         location: _dataList[index]['country'],
                         reviewCount: formatNumberWithCommas(_dataList[index]['review']),

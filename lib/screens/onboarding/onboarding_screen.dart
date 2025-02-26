@@ -229,11 +229,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void initState() {
       super.initState();
-      //_testGetCities('lond');
-      //_generateNewTripPlanner("GB/ENG/London");
-      //_getHotelList('london', '2025-02-20','2025-02-23');
-      //_getGeneralInfo('v4-1739894726493-20387');
-      //_find_n_match_attractions('v4-1739900073441-75474', 'United Kingdom', 1);
     fetchMetadata();
   } 
 
@@ -253,16 +248,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Expanded(
               flex: 14,
               child: PageView.builder(
-                itemCount: demoData.length,
+                itemCount: 1,
                 onPageChanged: (value) {
                   setState(() {
                     currentPage = value;
                   });
                 },
                 itemBuilder: (context, index) => OnboardContent(
-                  illustration: demoData[index]["illustration"],
-                  title: demoData[index]["title"],
-                  text: demoData[index]["text"],
+                  illustration: "assets/images/ai_travel_logo_1024.png",
+                  duration: 100,  //can wait 10 seconds, worst case is to update new cities
                 ),
               ),
             ),
@@ -273,13 +267,3 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 }
-
-// Demo data for our Onboarding screen
-List<Map<String, dynamic>> demoData = [
-  {
-    "illustration": "assets/images/ai_travel_logo_1024.png",
-    "title": "",
-    "text":
-        "Loading ...",
-  }
-];

@@ -123,7 +123,7 @@ class _State extends State<CityDetailsScreen> {
         newCityInfo.wonder_trip_id = objFromCloud['id'];
         DatabaseHelper.instance.updateCitydata(newCityInfo).then((id) async {
           //need to wait some minutes for Wonder gerating new data of trip, otherwise some info is null while getting the details
-          await Future.delayed(const Duration(seconds: 10));  //delay 10 secs
+          await Future.delayed(const Duration(seconds: 15));  //delay 15 secs
           _fetchRawCityDetails(objFromCloud['id']);
           return {'result': 'OK', 'id': objFromCloud['id']};
         });
@@ -200,7 +200,7 @@ class _State extends State<CityDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (_isLoading)
-                      const PercentageDisplay(),
+                      PercentageDisplay(duration: 150),
                     Text(
                       _cityDetails['locationName']??'Loading data ...',
                       style: Theme.of(context).textTheme.headlineSmall,

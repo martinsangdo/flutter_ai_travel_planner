@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class PercentageDisplay extends StatefulWidget {
-  const PercentageDisplay({super.key});
+  int duration = 100; //default is changing every 100 millisecs
+
+  PercentageDisplay({super.key, required this.duration});
 
   @override
   State<PercentageDisplay> createState() => _PercentageDisplayState();
@@ -22,7 +24,7 @@ class _PercentageDisplayState extends State<PercentageDisplay> {
   void _startAnimation() {
     _percentage = 0; // Reset percentage before starting a new animation.
     
-    _timer = Timer.periodic(const Duration(milliseconds: 150), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: widget.duration), (timer) {
       setState(() {
         _percentage += 1; // Increment by 1 for smoother animation
         if (_percentage > 100) {

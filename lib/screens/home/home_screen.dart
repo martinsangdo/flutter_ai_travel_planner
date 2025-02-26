@@ -52,7 +52,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
         List<dynamic> imgUrls = jsonDecode(dbData[0]['imgUrls']);
         List<String> imgList = [];
         for (dynamic imgUrl in imgUrls){
-          imgList.add(imgUrl);
+          imgList.add(fullImgUrl(imgUrl));
         }
         _homeSliderImages = imgList;
         //
@@ -94,13 +94,13 @@ class _OnboardingScreenState extends State<HomeScreen> {
     Map cityInfo = glb_home_cities['random_pick'];
     final dbData = await DatabaseHelper.instance.rawQuery(
       "SELECT * FROM tb_city WHERE name='"+cityInfo['n']+"' AND country='"+cityInfo['c']+"'", []);
-    // debugPrint(dbData[0].toString());
+    //debugPrint(dbData[0].toString());
     if (dbData.isNotEmpty){
       setState(() {
         List<dynamic> imgUrls = jsonDecode(dbData[0]['imgUrls']);
         List<String> imgList = [];
         for (dynamic imgUrl in imgUrls){
-          imgList.add(imgUrl);
+          imgList.add(fullImgUrl(imgUrl));
         }
         _randomPickImages = imgList;
         //
@@ -171,7 +171,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                     child: CircularProgressIndicator(),
                   ),
                 ),
-                const PercentageDisplay(),
+                PercentageDisplay(duration: 100,),
               ],
               const SizedBox(height: defaultPadding),
               //part 1 (top banner)

@@ -76,6 +76,11 @@ class DatabaseHelper {
     return await db.update('metadata', newMetadata.toMap(), where: 'uuid = ?', whereArgs: [newMetadata.uuid]);
   }
   /////////////// CITY DATA (saved in the local app, not cloud)
+  Future<int> deleteAll() async {
+    Database db = await instance.db;
+    return await db.delete('tb_city');
+  }
+  //
   Future<int> updateCitydata(City cityData) async {
     Database db = await instance.db;
     return await db.update('tb_city', cityData.toMap(), where: 'uuid = ?', whereArgs: [cityData.uuid]);
@@ -126,9 +131,13 @@ class DatabaseHelper {
     }
     debugPrint('list2Insert ' + list2Insert.length.toString());
     debugPrint('list2Update ' + list2Update.length.toString());
-
+    int index = 0;
     if (list2Insert.isNotEmpty){
       for (City city in list2Insert){
+        // if (index == 0 && city.img.isNotEmpty){
+        //   debugPrint(city.img);
+        //   index = 1;
+        // }
         dbBatch?.insert('tb_city', city.toMap());
       }
     }

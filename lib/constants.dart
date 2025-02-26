@@ -57,6 +57,25 @@ String formatNumberWithCommas(int number) {
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
       (Match match) => '${match[1]},');
 }
+//because we exported key by number
+String getContinentKey(_c){
+  if (_c == null){
+    return '';
+  }
+  List continent_keys = [
+    '','asia', 'america', 'africa', 'australia', 'europe'
+  ];
+  return continent_keys[_c];
+}
+const IMAGE_URI = 'https://ak-d.tripcdn.com/images/';
+
+String fullImgUrl(imgUrl) {
+    if (imgUrl.contains(IMAGE_URI)){
+      return imgUrl;
+    }
+    return IMAGE_URI + imgUrl;
+  }
+
 
 // Common Text
 final Center kOrText = Center(
