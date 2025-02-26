@@ -1,4 +1,5 @@
 import 'package:ai_travel_planner/components/expandable_widget.dart';
+import 'package:ai_travel_planner/components/percentage_display.dart';
 import 'package:ai_travel_planner/db/city_model.dart';
 import 'package:ai_travel_planner/db/database_helper.dart';
 import 'package:ai_travel_planner/functions.dart';
@@ -25,7 +26,7 @@ class CityDetailsScreen extends StatefulWidget {
 
 class _State extends State<CityDetailsScreen> {
   Map<String, dynamic> _cityDetails = {};  //will fetch data into this later
-  bool _isLoading = true;
+  bool _isLoading = true; //loading the page
   Map _budgets = {};
   List _attractionList = [];
   List _hotelList = [];
@@ -122,7 +123,7 @@ class _State extends State<CityDetailsScreen> {
         newCityInfo.wonder_trip_id = objFromCloud['id'];
         DatabaseHelper.instance.updateCitydata(newCityInfo).then((id) async {
           //need to wait some minutes for Wonder gerating new data of trip, otherwise some info is null while getting the details
-          // await Future.delayed(const Duration(seconds: 10));  //delay 10 secs
+          await Future.delayed(const Duration(seconds: 10));  //delay 10 secs
           _fetchRawCityDetails(objFromCloud['id']);
           return {'result': 'OK', 'id': objFromCloud['id']};
         });
@@ -159,7 +160,7 @@ class _State extends State<CityDetailsScreen> {
         _generateNewTripID();
       } else {
         //get data based on old trip (existing wonder trip id)
-        debugPrint('old trip id: ' + wonder_trip_id);
+        debugPrint('Old trip id: ' + wonder_trip_id);
         _fetchRawCityDetails(wonder_trip_id);
       }
   }
@@ -167,11 +168,15 @@ class _State extends State<CityDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    debugPrint('Receiving from homepage:');
-    debugPrint(widget.cityInfo.toString());
-    debugPrint('----------------');
+    debugPrint('Receiving city from homepage: ' + widget.cityInfo['name']);
     _checkNGenerateTripID();
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -194,6 +199,8 @@ class _State extends State<CityDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (_isLoading)
+                      const PercentageDisplay(), // Use the widget here
                     Text(
                       _cityDetails['locationName']??'Loading data ...',
                       style: Theme.of(context).textTheme.headlineSmall,

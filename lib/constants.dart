@@ -83,8 +83,9 @@ Map<String, dynamic> COMMON_TRIP_HEAD = {
                     }
                 ]
             };
-String APP_DATE_FORMAT = 'dd/MM/yyyy';
-int DEFAULT_DURATION_DAYS = 5;   //no. of days that user will travel
+const APP_DATE_FORMAT = 'dd/MM/yyyy';
+const DEFAULT_DURATION_DAYS = 5;   //no. of days that user will travel
+const WAIT_TIME_NEW_TRIP = 15;    //no. of seconds to wait until we have data of new trip
 //global variables
 String glb_gem_key = "";
 String glb_gem_uri = "";
