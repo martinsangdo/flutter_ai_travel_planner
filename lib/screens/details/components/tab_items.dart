@@ -43,23 +43,7 @@ class _ItemsState extends State<TabItems> {
           ),
         ),
         //list in tab body
-        if (_currentTabIndex == 0 && widget.attractions.isNotEmpty)
-        ...List.generate(
-          widget.attractions.length,
-          (index) => Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: defaultPadding, vertical: defaultPadding / 2),
-            child: ItemCard(
-              trip_id: widget.attractions[index]["trip_id"],
-              title: widget.attractions[index]["name"],
-              description: widget.attractions[index]["description"],
-              image: widget.attractions[index]["image"],
-              duration: widget.attractions[index]["duration"],
-              itemType: 'attraction',
-            ),
-          ),
-        ),  //end attraction list
-        if (_currentTabIndex == 1 && widget.hotelList.isNotEmpty)
+        if (_currentTabIndex == 0 && widget.hotelList.isNotEmpty)
         ...List.generate(
           widget.hotelList.length,
           (index) => Padding(
@@ -76,6 +60,22 @@ class _ItemsState extends State<TabItems> {
             ),
           ),
         ), //end hotel list
+        if (_currentTabIndex == 1 && widget.attractions.isNotEmpty)
+        ...List.generate(
+          widget.attractions.length,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: defaultPadding, vertical: defaultPadding / 2),
+            child: ItemCard(
+              trip_id: widget.attractions[index]["trip_id"],
+              title: widget.attractions[index]["name"],
+              description: widget.attractions[index]["description"],
+              image: widget.attractions[index]["image"],
+              duration: widget.attractions[index]["duration"],
+              itemType: 'attraction',
+            ),
+          ),
+        ),  //end attraction list
       ], 
     );
   }
@@ -83,9 +83,9 @@ class _ItemsState extends State<TabItems> {
 
 final List<Tab> tabHeaders = <Tab>[
   const Tab(
-    child: Text('Attractions'),
-  ),
-  const Tab(
     child: Text('Hotels'),
   ),
+  const Tab(
+    child: Text('Attractions'),
+  )
 ];

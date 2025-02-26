@@ -132,6 +132,37 @@ class _State extends State<CityDetailsScreen> {
       }
     }
   }
+  //save travel date and new trip ID to our local db
+  _checkNGenerateTripID() async{
+    if (widget.cityInfo.isNotEmpty && widget.cityInfo['wonder_trip_id'].isNotEmpty){
+      _checkExpiredTravelDate(widget.cityInfo['travel_date'], widget.cityInfo['wonder_trip_id']);
+    } else {
+      //check if this city existed in db or not, because this city may generated trip id before but not updated to homepage
+      final dbData = await DatabaseHelper.instance.rawQuery("SELECT * FROM tb_city WHERE uuid='"+widget.cityInfo['uuid']+"'", []);
+      if (dbData.isNotEmpty){
+        if (dbData[0]['wonder_trip_id'].isNotEmpty){
+          //this city had wonder trip id
+          _checkExpiredTravelDate(dbData[0]['travel_date'], dbData[0]['wonder_trip_id']);
+        } else {
+          _generateNewTripID();
+        }
+      } else {
+        //this case never happens
+      }
+    }
+  }
+  //
+  _checkExpiredTravelDate(travelDate, wonder_trip_id){
+    //check cache date to avoid generating so many trip in 1 date
+      if (_isExpiredTravelDate(travelDate)){
+        debugPrint('_isExpiredTravelDate: ' + travelDate);
+        _generateNewTripID();
+      } else {
+        //get data based on old trip (existing wonder trip id)
+        debugPrint('old trip id: ' + wonder_trip_id);
+        _fetchRawCityDetails(wonder_trip_id);
+      }
+  }
   //
   @override
   void initState() {
@@ -139,20 +170,7 @@ class _State extends State<CityDetailsScreen> {
     debugPrint('Receiving from homepage:');
     debugPrint(widget.cityInfo.toString());
     debugPrint('----------------');
-    if (widget.cityInfo.isNotEmpty && widget.cityInfo['wonder_trip_id'].isNotEmpty){
-      //check cache date to avoid generating so many trip in 1 date
-      if (_isExpiredTravelDate(widget.cityInfo['travel_date'])){
-        debugPrint('_isExpiredTravelDate: ' + widget.cityInfo['travel_date']);
-        _generateNewTripID();
-      } else {
-        //get data based on old trip (existing wonder trip id)
-        debugPrint('old trip id: ' + widget.cityInfo['wonder_trip_id']);
-        _fetchRawCityDetails(widget.cityInfo['wonder_trip_id']);
-      }
-    } else {
-      //generate new trip id, make sure we have wonder ID
-      _generateNewTripID();
-    }
+    _checkNGenerateTripID();
   }
   @override
   Widget build(BuildContext context) {
