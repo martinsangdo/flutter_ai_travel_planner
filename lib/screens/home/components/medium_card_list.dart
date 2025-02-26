@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import '../../../components/cards/medium/info_medium_card.dart';
 import '../../../components/scalton/medium_card_scalton.dart';
 import '../../../constants.dart';
-import '../../../demo_data.dart';
 import '../../details/city_details_screen.dart';
 
 class MediumCardList extends StatefulWidget {
-  const MediumCardList({super.key});
+  List dataList =[];  //list of items to display
+
+  MediumCardList({super.key, required this.dataList});
 
   @override
   State<MediumCardList> createState() => _MediumCardListState();
@@ -27,42 +28,44 @@ class _MediumCardListState extends State<MediumCardList> {
 
   @override
   Widget build(BuildContext context) {
+    List _dataList = [];
+    if (widget.dataList.isNotEmpty){
+      _dataList = widget.dataList..shuffle();
+    }
     // only for demo
-    List data = demoMediumCardData..shuffle();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: double.infinity,
-          height: 254,
-          child: isLoading
-              ? buildFeaturedPartnersLoadingIndicator()
-              : ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: data.length,
-                  itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.only(
-                      left: defaultPadding,
-                      right: (data.length - 1) == index ? defaultPadding : 0,
-                    ),
-                    child: InfoMediumCard(
-                      image: data[index]['image'],
-                      name: data[index]['name'],
-                      location: data[index]['location'],
-                      reviewCount: '12,345',
-                      rating: 4.6,
-                      press: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CityDetailsScreen(cityInfo: {}),
-                          ),
-                        );
-                      },
+          SizedBox(
+            width: double.infinity,
+            height: 254,
+            child: isLoading
+                ? buildFeaturedPartnersLoadingIndicator()
+                : ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _dataList.length,
+                    itemBuilder: (context, index) => Padding(
+                      padding: EdgeInsets.only(
+                        left: defaultPadding,
+                        right: (_dataList.length - 1) == index ? defaultPadding : 0,
+                      ),
+                      child: InfoMediumCard(
+                        image: _dataList[index]['img'],
+                        name: _dataList[index]['name'],
+                        location: _dataList[index]['country'],
+                        reviewCount: formatNumberWithCommas(_dataList[index]['review']),
+                        press: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CityDetailsScreen(cityInfo: {}),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-        ),
+          ),
       ],
     );
   }

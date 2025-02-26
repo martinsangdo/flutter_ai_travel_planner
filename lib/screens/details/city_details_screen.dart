@@ -200,7 +200,7 @@ class _State extends State<CityDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (_isLoading)
-                      const PercentageDisplay(), // Use the widget here
+                      const PercentageDisplay(),
                     Text(
                       _cityDetails['locationName']??'Loading data ...',
                       style: Theme.of(context).textTheme.headlineSmall,

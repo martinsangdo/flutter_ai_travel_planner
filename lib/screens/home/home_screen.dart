@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ai_travel_planner/components/percentage_display.dart';
 import 'package:ai_travel_planner/db/database_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -25,19 +26,26 @@ class _OnboardingScreenState extends State<HomeScreen> {
   //
   List<String> _randomPickImages = [];
   Map<dynamic, dynamic> _randomPickInfo = {};
-
-
+  //
+  Map _countriesInContinents = {
+    'europe': [], 'america': [], 'asia': [], 'australia': [], 'africa': []
+  };  //key: continent id, value: list of countries info
 
   _loadHomeCities(){
     //load banner
-    _loadBanner(glb_home_cities['top_banner']);
+    _loadBanner();
     //load Random Pick city
-    _loadRandomPick(glb_home_cities['random_pick']);
+    _loadRandomPick();
     //load other continents
-    
+    _loadContinentCountries('europe');
+    _loadContinentCountries('america');
+    _loadContinentCountries('asia');
+    _loadContinentCountries('australia');
+    _loadContinentCountries('africa');
   }
-  //get images of top banner
-  _loadBanner(Map topBannerCity) async{
+  //get countries of 
+  _loadBanner() async{
+    Map topBannerCity = glb_home_cities['top_banner'];
     final dbData = await DatabaseHelper.instance.rawQuery("SELECT * FROM tb_city WHERE name='"+topBannerCity['n']+"' AND country='"+topBannerCity['c']+"'", []);
     if (dbData.isNotEmpty){
       setState(() {
@@ -59,8 +67,31 @@ class _OnboardingScreenState extends State<HomeScreen> {
       });
     }
   }
+  //get countries of continent
+  _loadContinentCountries(String continent) async{
+    List continentCountries = glb_home_cities[continent]; //list of city names/countries of this continent
+    if (continentCountries.isEmpty){
+      return; //do nothing
+    }
+    List countryObjects = [];
+    //find info of those city in our local db
+    for (Map cityCountry in continentCountries){
+      final dbData = await DatabaseHelper.instance.rawQuery("SELECT * FROM tb_city WHERE name='"+cityCountry['n']+"' AND country='"+cityCountry['c']+"'", []);
+      if (dbData.isNotEmpty){
+        countryObjects.add(dbData[0]);
+      } else {
+       //not found this city in our db
+      }
+    }
+    if (countryObjects.isNotEmpty){
+      setState(() {
+        _countriesInContinents[continent] = countryObjects;
+      });
+    }
+  }
   //
-  _loadRandomPick(Map cityInfo) async{
+  _loadRandomPick() async{
+    Map cityInfo = glb_home_cities['random_pick'];
     final dbData = await DatabaseHelper.instance.rawQuery(
       "SELECT * FROM tb_city WHERE name='"+cityInfo['n']+"' AND country='"+cityInfo['c']+"'", []);
     // debugPrint(dbData[0].toString());
@@ -133,13 +164,15 @@ class _OnboardingScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (_isLoading)
+              if (_isLoading) ...[
                 const Padding(
                   padding: EdgeInsets.all(5),
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
                 ),
+                const PercentageDisplay(),
+              ],
               const SizedBox(height: defaultPadding),
               //part 1 (top banner)
               if (_homeSliderImages.isNotEmpty)...[
@@ -168,7 +201,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: defaultPadding),
-              const MediumCardList(), //list
+              MediumCardList(dataList: _countriesInContinents['europe']), //list of items
               const SizedBox(height: defaultPadding),
               //part 3
               SectionTitle(
@@ -181,7 +214,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: defaultPadding),
-              const MediumCardList(),
+              MediumCardList(dataList: _countriesInContinents['america']),
               const SizedBox(height: defaultPadding),
               //part 4
               if (_randomPickImages.isNotEmpty)...[
@@ -210,7 +243,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: defaultPadding),
-              const MediumCardList(),
+              MediumCardList(dataList: _countriesInContinents['australia']),
               const SizedBox(height: defaultPadding),
               //part 6
               SectionTitle(
@@ -223,7 +256,20 @@ class _OnboardingScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: defaultPadding),
-              const MediumCardList(),
+              MediumCardList(dataList: _countriesInContinents['africa']),
+              const SizedBox(height: defaultPadding),
+              //part 6
+              SectionTitle(
+                title: "Asia",
+                press: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FeaturedScreen(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: defaultPadding),
+              MediumCardList(dataList: _countriesInContinents['asia']),
               const SizedBox(height: defaultPadding),
             ],
           ),

@@ -9,13 +9,13 @@ class InfoMediumCard extends StatelessWidget {
     required this.image,
     required this.name,
     required this.location,
-    required this.rating,
+    this.rating,
     required this.reviewCount,
     required this.press,
   });
 
   final String image, name, location;
-  final double rating;
+  final double? rating;
   final String reviewCount;
   final VoidCallback press;
 
@@ -51,9 +51,10 @@ class InfoMediumCard extends StatelessWidget {
             const SizedBox(height: defaultPadding / 2),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Rating(rating: rating),
+                if (rating != null)
+                  Rating(rating: rating!),
                 Text(
                   "$reviewCount reviews",
                   style: Theme.of(context)

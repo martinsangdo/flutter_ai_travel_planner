@@ -1,11 +1,9 @@
 import 'package:ai_travel_planner/screens/auto_complete_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../components/cards/big/info_big_card.dart';
 import '../../components/scalton/big_card_scalton.dart';
 import '../../constants.dart';
-import '../../demo_data.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});

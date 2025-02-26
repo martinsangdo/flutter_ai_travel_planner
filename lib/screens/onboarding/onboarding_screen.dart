@@ -221,7 +221,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   //
   move2HomePage() async{
     if (context.mounted) {
-      await Future.delayed(const Duration(seconds: 2));  //delay screen 2 secs
+      await Future.delayed(const Duration(seconds: 1));  //delay screen 2 secs
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     }
   }

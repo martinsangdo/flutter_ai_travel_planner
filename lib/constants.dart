@@ -52,6 +52,12 @@ bool isPrimitive(dynamic value) {
   return value is num || value is int || value is bool || value is String || value == null;
 }
 
+String formatNumberWithCommas(int number) {
+  return number.toString().replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (Match match) => '${match[1]},');
+}
+
 // Common Text
 final Center kOrText = Center(
     child: Text("Or", style: TextStyle(color: titleColor.withOpacity(0.7))));

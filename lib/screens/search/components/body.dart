@@ -4,7 +4,6 @@ import '../../../constants.dart';
 
 import '../../../components/cards/big/info_big_card.dart';
 import '../../../components/scalton/big_card_scalton.dart';
-import '../../../demo_data.dart';
 
 //Body of search screen
 class Body extends StatefulWidget {
