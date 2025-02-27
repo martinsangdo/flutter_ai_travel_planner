@@ -72,6 +72,7 @@ class _ItemsState extends State<TabItems> {
               description: widget.attractions[index]["description"],
               image: widget.attractions[index]["image"],
               duration: widget.attractions[index]["duration"],
+              commentNum: widget.attractions[index]['commentNum']??'',
               itemType: 'attraction',
             ),
           ),

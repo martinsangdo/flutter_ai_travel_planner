@@ -44,7 +44,7 @@ class _State extends State<CityDetailsScreen> {
       if (objFromCloud['nodes'] != null){
         //debugPrint(objFromCloud['nodes'][1]['data'].toString());
         Map<String, dynamic> parsedData = await parseRawTripDetails(objFromCloud['nodes'][1]['data']);
-        if (parsedData['attractions'] != null || parsedData['hotelList'] != null){
+        if (parsedData['hotelList'] != null){
           //we had data of this city, save it details in state
           setState((){
             _cityDetails = parsedData;
@@ -55,9 +55,9 @@ class _State extends State<CityDetailsScreen> {
             if (_cityDetails['hotelList'] != null){
               _hotelList = _cityDetails['hotelList'];
             }
-            if (_cityDetails['attractions'] != null){
-              _attractionList = _cityDetails['attractions'];
-            }
+            // if (_cityDetails['attractions'] != null){
+            //   _attractionList = _cityDetails['attractions'];
+            // }
             // debugPrint(_attractionList.toString());
             _isLoading = false;
           });
@@ -67,10 +67,77 @@ class _State extends State<CityDetailsScreen> {
             _isLoading = false;
           });
         }
+        //get attractions from trip
+        List attractionList = await _searchAttractionsInTrip();
+        setState(() {
+          _attractionList = attractionList;
+        });
       }
       return {'result': 'OK', 'id': objFromCloud['id']};
     }
   }
+  //get list of attractions in trip
+_searchAttractionsInTrip() async{
+  List finalList = [];
+  String cityActivities = glb_trip_uri + GET_THINGS_2_EAT_N_VISIT;
+  final response = await http.Client().post(Uri.parse(cityActivities), 
+        headers: COMMON_HEADER, body: jsonEncode({
+            "districtId": widget.cityInfo['city_id'],
+            "moduleList": [
+                "classicRecommendSight",
+                "classicRecommendRestaurant"
+            ],
+            "head": {
+                "locale": "en-US",
+                "extension": [
+                    {
+                        "name": "locale",
+                        "value": "en-US"
+                    },
+                    {
+                        "name": "platform",
+                        "value": "Online"
+                    },
+                    {
+                        "name": "currency",
+                        "value": "USD"
+                    },
+                    {
+                        "name": "user-agent",
+                        "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+                    }
+                ]
+            }
+        }));
+    if (response.statusCode != 200){
+      debugPrint('Cannot get content from cloud');
+    } else {
+      Map<String, dynamic> objFromCloud = jsonDecode(response.body);
+      if (objFromCloud['moduleList'] != null){
+        // debugPrint(objFromCloud['moduleList'][0].toString());
+        if (objFromCloud['moduleList'][0]['typeName'] == 'classicRecommendSight'){
+          //this is the list of what to do
+          try {
+            List whats2Do = objFromCloud['moduleList'][0]['classicRecommendSightModule']['sightList'][0]['sightList'];
+            for (Map what2Do in whats2Do){
+              finalList.add({
+                'trip_id': what2Do["id"],
+                'name': what2Do["name"],
+                'description': '',
+                'image': what2Do["imageUrl"],
+                'duration': 0,
+                'commentNum': what2Do['commentNum']
+              });
+            }
+          } catch (e){
+            debugPrint('Error when parse data');
+          }
+        }
+      }
+    }
+
+  return finalList;
+}
   //the travel date is expired if it happened before TODAY
   _isExpiredTravelDate(travelDate){
     if (travelDate.isNotEmpty){
@@ -94,12 +161,11 @@ class _State extends State<CityDetailsScreen> {
   _generateNewTripID() async{
     final headers = {'Content-Type': 'application/json'}; // Important for JSON requests
     //generate new trip
-    String todayISO = getCurrentDateInISO8601();
+    String todayISO = getTomorrowFormatted();
     if (!todayISO.contains("Z")){
       todayISO += "Z";
     }
-    final response = await http.Client().post(Uri.parse(glb_wonder_uri + GENERATE_NEW_TRIP_PLANNER), 
-        headers: headers, body: jsonEncode({
+    Map requestBody = {
           "destinationDestinationId": widget.cityInfo['wonder_id'],
           "travelAt": widget.cityOptions!['travelAt']??todayISO,
           "days": DEFAULT_DURATION_DAYS,
@@ -110,7 +176,12 @@ class _State extends State<CityDetailsScreen> {
           ],
           "isVegan": false,
           "isHalal": false
-        }));
+        };
+    // debugPrint('----------- generate new trip');
+    // debugPrint(requestBody.toString());
+    //
+    final response = await http.Client().post(Uri.parse(glb_wonder_uri + GENERATE_NEW_TRIP_PLANNER), 
+        headers: headers, body: jsonEncode(requestBody));
     if (response.statusCode != 200){
       return {'result': 'FAILED', 'message': 'Cannot create trip ID'};
     } else {
@@ -136,6 +207,7 @@ class _State extends State<CityDetailsScreen> {
   }
   //save travel date and new trip ID to our local db
   _checkNGenerateTripID() async{
+    debugPrint(widget.cityInfo.toString());
     if (widget.cityInfo.isNotEmpty && widget.cityInfo['wonder_trip_id'].isNotEmpty){
       _checkExpiredTravelDate(widget.cityInfo['travel_date'], widget.cityInfo['wonder_trip_id']);
     } else {
@@ -150,6 +222,7 @@ class _State extends State<CityDetailsScreen> {
         }
       } else {
         //this case never happens
+        debugPrint('_checkNGenerateTripID 111');
       }
     }
   }
@@ -303,6 +376,7 @@ class _State extends State<CityDetailsScreen> {
               ],
               //including tabs inside
               TabItems(hotelList: _hotelList, attractions: _attractionList),
+              const SizedBox(height: defaultPadding),
             ],
           ),
         ),

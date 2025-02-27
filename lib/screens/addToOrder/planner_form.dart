@@ -1,4 +1,3 @@
-import 'package:ai_travel_planner/db/city_model.dart';
 import 'package:ai_travel_planner/functions.dart';
 import 'package:ai_travel_planner/screens/addToOrder/components/square_checkedbox.dart';
 import 'package:ai_travel_planner/screens/addToOrder/date_widget.dart';
@@ -58,8 +57,8 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
   //begin planning
   _suggestThePlan() async{
     //collect other info
-    debugPrint(_selectedCityInfo.toString());
-    if (!_selectedCityInfo['name'].isNotEmpty){
+    //debugPrint(_selectedCityInfo.toString());
+    if (_selectedCityInfo['name'] == null){
       return; //do nothing because user hasn't input to search
     }
     List activityIndexes = [];
@@ -70,7 +69,7 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
     }
     if (_selectedTravelDate.isEmpty){
       //set at today
-      String todayISO = getCurrentDateInISO8601();
+      String todayISO = getTomorrowFormatted();
       if (!todayISO.contains("Z")){
         todayISO += "Z";
       }
@@ -85,7 +84,7 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
       "groupType": _selectedWhoGoIndex,
       "activityTypes": activityIndexes
     };  //options to create new trip 
-    debugPrint(cityOptions.toString());
+    //debugPrint(cityOptions.toString());
     //open detail page
     Navigator.push(
       context,

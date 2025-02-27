@@ -49,12 +49,13 @@ class _OnboardingScreenState extends State<ItemCard> {
         throw Exception('Could not launch $widget.url');
       }
     } else if (widget.itemType == 'attraction'){
-      if (context.mounted) {
-        //navigate to attraction detail page
-        Navigator.pushReplacement(context, 
-          MaterialPageRoute(builder: (context) => 
-          AttractionDetailsScreen(trip_id: widget.trip_id!, name: widget.title!, currency: widget.currency!,)));
-      }
+      // if (context.mounted) {
+      //   //navigate to attraction detail page
+      //   Navigator.pushReplacement(context, 
+      //     MaterialPageRoute(builder: (context) => 
+      //     AttractionDetailsScreen(trip_id: widget.trip_id!, name: widget.title!, currency: widget.currency!,)));
+      // }
+      
     }
   }
 
@@ -118,7 +119,7 @@ class _OnboardingScreenState extends State<ItemCard> {
                           const SizedBox(width: 8),
                           Text("Rating: "+widget.rating.toString(), style: const TextStyle(color: Colors.black),),
                         ],//end rating
-                        if (widget.duration != null)...[
+                        if (widget.duration != null && widget.duration! > 0)...[
                           SvgPicture.asset(
                             "assets/icons/clock.svg",
                             height: 20,
@@ -144,7 +145,7 @@ class _OnboardingScreenState extends State<ItemCard> {
                           const SizedBox(width: 8),
                           Text(widget.reviews!, style: const TextStyle(color: Colors.black),),
                         ],//end reviews
-                        if (widget.commentNum != null)...[
+                        if (widget.commentNum != null && widget.commentNum != '')...[
                           SvgPicture.asset(
                             "assets/icons/profile.svg",
                             height: 20,

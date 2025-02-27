@@ -152,7 +152,7 @@ class _SearchFormState extends State<SearchForm> {
             setState(() {
               keyword = value;
             });
-            //_beginSearching();
+            _beginSearching();
           }
         },
         onFieldSubmitted: (value) {

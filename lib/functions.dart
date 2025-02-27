@@ -9,11 +9,21 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 //  Gets the current date in UTC and formats it as "YYYY-MM-DDTHH:MM:SS.000Z" -> used to generate the trip
-String getCurrentDateInISO8601() {
-  DateTime nowUtc = DateTime.now().toUtc(); // Get current time and convert to UTC
-  String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss.000Z').format(nowUtc);
-  return formattedDate;
+// String getCurrentDateInISO8601() {
+//   DateTime nowUtc = DateTime.now().toUtc(); // Get current time and convert to UTC
+//   String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss.000Z').format(nowUtc);
+//   return formattedDate;
+// }
+//Gets the tomorrow date in UTC and formats it as "YYYY-MM-DDTHH:MM:SS.000Z" -> used to generate the trip
+String getTomorrowFormatted() {
+  DateTime now = DateTime.now().toUtc(); // Get current time in UTC
+  DateTime tomorrow = now.add(const Duration(days: 1)); // Add one day
+
+  // Format the DateTime object
+  String formattedTomorrow = tomorrow.toIso8601String().substring(0, 19) + '.000Z';
+  return formattedTomorrow;
 }
+
 //add X days to the org date
 String addDaysToDate(String dateString, int daysToAdd) {
   try {
@@ -127,13 +137,16 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
         {days: 8 -> day index, activities: 82 -> [83, 100, ] -> 
         {'location': 84 -> location name, 'durationMin': 105 -> mins, 'description': 91}}
         */
-        //get list of activities in each day
+        //get list of activities in each day -> Wonderplan returns not good results
+        /*
         if (item['tripResult'] != null){
           List<dynamic> daysMetaIndexes = rawData[rawData[item['tripResult']]['days']]; //[84, 195, 278, 340, 397]
+          debugPrint(daysMetaIndexes.toString());
           if (daysMetaIndexes != null){
             List dayResults = [];
             for (int dayMetaIndex in daysMetaIndexes){  //dayMetaIndex: day 1, 2, ...
               List<dynamic> activityMetaIndexes = rawData[rawData[dayMetaIndex]['activities']];
+              debugPrint(activityMetaIndexes.toString());
               for (int activityMetaIndex in activityMetaIndexes){
                 //add all, no follow by each day
                 if (rawData[activityMetaIndex]['imageUrl'] != null){
@@ -143,12 +156,14 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
                     'duration': rawData[rawData[activityMetaIndex]['durationMin']],  //activity duration, in minutes
                     'image': rawData[rawData[activityMetaIndex]['imageUrl']]
                   });
+                } else {
+                  debugPrint('Image null ' + activityMetaIndex.toString() );
                 }
               }
             }
             results['dayResults'] = dayResults;
           }
-        }
+        }*/
       }
     } else if (item is String){
       //this can be key or value
@@ -159,9 +174,9 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
   //get hotel list
   results['hotelList'] = await _getHotelList(results['city'], results['travelAt'], results['currency_code']);
   //get attraction list
-  if (results['dayResults'] != null){
-    results['attractions'] = await _findMatchedAttractions(results['country'], results['dayResults']);
-  }
+  // if (results['dayResults'] != null){
+  //   results['attractions'] = await _findMatchedAttractions(results['country'], results['dayResults']);
+  // }
   //
   return results;
 }
@@ -199,12 +214,13 @@ Future<List> _getHotelList(city, travelDate, currency) async {
 _findMatchedAttractions(String country, List orgAttractions) async{
   List attractions = [];  //init it empty
   if (orgAttractions.isNotEmpty){
+    debugPrint(orgAttractions.toString());
     for (Map item in orgAttractions){
       Map searchResult = await _searchLocations(item['name'], country);
       if (searchResult['result'] == 'FAILED'){
-        //debugPrint('Cannot find this place: ' + item['name']);
+        debugPrint('Cannot find this place: ' + item['name']);
       } else {
-        //debugPrint(searchResult.toString());
+        debugPrint(searchResult.toString());
         //add into the final list
         attractions.add({
           'trip_id': searchResult['id'],
@@ -218,6 +234,7 @@ _findMatchedAttractions(String country, List orgAttractions) async{
   }
   return attractions;
 }
+
 //search city id in trip (which could be same country)
 _searchLocations(orgPlaceName, country) async{
     String placeName = orgPlaceName.toLowerCase().replaceAll("'", '').replaceAll(".", '');
