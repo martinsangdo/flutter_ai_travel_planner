@@ -190,4 +190,17 @@ class DatabaseHelper {
     );
     return result;
   }
+  //search by keyword
+  Future<List<Map>> searchByKeyword(String keyword, int pageSize) async {
+    Database db = await instance.db;
+    List<Map> result = await db.query('tb_city',
+      columns: ['name,country,wonder_id'],
+      where: 'name LIKE ? OR country LIKE ?',
+      whereArgs: ['%$keyword%', '%$keyword%'],
+      orderBy: "name ASC",
+      limit: pageSize,
+      offset: 0
+    );
+    return result;
+  }
 }

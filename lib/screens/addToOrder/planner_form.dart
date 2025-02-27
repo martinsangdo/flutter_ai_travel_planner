@@ -2,7 +2,6 @@ import 'package:ai_travel_planner/screens/addToOrder/components/square_checkedbo
 import 'package:ai_travel_planner/screens/addToOrder/date_widget.dart';
 import 'package:ai_travel_planner/screens/search/search_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../constants.dart';
 import 'components/required_section_title.dart';
@@ -33,10 +32,18 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
   final List<String> _budgetType = ['0 - 1000 USD', '< 2500 USD', '2500+ USD'];
   int _selectedBudgetIndex = 0;
   //
-  List<Map> _searchResults = [];  //list of search results of cities
+  Map<String, dynamic> _searchResults = {};  //list of search results of city,country
   //
-  int _selectedTravelDays = 3;
+  int _selectedTravelDays = 5;
   String _selectedTravelDate = '';  //yyyy-mm-dd
+  String _selectedWonderId = '';
+  //
+  _callbackShowSearchResults(searchResults){
+    //debugPrint(searchResults.toString());
+    setState(() {
+      _searchResults = searchResults;
+    });
+  }
   //this is called after user chose the date
   void onDateSelected(strSelectedDate){
     //debugPrint(strSelectedDate);
@@ -46,7 +53,12 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
   }
   //begin planning
   _suggestThePlan() async{
-
+    debugPrint(_selectedWonderId);
+    //collect other info
+    debugPrint(_selectedTravelDate);
+    debugPrint(_activityTypes.toString());
+    debugPrint(_selectedWhoGoIndex.toString());
+    debugPrint(_selectedBudgetIndex.toString());
   }
   //max days to travel is 7
   _increaseDays(){
@@ -87,7 +99,7 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: defaultPadding),
-              const SearchForm(), //input the city keyword
+              SearchForm(callBackSearchResult: _callbackShowSearchResults), //input the city keyword
               //list of results
               if (_searchResults.isNotEmpty)
                 Align(
@@ -98,17 +110,22 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
                       height: 200.0, // Set a maximum height for the dropdown
                       child: ListView(
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        children: myItems.map((option) {
-                          return InkWell(
-                            onTap: () {
-                              
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(option),
-                            ),
-                          );
-                        }).toList(),
+                        children: [
+                          for (String key in _searchResults.keys.toList())...[
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _selectedWonderId = _searchResults[key]['wonder_id'];
+                                  _searchResults = {};  //clear search results
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(_searchResults[key]['city_name']),
+                              ),
+                            )
+                          ],
+                        ],
                       ),
                     ),
                   ),

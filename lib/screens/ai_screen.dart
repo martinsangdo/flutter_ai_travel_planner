@@ -54,7 +54,8 @@ class _AiChatScreenState extends State<AiChatScreen> {
     final response = await http.Client().post(Uri.parse(glb_backend_uri + postGetChatboxContent), 
         headers: headers, body: jsonEncode({
           'text': message,
-          'session_id': _newSessionId
+          'session_id': _newSessionId,
+          'app_id' : 'ai_travel_planner'
     }));
     //debugPrint(response.body.toString());
     if (response.statusCode != 200){

@@ -1,4 +1,5 @@
-import 'package:ai_travel_planner/screens/auto_complete_dropdown.dart';
+import 'package:ai_travel_planner/db/database_helper.dart';
+import 'package:ai_travel_planner/functions.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/cards/big/info_big_card.dart';
@@ -25,7 +26,7 @@ class _SearchScreenState extends State<SearchScreen> {
       });
     });
   }
-
+  //
   void showResult() {
     setState(() {
       _isLoading = true;
@@ -64,7 +65,7 @@ class _SearchScreenState extends State<SearchScreen> {
               Text('Search', style: Theme.of(context).textTheme.headlineMedium),
               const SizedBox(height: defaultPadding),
               //input box
-              const SearchForm(),
+              // SearchForm(callBackSearchResult: null,),
               
 
 
@@ -112,14 +113,36 @@ class _SearchScreenState extends State<SearchScreen> {
 }
 //input keyword to find cities
 class SearchForm extends StatefulWidget {
-  const SearchForm({super.key});
+  Function callBackSearchResult;
+
+  SearchForm({super.key, required this.callBackSearchResult});
 
   @override
   State<SearchForm> createState() => _SearchFormState();
 }
 
 class _SearchFormState extends State<SearchForm> {
+  String keyword = '';  //user inputs this info
   final _formKey = GlobalKey<FormState>();
+  //search city
+  _beginSearching() async{
+    await Future.delayed(const Duration(seconds: 1));  //delay screen 2 secs
+    //search in our local db (city or country that contains the keyword)
+    final dbData = await DatabaseHelper.instance.searchByKeyword(keyword, 10);
+    if (dbData.isNotEmpty){
+      //debugPrint(dbData.toString());
+      Map<String, dynamic> results = {};  //key: city@country, value: {name, wonder id}
+      for (Map city in dbData){
+        results[cityAtCountry(city['name'], city['country'])] = {
+          'city_name':city['name'] + ', ' + city['country'],
+          'wonder_id': city['wonder_id']
+        };
+      }
+      widget.callBackSearchResult(results); //send data back to main form
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -128,15 +151,23 @@ class _SearchFormState extends State<SearchForm> {
       child: TextFormField(
         onChanged: (value) {
           // get data while typing
-          // if (value.length >= 3) showResult();
+          if (value.length >= 2){
+            setState(() {
+              keyword = value;
+            });
+            //_beginSearching();
+          }
         },
         onFieldSubmitted: (value) {
           if (_formKey.currentState!.validate()) {
             // If all data are correct then save data to out variables
             _formKey.currentState!.save();
+            // Once user pressed on submit
+            _beginSearching();
+          } else {
+            //When is it happening?
 
-            // Once user pree on submit
-          } else {}
+          }
         },
         // validator: requiredValidator.call,
         style: Theme.of(context).textTheme.labelLarge,
@@ -152,16 +183,3 @@ class _SearchFormState extends State<SearchForm> {
     );
   }
 }
-
-List<String> myItems = [
-  'Apple',
-  'Banana',
-  'Orange',
-  'Grape',
-  'Mango',
-  'Pineapple',
-  'Watermelon',
-  'Kiwi',
-  'Strawberry',
-  'Blueberry',
-];

@@ -31,10 +31,10 @@ class _EntryPointState extends State<EntryPoint> {
 
 // Screens
   final List<Widget> _screens = [
-    const HomeScreen(),
-    //const CityDetailsScreen(),
-    //AttractionDetailsScreen(trip_id: test_attraction_id, city_id: test_city_id, currency: test_currency, name: 'aa'),
     const PlannerFormScreen(),
+    //const HomeScreen(),
+    //AttractionDetailsScreen(trip_id: test_attraction_id, city_id: test_city_id, currency: test_currency, name: 'aa'),
+    const HomeScreen(),
     const AiChatScreen(),
     // const ProfileScreen(),
   ];
