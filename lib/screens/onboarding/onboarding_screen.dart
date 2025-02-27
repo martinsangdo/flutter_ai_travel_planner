@@ -113,7 +113,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   //
   void updateCityDataAndOpenHome(List<City> cities) async{
     // await DatabaseHelper.instance.upsertBatch(cities);  //ensure data is inserted or update with "await" -> this medthod slow down the app
-    await compute(deleteAllThenInsert, cities);
+    await deleteAllThenInsert(cities);  //compute won't work
     move2HomePage();
   }
   //update app global variables from metadata
@@ -169,7 +169,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 },
                 itemBuilder: (context, index) => OnboardContent(
                   illustration: "assets/images/ai_travel_logo_1024.png",
-                  duration: 100,  //can wait 10 seconds, worst case is to update new cities
+                  duration: 300,  //can wait 30 seconds, worst case is to update new cities
                 ),
               ),
             ),
