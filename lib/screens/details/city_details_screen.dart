@@ -56,6 +56,8 @@ class _State extends State<CityDetailsScreen> {
             }
             if (_cityDetails['attractions'] != null){
               _attractionList = _cityDetails['attractions'];
+            } else {
+              debugPrint('attractions not found');
             }
             // debugPrint(_attractionList.toString());
             _isLoading = false;
@@ -123,7 +125,7 @@ class _State extends State<CityDetailsScreen> {
         newCityInfo.wonder_trip_id = objFromCloud['id'];
         DatabaseHelper.instance.updateCitydata(newCityInfo).then((id) async {
           //need to wait some minutes for Wonder gerating new data of trip, otherwise some info is null while getting the details
-          await Future.delayed(const Duration(seconds: 15));  //delay 15 secs
+          await Future.delayed(const Duration(seconds: WAIT_TIME_NEW_TRIP));  //delay 15 secs
           _fetchRawCityDetails(objFromCloud['id']);
           return {'result': 'OK', 'id': objFromCloud['id']};
         });
@@ -278,6 +280,8 @@ class _State extends State<CityDetailsScreen> {
                       children: [
                         Text(
                           budgetKey.toUpperCase(),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                           style: const TextStyle(color: Colors.black),
                         ),
                         const Icon(Icons.arrow_downward, color: Colors.white), // or use an animated icon

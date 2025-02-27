@@ -5,6 +5,7 @@ import 'package:ai_travel_planner/db/database_helper.dart';
 import 'package:ai_travel_planner/db/metadata_model.dart';
 import 'package:ai_travel_planner/entry_point.dart';
 import 'package:ai_travel_planner/screens/home/home_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 
@@ -199,9 +200,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       refreshCitiesWithCloudData(list);
     }
   }
-
+  //
+  Future<void> deleteAllThenInsert(List<City> cities) async {
+    await DatabaseHelper.instance.deleteAll();
+    await DatabaseHelper.instance.insertBatch(cities);
+  }
+  //
   void updateCityDataAndOpenHome(List<City> cities) async{
-    await DatabaseHelper.instance.upsertBatch(cities);  //ensure data is inserted or update with "await"
+    // await DatabaseHelper.instance.upsertBatch(cities);  //ensure data is inserted or update with "await" -> this medthod slow down the app
+    await compute(deleteAllThenInsert, cities);
     move2HomePage();
   }
   //update app global variables from metadata

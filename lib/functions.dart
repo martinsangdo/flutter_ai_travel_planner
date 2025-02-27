@@ -380,3 +380,8 @@ _searchLocations(orgPlaceName, country) async{
       'what2Eat': what2Eat
     };
   }
+//create key of "city@country" to save in the map
+String cityAtCountry(city, country){
+  String cityCountry = city + '@' + country;
+  return cityCountry.toLowerCase().replaceAll(' ', '');
+}

@@ -105,7 +105,7 @@ class _OnboardingScreenState extends State<ItemCard> {
                     ),
                     Row(
                       children: [
-                        if (widget.rating != null)...[
+                        if (widget.rating != null && widget.rating! > 0)...[
                           SvgPicture.asset(
                             "assets/icons/rating.svg",
                             height: 20,
@@ -116,7 +116,7 @@ class _OnboardingScreenState extends State<ItemCard> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text("Rating: $widget.rating", style: const TextStyle(color: Colors.black),),
+                          Text("Rating: "+widget.rating.toString(), style: const TextStyle(color: Colors.black),),
                         ],//end rating
                         if (widget.duration != null)...[
                           SvgPicture.asset(

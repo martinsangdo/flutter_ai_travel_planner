@@ -17,13 +17,20 @@ class PriceRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          text,
-          style: const TextStyle(color: titleColor),
-        ),
-        Text(
-          price,
-          style: const TextStyle(color: titleColor),
+        Wrap(children: [
+          Text(
+            text,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            style: const TextStyle(color: titleColor),
+          ),
+        ]),
+        Flexible(
+          child:
+          Text(
+            price,
+            style: const TextStyle(color: titleColor),
+          )
         )
       ],
     );

@@ -1,5 +1,6 @@
 //author: Sang Do
 import 'package:ai_travel_planner/db/city_model.dart';
+import 'package:ai_travel_planner/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'metadata_model.dart';
@@ -85,6 +86,11 @@ class DatabaseHelper {
     Database db = await instance.db;
     return await db.update('tb_city', cityData.toMap(), where: 'uuid = ?', whereArgs: [cityData.uuid]);
   }
+  //get ALL cities
+  Future<List<Map>> getAllCities() async {
+    Database db = await instance.db;
+    return await db.query('tb_city');
+  }
   //get cities by uuids
   Future<List<Map>> queryCitiesIn(List<dynamic> uuids) async {
     Database db = await instance.db;
@@ -93,45 +99,55 @@ class DatabaseHelper {
       whereArgs: uuids);
   }
 
+  Future<void> insertBatch(List<City> paramCities) async {
+    var dbBatch = _database?.batch();
+    for (City city in paramCities){
+      dbBatch?.insert('tb_city', city.toMap());
+    }
+    debugPrint('Insert all ' + paramCities.length.toString());
+    await dbBatch?.commit();
+  }
+
   //update or insert cities at once
-  Future<void> upsertBatch(List<City> cities) async {
+  Future<void> upsertBatch(List<City> paramCities) async {
     var dbBatch = _database?.batch();
     List<City> list2Insert = [];
     List<City> list2Update = [];
-    List<String> uuids = [];  //all uuids
-    Map<String, City> citiesMap = {};  //key: uuid, value: city detail
-    for (City city in cities){
-      uuids.add(city.uuid);
-      citiesMap[city.uuid] = city;
+    List<String> cityCountriesInParams = [];  //all "city@country" in params
+    Map<String, City> citiesMapInParams = {};  //key: "city@country", value: city detail
+    for (City city in paramCities){
+      cityCountriesInParams.add(cityAtCountry(city.name, city.country));
+      citiesMapInParams[cityAtCountry(city.name, city.country)] = city;
     }
     //
     if (dbBatch != null){
-      final dbCities = await DatabaseHelper.instance.queryCitiesIn(uuids);
+      final dbCities = await DatabaseHelper.instance.getAllCities();
       if (dbCities.isNotEmpty){
-        List<String> uuidsInDb = [];  //all uuids in db
+        List<String> cityCountriesInDb = [];  //all cities in db
         for (Map dbCity in dbCities){
-          uuidsInDb.add(dbCity['uuid']);
-          if (uuids.contains(dbCity['uuid']) && citiesMap[dbCity['uuid']] != null){
-            list2Update.add(citiesMap[dbCity['uuid']]!);  //update new city detail
+          cityCountriesInDb.add(cityAtCountry(dbCity['name'], dbCity['country']));
+          if (cityCountriesInParams.contains(cityAtCountry(dbCity['name'], dbCity['country'])) 
+                && citiesMapInParams[cityAtCountry(dbCity['name'], dbCity['country'])] != null){
+            list2Update.add(citiesMapInParams[cityAtCountry(dbCity['name'], dbCity['country'])]!);  //update new city detail
           }
         }
-        for (City city in cities){
-          if (!uuidsInDb.contains(city.uuid)){
-            list2Insert.add(city);  //new city
+        for (City city in paramCities){
+          if (!cityCountriesInDb.contains(cityAtCountry(city.name, city.country))){
+            list2Insert.add(city);  //new city because it is not found in our db
           }
         }
       } else {
         //nothing in db, insert all
-        for (City city in cities){
+        for (City city in paramCities){
           list2Insert.add(city);
         }
       }
     } else {
-      debugPrint('dbBatch null ');
+      debugPrint('dbBatch null');
     }
     debugPrint('list2Insert ' + list2Insert.length.toString());
     debugPrint('list2Update ' + list2Update.length.toString());
-    int index = 0;
+    // int index = 0;
     if (list2Insert.isNotEmpty){
       for (City city in list2Insert){
         // if (index == 0 && city.img.isNotEmpty){
@@ -143,7 +159,9 @@ class DatabaseHelper {
     }
     if (list2Update.isNotEmpty){
       for (City city in list2Update){
-        dbBatch?.update('tb_city', city.toMap(), where: 'uuid = ?', whereArgs: [city.uuid]);
+        dbBatch?.update('tb_city', city.toMap(), 
+            where: 'name = ? and country = ?', 
+            whereArgs: [city.name, city.country]);
       }
     }
     await dbBatch?.commit();
