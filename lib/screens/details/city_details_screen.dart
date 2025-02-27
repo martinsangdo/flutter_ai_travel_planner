@@ -129,13 +129,14 @@ _searchAttractionsInTrip() async{
                 'commentNum': what2Do['commentNum']
               });
             }
+            //debugPrint(finalList.toString());
           } catch (e){
             debugPrint('Error when parse data');
           }
         }
       }
     }
-
+  //debugPrint(finalList.toString());
   return finalList;
 }
   //the travel date is expired if it happened before TODAY
@@ -276,7 +277,7 @@ _searchAttractionsInTrip() async{
                     if (_isLoading)
                       PercentageDisplay(duration: 300),
                     Text(
-                      _cityDetails['locationName']??'Loading data ...',
+                      _cityDetails['locationName']??'Generating suggestions ...',
                       style: Theme.of(context).textTheme.headlineSmall,
                       maxLines: 1,
                     ),

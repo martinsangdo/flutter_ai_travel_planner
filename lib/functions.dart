@@ -72,6 +72,9 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
   //debugPrint(rawData.toString());
   Map<String, dynamic> results = {};
   int index = 0;
+  // debugPrint('===========');
+  // debugPrint(rawData.toString());
+  // debugPrint('===========');
   for (dynamic item in rawData){
     if (item == ''){
       index++;
@@ -94,10 +97,6 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
         //begin date
         if (item['travelAt'] != null){
           results['travelAt'] = rawData[item['travelAt']];
-          if (results['travelAt'] == null){
-            results['travelAt'] = getTomorrowDateFormatted();
-          }
-          results['travelDate'] = formatDateForUI(results['travelAt']);
         }
         //currency
         if (item['currency'] != null){
@@ -171,6 +170,10 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
     }
     index++;
   }
+  if (results['travelAt'] == null || results['travelAt'] == ''){
+    results['travelAt'] = getTomorrowDateFormatted();
+  }
+  results['travelDate'] = formatDateForUI(results['travelAt']);
   //get hotel list
   results['hotelList'] = await _getHotelList(results['city'], results['travelAt'], results['currency_code']);
   //get attraction list
@@ -182,11 +185,13 @@ Future<Map<String, dynamic>> parseRawTripDetails(rawData) async {
 }
 //query hotel list in city
 Future<List> _getHotelList(city, travelDate, currency) async {
+  if (city.isEmpty){
+    return [];  //somehow?
+  }
   String endDate = addDaysToDate(travelDate, DEFAULT_DURATION_DAYS);  //add 5 days as default
   travelDate = travelDate.replaceAll('T00:00:00Z', '');
   String hotelListUrl = glb_wonder_uri + 'api/v4/trips/accommondation?city='+city+'&start='+
         travelDate+'&end='+endDate;
-  //debugPrint(hotelListUrl);
   final response = await http.Client().get(Uri.parse(hotelListUrl), 
         headers: COMMON_HEADER);
   if (response.statusCode != 200){

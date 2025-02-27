@@ -110,7 +110,7 @@ Map<String, dynamic> COMMON_TRIP_HEAD = {
             };
 const APP_DATE_FORMAT = 'dd/MM/yyyy';
 const DEFAULT_DURATION_DAYS = 5;   //no. of days that user will travel
-const WAIT_TIME_NEW_TRIP = 10;    //no. of seconds to wait until we have data of new trip
+const WAIT_TIME_NEW_TRIP = 20;    //no. of seconds to wait until we have data of new trip
 //
 const PAGE_SIZE = 20; //20 items per page
 const DOUBLE_PAGE_SIZE = PAGE_SIZE * 2;
@@ -139,6 +139,6 @@ const SEARCH_LOCATIONS = '20400/getGsMainSuggestForTripOnline';
 const GET_ATTRACTION_OFFICIAL_PHOTOS = '19913/getTripPoiPhotoGallery';
 const GET_THINGS_TODO = '14580/json/getCrossRecommendProduct';
 const GET_THINGS_2_EAT_N_VISIT = '23044/getDestinationPageInfo.json';
-
+const GET_GALLERY_ATTRACTION = '/19913/getTripPoiPhotoGallery'; //photos of 1 attraction
 //for debugging
 bool isDebug = true;  //todo remove this flag when releasing

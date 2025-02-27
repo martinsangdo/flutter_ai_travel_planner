@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:ai_travel_planner/screens/details/attractions_details_screen.dart';
+import 'package:ai_travel_planner/screens/photo_gallery_fullscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../constants.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:http/http.dart' as http;
 
 //used to show hotel or attractions in city detail page (tab region)
 class ItemCard extends StatefulWidget {
@@ -16,7 +20,7 @@ class ItemCard extends StatefulWidget {
     this.url,
     this.rating,
     this.duration,
-    this.trip_id,
+    this.trip_id, ///attraction
     this.currency,
     this.reviews,
     this.commentNum
@@ -49,13 +53,61 @@ class _OnboardingScreenState extends State<ItemCard> {
         throw Exception('Could not launch $widget.url');
       }
     } else if (widget.itemType == 'attraction'){
-      // if (context.mounted) {
-      //   //navigate to attraction detail page
-      //   Navigator.pushReplacement(context, 
-      //     MaterialPageRoute(builder: (context) => 
-      //     AttractionDetailsScreen(trip_id: widget.trip_id!, name: widget.title!, currency: widget.currency!,)));
-      // }
-      
+      _getGalleryAttraction();
+    }
+  }
+  //get photos of this attraction to show in Gallery
+  _getGalleryAttraction() async{
+    List finalList = [];
+    String attractionPhotosUri = glb_trip_uri + GET_GALLERY_ATTRACTION;
+    final response = await http.Client().post(Uri.parse(attractionPhotosUri), 
+        headers: COMMON_HEADER, body: jsonEncode({
+          "head": {
+              "locale": "en-US",
+              "extension": [
+                  {
+                      "name": "locale",
+                      "value": "en-US"
+                  },
+                  {
+                      "name": "platform",
+                      "value": "Online"
+                  },
+                  {
+                      "name": "currency",
+                      "value": "USD"
+                  },
+                  {
+                      "name": "user-agent",
+                      "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+                  }
+              ]
+          },
+          "poiId": widget.trip_id,
+          "index": 1,
+          "count": 50
+      }));
+    if (response.statusCode != 200){
+      debugPrint('Cannot get content from cloud');
+    } else {
+      Map<String, dynamic> objFromCloud = jsonDecode(response.body);
+      if (objFromCloud['recommendPhoto'] != null && objFromCloud['recommendPhoto']['photoList'] != null){
+        List<String> imgList = [];
+        for (Map photo in objFromCloud['recommendPhoto']['photoList']){
+          imgList.add(photo['imageUrl']);
+        }
+        if (imgList.isNotEmpty){
+          Navigator.push(
+              context,
+                        MaterialPageRoute(
+                          builder: (context) => 
+                          PhotoGalleryFullscreen(
+                            imageUrls: imgList
+                          ),
+              ),
+          );
+        }
+      }
     }
   }
 
