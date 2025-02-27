@@ -180,7 +180,7 @@ class _OnboardingScreenState extends State<ItemCard> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text("Rating: "+widget.rating.toString(), style: const TextStyle(color: Colors.black),),
+                          Text(widget.rating.toString(), style: const TextStyle(color: Colors.black),),
                         ],//end rating
                         if (widget.duration != null && widget.duration! > 0)...[
                           SvgPicture.asset(
