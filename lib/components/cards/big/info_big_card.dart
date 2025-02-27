@@ -39,7 +39,7 @@ class InfoBigCard extends StatelessWidget {
           const SizedBox(height: defaultPadding / 4),
           Row(
             children: [
-              RatingWithCounter(rating: rating??0, reviewCount: reviewCount??'dd', attractionCount: attractionCount??''),
+              RatingWithCounter(rating: rating??0, reviewCount: reviewCount??'', attractionCount: attractionCount??''),
               const SizedBox(width: defaultPadding / 2),
             ],
           ),

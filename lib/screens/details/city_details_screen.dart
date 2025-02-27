@@ -50,16 +50,12 @@ class _State extends State<CityDetailsScreen> {
             //debugPrint(parsedData.toString());
             if (_cityDetails['budgets'] != null){
               _budgets = _cityDetails['budgets'];
-            } else {
-              debugPrint('budgets not found');
             }
             if (_cityDetails['hotelList'] != null){
               _hotelList = _cityDetails['hotelList'];
             }
             if (_cityDetails['attractions'] != null){
               _attractionList = _cityDetails['attractions'];
-            } else {
-              debugPrint('attractions not found');
             }
             // debugPrint(_attractionList.toString());
             _isLoading = false;

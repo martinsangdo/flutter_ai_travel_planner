@@ -45,6 +45,7 @@ dependencies:
   sqflite: ^2.4.1
   sqflite_common_ffi: ^2.3.4+4
   sqflite_common_ffi_web:
+  number_paginator: ^0.4.3
 
 dev_dependencies:
   flutter_test:

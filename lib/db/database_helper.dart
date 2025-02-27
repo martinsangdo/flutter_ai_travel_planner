@@ -166,4 +166,28 @@ class DatabaseHelper {
     }
     await dbBatch?.commit();
   }
+  //
+  Future<List<Map>> queryCitiesByContinentPagination(String continent, int pageIndex, int pageSize) async {
+    Database db = await instance.db;
+    List<Map> result = await db.query('tb_city',
+      columns: ['*'],
+      where: 'continent = ?',
+      whereArgs: [continent],
+      orderBy: "review DESC",
+      limit: pageSize,
+      offset: pageIndex * pageSize
+    );
+    return result;
+  }
+//
+//get books by categories with pagination
+  Future<List<Map>> queryByContinentTotal(String continent) async {
+    Database db = await instance.db;
+    List<Map> result = await db.query('tb_city',
+      columns: ['count(*) AS total'],
+      where: 'continent = ?',
+      whereArgs: [continent]
+    );
+    return result;
+  }
 }

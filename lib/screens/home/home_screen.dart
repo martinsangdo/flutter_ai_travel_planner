@@ -8,7 +8,7 @@ import '../../components/cards/big/info_big_card.dart';
 import '../../components/section_title.dart';
 import '../../constants.dart';
 import '../details/city_details_screen.dart';
-import '../featured/featurred_screen.dart';
+import '../featured/continent_cities_screen.dart';
 import 'components/medium_card_list.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -196,7 +196,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const FeaturedScreen(),
+                    builder: (context) => ContinentCityScreen(continent: 'europe'),
                   ),
                 ),
               ),
@@ -209,7 +209,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const FeaturedScreen(),
+                    builder: (context) => ContinentCityScreen(continent: 'america'),
                   ),
                 ),
               ),
@@ -238,7 +238,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const FeaturedScreen(),
+                    builder: (context) => ContinentCityScreen(continent: 'australia'),
                   ),
                 ),
               ),
@@ -251,7 +251,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const FeaturedScreen(),
+                    builder: (context) => ContinentCityScreen(continent: 'africa'),
                   ),
                 ),
               ),
@@ -264,7 +264,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const FeaturedScreen(),
+                    builder: (context) => ContinentCityScreen(continent: 'asia'),
                   ),
                 ),
               ),
