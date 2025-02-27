@@ -212,7 +212,7 @@ _searchAttractionsInTrip() async{
     } else {
       Map<String, dynamic> objFromCloud = jsonDecode(response.body);
       if (objFromCloud['id'] != null){
-        debugPrint('Generated new trip id: ' + objFromCloud['id']);
+        //debugPrint('Generated new trip id: ' + objFromCloud['id']);
         //generated successully
         //cache the date and trip id to db
         City newCityInfo = City.fromMap(widget.cityInfo);
@@ -255,11 +255,11 @@ _searchAttractionsInTrip() async{
   _checkExpiredTravelDate(travelDate, wonder_trip_id){
     //check cache date to avoid generating so many trip in 1 date
       if (_isExpiredTravelDate(travelDate)){
-        debugPrint('_isExpiredTravelDate: ' + travelDate);
+        //debugPrint('_isExpiredTravelDate: ' + travelDate);
         _generateNewTripID();
       } else {
         //get data based on old trip (existing wonder trip id)
-        debugPrint('Old trip id: ' + wonder_trip_id);
+        //debugPrint('Old trip id: ' + wonder_trip_id);
         _fetchRawCityDetails(wonder_trip_id);
       }
   }
@@ -267,7 +267,7 @@ _searchAttractionsInTrip() async{
   @override
   void initState() {
     super.initState();
-    debugPrint('Receiving city from homepage: ' + widget.cityInfo['name']);
+    //debugPrint('Receiving city from homepage: ' + widget.cityInfo['name']);
     _checkNGenerateTripID();
   }
 
@@ -301,7 +301,7 @@ _searchAttractionsInTrip() async{
                     if (_isLoading)
                       PercentageDisplay(duration: 300),
                     Text(
-                      _cityDetails['locationName']??'Generating suggestions ...',
+                      _cityDetails['locationName']??(widget.cityInfo['name']??''),
                       style: Theme.of(context).textTheme.headlineSmall,
                       maxLines: 1,
                     ),
@@ -315,7 +315,7 @@ _searchAttractionsInTrip() async{
                         const SizedBox(width: defaultPadding),
                         DeliveryInfo(
                           iconSrc: "assets/icons/fast-delivery.svg",
-                          text: _cityDetails['travelDate']??'...',
+                          text: _cityDetails['travelDate']??'Generating suggestions ...',
                         ),
                       ],
                     ),

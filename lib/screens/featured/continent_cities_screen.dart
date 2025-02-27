@@ -52,7 +52,7 @@ class _State extends State<ContinentCityScreen> {
         _totalPage = (cityTotal[0]['total'] / DOUBLE_PAGE_SIZE).ceil();
       }
     }
-    debugPrint('Total page ' + _totalPage.toString());
+    //debugPrint('Total page ' + _totalPage.toString());
     return _totalPage;
   }
   //

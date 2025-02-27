@@ -115,6 +115,10 @@ class _AiChatScreenState extends State<AiChatScreen> {
               children: [
                 Expanded(
                   child: TextField(
+                    onSubmitted: (value) {
+                      //user pressed Enter in keyboard
+                      _sendMessage();
+                    },
                     controller: _textController,
                     decoration: const InputDecoration(
                       hintText: 'Ask me anything ...',
