@@ -90,7 +90,7 @@ class _ItemsState extends State<TabItems> {
               image: widget.hotelList[index]["image"],
               price: widget.hotelList[index]["price"],
               url: widget.hotelList[index]["url"],
-              rating: widget.hotelList[index]["rating"],
+              rating: (widget.hotelList[index]["rating"]==null)?0:double.parse(widget.hotelList[index]["rating"].toString()),
               itemType: 'hotel'
             ),
           ),
