@@ -125,7 +125,7 @@ String glb_backend_uri = '';  //our internal BE
 String glb_trip_uri = '';
 Map glb_home_cities = {}; //cities to show in homepage
 //
-String postGetChatboxContent = '';
+String postGetChatboxContent = 'stock/chatbot';
 String postGetRawData = 'post_query_raw_url';
 //message
 String CHATBOT_UNAVAILABLE = 'The AI service is unavailable now. Please try in another time.';

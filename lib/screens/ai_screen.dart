@@ -55,7 +55,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
         headers: headers, body: jsonEncode({
           'text': message,
           'session_id': _newSessionId
-        }));
+    }));
     //debugPrint(response.body.toString());
     if (response.statusCode != 200){
       //debugPrint('Cannot get content from cloud');

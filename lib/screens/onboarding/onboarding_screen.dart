@@ -214,6 +214,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   //update app global variables from metadata
   updateGlobalVariablesNMove2Home(metadataObj, isMove2Home){
   //save variables to global space
+    glb_backend_uri = metadataObj.backend_uri;
     glb_gem_key = metadataObj.gem_key;
     glb_gem_uri = metadataObj.gem_uri;
     glb_hotel_booking_aff_id = metadataObj.hotel_booking_aff_id;
@@ -229,7 +230,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   move2HomePage() async{
     if (context.mounted) {
       await Future.delayed(const Duration(seconds: 1));  //delay screen 2 secs
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const EntryPoint()));
     }
   }
 
