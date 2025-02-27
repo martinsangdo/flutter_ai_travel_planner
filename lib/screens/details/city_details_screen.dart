@@ -16,9 +16,9 @@ import 'package:http/http.dart' as http;
 //display results after using AI planner
 class CityDetailsScreen extends StatefulWidget {
   Map<dynamic, dynamic> cityInfo = {};
-  Map<String, dynamic>? cityOptions = {};  //options to create new trip 
+  Map<String, dynamic> cityOptions = {};  //options to create new trip 
 
-  CityDetailsScreen({super.key, required this.cityInfo, this.cityOptions});
+  CityDetailsScreen({super.key, required this.cityInfo, required this.cityOptions});
 
   @override
   State<CityDetailsScreen> createState() =>
@@ -29,8 +29,10 @@ class _State extends State<CityDetailsScreen> {
   Map<String, dynamic> _cityDetails = {};  //will fetch data into this later
   bool _isLoading = true; //loading the page
   Map _budgets = {};
-  List _attractionList = [];
   List _hotelList = [];
+  //
+    List _attractionList = [];
+    List _restaurantList = [];
 
   //call to get details of city
   _fetchRawCityDetails(wonder_trip_id) async {
@@ -68,9 +70,10 @@ class _State extends State<CityDetailsScreen> {
           });
         }
         //get attractions from trip
-        List attractionList = await _searchAttractionsInTrip();
+        Map what2DoNEat = await _searchAttractionsInTrip();
         setState(() {
-          _attractionList = attractionList;
+          _attractionList = what2DoNEat['whats2DoList'];
+          _restaurantList = what2DoNEat['whats2EatList'];
         });
       }
       return {'result': 'OK', 'id': objFromCloud['id']};
@@ -78,7 +81,10 @@ class _State extends State<CityDetailsScreen> {
   }
   //get list of attractions in trip
 _searchAttractionsInTrip() async{
-  List finalList = [];
+  Map finalList = { //response those info
+    'whats2DoList' : [],
+    'whats2EatList' : []
+  };
   String cityActivities = glb_trip_uri + GET_THINGS_2_EAT_N_VISIT;
   final response = await http.Client().post(Uri.parse(cityActivities), 
         headers: COMMON_HEADER, body: jsonEncode({
@@ -116,11 +122,11 @@ _searchAttractionsInTrip() async{
       if (objFromCloud['moduleList'] != null){
         // debugPrint(objFromCloud['moduleList'][0].toString());
         if (objFromCloud['moduleList'][0]['typeName'] == 'classicRecommendSight'){
-          //this is the list of what to do
+          //this is the list of whats to do
           try {
             List whats2Do = objFromCloud['moduleList'][0]['classicRecommendSightModule']['sightList'][0]['sightList'];
             for (Map what2Do in whats2Do){
-              finalList.add({
+              finalList['whats2DoList'].add({
                 'trip_id': what2Do["id"],
                 'name': what2Do["name"],
                 'description': '',
@@ -129,11 +135,29 @@ _searchAttractionsInTrip() async{
                 'commentNum': what2Do['commentNum']
               });
             }
-            //debugPrint(finalList.toString());
           } catch (e){
-            debugPrint('Error when parse data');
+            debugPrint('Error when parse data what to do');
           }
         }
+        if (objFromCloud['moduleList'][1]['typeName'] == 'classicRecommendRestaurant'){
+          //this is a list of restaurants
+          try {
+            List whats2Eat = objFromCloud['moduleList'][1]['classicRecommendRestaurantModule']['restaurantList'][0]['restaurantList'];
+            //debugPrint(whats2Eat.toString());
+            for (Map what2Eat in whats2Eat){
+              finalList['whats2EatList'].add({
+                'trip_id': what2Eat["poiId"],
+                'name': what2Eat["name"],
+                'description': '',
+                'image': what2Eat["imageUrl"],
+                'duration': 0,
+                'commentNum': what2Eat['commentNum']
+              });
+            }
+          } catch (e){
+            debugPrint('Error when parse data what to eat');
+          }
+        } 
       }
     }
   //debugPrint(finalList.toString());
@@ -376,7 +400,7 @@ _searchAttractionsInTrip() async{
               const SizedBox(height: defaultPadding / 2),
               ],
               //including tabs inside
-              TabItems(hotelList: _hotelList, attractions: _attractionList),
+              TabItems(hotelList: _hotelList, attractions: _attractionList, restaurants: _restaurantList),
               const SizedBox(height: defaultPadding),
             ],
           ),

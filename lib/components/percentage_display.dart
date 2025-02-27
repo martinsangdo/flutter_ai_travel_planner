@@ -30,7 +30,7 @@ class _PercentageDisplayState extends State<PercentageDisplay> {
         if (_percentage > 100) {
           _timer.cancel(); // Stop when 100% is reached
           _percentage = 100; // Ensure it stops at exactly 100
-          debugPrint('Timer stopped');
+          //debugPrint('Timer stopped');
         }
       });
     });
@@ -39,7 +39,7 @@ class _PercentageDisplayState extends State<PercentageDisplay> {
   @override
   void dispose() {
     _timer.cancel(); // Cancel the timer to prevent memory leaks
-    debugPrint('Timer stopped');
+    //debugPrint('Timer stopped');
     super.dispose();
   }
 

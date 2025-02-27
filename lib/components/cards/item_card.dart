@@ -36,6 +36,8 @@ class ItemCard extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<ItemCard> {
+  bool _isGettingPhotos = false;
+
   @override
   void initState() {
       super.initState();
@@ -52,12 +54,18 @@ class _OnboardingScreenState extends State<ItemCard> {
       if (!await launchUrlString(widget.url!, mode: LaunchMode.externalApplication)) {
         throw Exception('Could not launch $widget.url');
       }
-    } else if (widget.itemType == 'attraction'){
+    } else if (widget.itemType == 'attraction' || widget.itemType == 'restaurant'){
       _getGalleryAttraction();
     }
   }
   //get photos of this attraction to show in Gallery
   _getGalleryAttraction() async{
+    if (_isGettingPhotos){
+      return; //you must wait
+    }
+    setState(() {
+      _isGettingPhotos = true;  //lock multiple tap
+    });
     List finalList = [];
     String attractionPhotosUri = glb_trip_uri + GET_GALLERY_ATTRACTION;
     final response = await http.Client().post(Uri.parse(attractionPhotosUri), 
@@ -87,6 +95,9 @@ class _OnboardingScreenState extends State<ItemCard> {
           "index": 1,
           "count": 50
       }));
+    setState(() {
+      _isGettingPhotos = false;
+    });
     if (response.statusCode != 200){
       debugPrint('Cannot get content from cloud');
     } else {

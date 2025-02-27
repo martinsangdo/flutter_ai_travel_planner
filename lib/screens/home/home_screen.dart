@@ -113,7 +113,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CityDetailsScreen(cityInfo: _topBannerInfo),
+        builder: (context) => CityDetailsScreen(cityInfo: _topBannerInfo, cityOptions: {},),
       ),
     );
   }
@@ -122,7 +122,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CityDetailsScreen(cityInfo: _randomPickInfo),
+        builder: (context) => CityDetailsScreen(cityInfo: _randomPickInfo, cityOptions: {}),
       ),
     );
   }

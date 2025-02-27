@@ -98,7 +98,7 @@ class _State extends State<ContinentCityScreen> {
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CityDetailsScreen(cityInfo: _cityList[index]),
+                    builder: (context) => CityDetailsScreen(cityInfo: _cityList[index], cityOptions: {},),
                   ),
                 ),
               ),
