@@ -16,8 +16,9 @@ import 'package:http/http.dart' as http;
 //display results after using AI planner
 class CityDetailsScreen extends StatefulWidget {
   Map<dynamic, dynamic> cityInfo = {};
+  Map<String, dynamic>? cityOptions = {};  //options to create new trip 
 
-  CityDetailsScreen({super.key, required this.cityInfo});
+  CityDetailsScreen({super.key, required this.cityInfo, this.cityOptions});
 
   @override
   State<CityDetailsScreen> createState() =>
@@ -92,7 +93,7 @@ class _State extends State<CityDetailsScreen> {
   //generate new trip id and cache it
   _generateNewTripID() async{
     final headers = {'Content-Type': 'application/json'}; // Important for JSON requests
-    //generate with default info
+    //generate new trip
     String todayISO = getCurrentDateInISO8601();
     if (!todayISO.contains("Z")){
       todayISO += "Z";
@@ -100,11 +101,11 @@ class _State extends State<CityDetailsScreen> {
     final response = await http.Client().post(Uri.parse(glb_wonder_uri + GENERATE_NEW_TRIP_PLANNER), 
         headers: headers, body: jsonEncode({
           "destinationDestinationId": widget.cityInfo['wonder_id'],
-          "travelAt": todayISO,
+          "travelAt": widget.cityOptions!['travelAt']??todayISO,
           "days": DEFAULT_DURATION_DAYS,
-          "budgetType": 2,  //medium
-          "groupType": 1, //solo
-          "activityTypes": [
+          "budgetType": widget.cityOptions!['budgetType']??2,  //medium
+          "groupType": widget.cityOptions!['groupType']??0, //solo
+          "activityTypes": widget.cityOptions!['activityTypes']??[
             0, 1, 2, 3, 4, 5, 6, 7 //all activities
           ],
           "isVegan": false,

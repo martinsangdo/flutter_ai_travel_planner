@@ -133,10 +133,7 @@ class _SearchFormState extends State<SearchForm> {
       //debugPrint(dbData.toString());
       Map<String, dynamic> results = {};  //key: city@country, value: {name, wonder id}
       for (Map city in dbData){
-        results[cityAtCountry(city['name'], city['country'])] = {
-          'city_name':city['name'] + ', ' + city['country'],
-          'wonder_id': city['wonder_id']
-        };
+        results[cityAtCountry(city['name'], city['country'])] = city;
       }
       widget.callBackSearchResult(results); //send data back to main form
     }

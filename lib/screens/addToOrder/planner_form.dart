@@ -1,5 +1,8 @@
+import 'package:ai_travel_planner/db/city_model.dart';
+import 'package:ai_travel_planner/functions.dart';
 import 'package:ai_travel_planner/screens/addToOrder/components/square_checkedbox.dart';
 import 'package:ai_travel_planner/screens/addToOrder/date_widget.dart';
+import 'package:ai_travel_planner/screens/details/city_details_screen.dart';
 import 'package:ai_travel_planner/screens/search/search_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +39,8 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
   //
   int _selectedTravelDays = 5;
   String _selectedTravelDate = '';  //yyyy-mm-dd
-  String _selectedWonderId = '';
+  //
+  Map _selectedCityInfo = {};
   //
   _callbackShowSearchResults(searchResults){
     //debugPrint(searchResults.toString());
@@ -53,12 +57,42 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
   }
   //begin planning
   _suggestThePlan() async{
-    debugPrint(_selectedWonderId);
     //collect other info
-    debugPrint(_selectedTravelDate);
-    debugPrint(_activityTypes.toString());
-    debugPrint(_selectedWhoGoIndex.toString());
-    debugPrint(_selectedBudgetIndex.toString());
+    debugPrint(_selectedCityInfo.toString());
+    if (!_selectedCityInfo['name'].isNotEmpty){
+      return; //do nothing because user hasn't input to search
+    }
+    List activityIndexes = [];
+    for (Map activity in _activityTypes){
+      if (activity['selected']){
+        activityIndexes.add(activity['value']);
+      }
+    }
+    if (_selectedTravelDate.isEmpty){
+      //set at today
+      String todayISO = getCurrentDateInISO8601();
+      if (!todayISO.contains("Z")){
+        todayISO += "Z";
+      }
+      _selectedTravelDate = todayISO;
+      setState(() {
+        _selectedTravelDate = todayISO;
+      });
+    }
+    Map<String, dynamic> cityOptions = {
+      "travelAt": _selectedTravelDate, //ISO format
+      "budgetType": _selectedBudgetIndex,
+      "groupType": _selectedWhoGoIndex,
+      "activityTypes": activityIndexes
+    };  //options to create new trip 
+    debugPrint(cityOptions.toString());
+    //open detail page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CityDetailsScreen(cityInfo: _selectedCityInfo, cityOptions: cityOptions),
+      ),
+    );
   }
   //max days to travel is 7
   _increaseDays(){
@@ -115,13 +149,13 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
                             InkWell(
                               onTap: () {
                                 setState(() {
-                                  _selectedWonderId = _searchResults[key]['wonder_id'];
+                                  _selectedCityInfo = _searchResults[key];
                                   _searchResults = {};  //clear search results
                                 });
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
-                                child: Text(_searchResults[key]['city_name']),
+                                child: Text(_searchResults[key]['name'] + ', ' + _searchResults[key]['country']),
                               ),
                             )
                           ],
