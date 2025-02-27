@@ -218,7 +218,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
               const SizedBox(height: defaultPadding),
               //part 4
               if (_randomPickImages.isNotEmpty)...[
-                SectionTitle(title: "Random pick", press: () {}),
+                SectionTitle(title: "Random pick", press: () {}, isMainSection: false),
                 const SizedBox(height: defaultPadding),
                 Padding(
                     padding: const EdgeInsets.fromLTRB(

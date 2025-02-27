@@ -27,6 +27,11 @@ class _MediumCardListState extends State<MediumCardList> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List _dataList = [];
     if (widget.dataList.isNotEmpty){
