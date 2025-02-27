@@ -50,6 +50,8 @@ class _State extends State<CityDetailsScreen> {
             //debugPrint(parsedData.toString());
             if (_cityDetails['budgets'] != null){
               _budgets = _cityDetails['budgets'];
+            } else {
+              debugPrint('budgets not found');
             }
             if (_cityDetails['hotelList'] != null){
               _hotelList = _cityDetails['hotelList'];
@@ -202,7 +204,7 @@ class _State extends State<CityDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (_isLoading)
-                      PercentageDisplay(duration: 150),
+                      PercentageDisplay(duration: 300),
                     Text(
                       _cityDetails['locationName']??'Loading data ...',
                       style: Theme.of(context).textTheme.headlineSmall,
