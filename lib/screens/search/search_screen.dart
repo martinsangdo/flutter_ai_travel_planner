@@ -113,7 +113,7 @@ class _SearchScreenState extends State<SearchScreen> {
 }
 //input keyword to find cities
 class SearchForm extends StatefulWidget {
-  Function callBackSearchResult;
+  Function callBackSearchResult;  //send data back to main form
 
   SearchForm({super.key, required this.callBackSearchResult});
 

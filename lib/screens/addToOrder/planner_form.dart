@@ -133,6 +133,8 @@ class _AddToOrderScrreenState extends State<PlannerFormScreen> {
             children: [
               const SizedBox(height: defaultPadding),
               SearchForm(callBackSearchResult: _callbackShowSearchResults), //input the city keyword
+              if (_selectedCityInfo['name'] != null)
+                Text(_selectedCityInfo['name'] + ', ' + _selectedCityInfo['country']),
               //list of results
               if (_searchResults.isNotEmpty)
                 Align(
