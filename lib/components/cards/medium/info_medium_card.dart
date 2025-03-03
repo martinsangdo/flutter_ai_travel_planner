@@ -55,13 +55,14 @@ class InfoMediumCard extends StatelessWidget {
               children: [
                 if (rating != null)
                   Rating(rating: rating!),
-                Text(
-                  "$reviewCount reviews",
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelLarge!
-                      .copyWith(color: titleColor.withOpacity(0.74)),
-                ),
+                // if (reviewCount != '' && reviewCount != '0')
+                //   Text(
+                //     "$reviewCount reviews",
+                //     style: Theme.of(context)
+                //         .textTheme
+                //         .labelLarge!
+                //         .copyWith(color: titleColor.withOpacity(0.74)),
+                //   ),
               ],
             )
           ],

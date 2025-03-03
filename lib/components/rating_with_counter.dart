@@ -40,7 +40,7 @@ class RatingWithCounter extends StatelessWidget {
         ],
         if (reviewCount.isNotEmpty)...[
           const SizedBox(width: 8),
-          Text("$reviewCount+ Reviews",
+          Text("$reviewCount Reviews",
             style: Theme.of(context)
                 .textTheme
                 .labelSmall!

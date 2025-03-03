@@ -132,7 +132,7 @@ _searchAttractionsInTrip() async{
                 'description': '',
                 'image': what2Do["imageUrl"],
                 'duration': 0,
-                'commentNum': what2Do['commentNum']
+                'commentNum': formatNumberWithCommas(what2Do['commentNum']!=null?int.parse(what2Do['commentNum']):0)
               });
             }
           } catch (e){
@@ -151,7 +151,7 @@ _searchAttractionsInTrip() async{
                 'description': '',
                 'image': what2Eat["imageUrl"],
                 'duration': 0,
-                'commentNum': what2Eat['commentNum']
+                'commentNum': formatNumberWithCommas(what2Eat['commentNum']!=null?int.parse(what2Eat['commentNum']):0)
               });
             }
           } catch (e){
@@ -299,7 +299,7 @@ _searchAttractionsInTrip() async{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (_isLoading)
-                      PercentageDisplay(duration: 300),
+                      PercentageDisplay(duration: 75),
                     Text(
                       _cityDetails['locationName']??(widget.cityInfo['name']??''),
                       style: Theme.of(context).textTheme.headlineSmall,

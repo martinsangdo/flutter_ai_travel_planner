@@ -35,19 +35,20 @@ class _BigCardImageSlideState extends State<BigCardImageSlide> {
             itemBuilder: (context, index) =>
                 BigCardImage(image: widget.images[index]),
           ),
-          Positioned(
-            bottom: defaultPadding,
-            right: defaultPadding,
-            child: Row(
-              children: List.generate(
-                widget.images.length,
-                (index) => DotIndicator(
-                  isActive: intialIndex == index,
-                  activeColor: Colors.yellow,
-                  inActiveColor: Colors.white,
+          if (widget.images.length > 1) //do not show dot if there is only 1 item
+            Positioned(
+              bottom: defaultPadding,
+              right: defaultPadding,
+              child: Row(
+                children: List.generate(
+                  widget.images.length,
+                  (index) => DotIndicator(
+                    isActive: intialIndex == index,
+                    activeColor: Colors.yellow,
+                    inActiveColor: Colors.white,
+                  ),
                 ),
               ),
-            ),
           )
         ],
       ),

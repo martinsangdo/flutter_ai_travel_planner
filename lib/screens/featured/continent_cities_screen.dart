@@ -94,7 +94,7 @@ class _State extends State<ContinentCityScreen> {
               child: InfoBigCard(
                 images: [fullImgUrl(_cityList[index]['img'])],
                 name: _cityList[index]['name'] + ', ' + _cityList[index]['country'],
-                reviewCount: _cityList[index]['review'].toString(),
+                reviewCount: formatNumberWithCommas(_cityList[index]['review']),
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(

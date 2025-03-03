@@ -207,7 +207,7 @@ Future<List> _getHotelList(city, travelDate, currency) async {
         'name': item["name"],
         'description': item['location']['address'],
         'image': item["images"][0],
-        'price': item["price"].isNotEmpty?item["price"]+' ' + currency + '/night': '',
+        'price': item["price"].isNotEmpty?item["price"]+' /night': '',
         'rating': item['ratingScore'],
         'url': item["url"]
       });

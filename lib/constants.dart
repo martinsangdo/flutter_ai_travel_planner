@@ -110,7 +110,7 @@ Map<String, dynamic> COMMON_TRIP_HEAD = {
             };
 const APP_DATE_FORMAT = 'dd/MM/yyyy';
 const DEFAULT_DURATION_DAYS = 5;   //no. of days that user will travel
-const WAIT_TIME_NEW_TRIP = 20;    //no. of seconds to wait until we have data of new trip
+const WAIT_TIME_NEW_TRIP = 5;    //no. of seconds to wait until we have data of new budget
 //
 const PAGE_SIZE = 20; //20 items per page
 const DOUBLE_PAGE_SIZE = PAGE_SIZE * 2;

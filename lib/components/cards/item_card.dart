@@ -208,7 +208,7 @@ class _OnboardingScreenState extends State<ItemCard> {
                           const SizedBox(width: 8),
                           Text(widget.reviews!, style: const TextStyle(color: Colors.black),),
                         ],//end reviews
-                        if (widget.commentNum != null && widget.commentNum != '')...[
+                        if (widget.commentNum != null && widget.commentNum != '' && widget.commentNum != '0')...[
                           SvgPicture.asset(
                             "assets/icons/profile.svg",
                             height: 20,

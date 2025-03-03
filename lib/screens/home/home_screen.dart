@@ -183,7 +183,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                     child: InfoBigCard(
                       images: _homeSliderImages..shuffle(),
                       name: _topBannerInfo['name'] + ', ' + _topBannerInfo['country'],
-                      reviewCount: _topBannerInfo['review'].toString(),
+                      reviewCount: formatNumberWithCommas(_topBannerInfo['review']),
                       press: _pressedTopBanner
                     ),
                   ),
@@ -226,7 +226,7 @@ class _OnboardingScreenState extends State<HomeScreen> {
                     child: InfoBigCard(
                       images: _randomPickImages..shuffle(),
                       name: _randomPickInfo['name'] + ', ' + _randomPickInfo['country'],
-                      reviewCount: _randomPickInfo['review'].toString(),
+                      reviewCount: formatNumberWithCommas(_randomPickInfo['review']),
                       press: _pressedRandomPick
                     ),
                   ),
