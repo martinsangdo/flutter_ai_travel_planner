@@ -232,7 +232,7 @@ _searchAttractionsInTrip() async{
   }
   //save travel date and new trip ID to our local db
   _checkNGenerateTripID() async{
-    debugPrint(widget.cityInfo.toString());
+    //debugPrint(widget.cityInfo.toString());
     if (widget.cityInfo.isNotEmpty && widget.cityInfo['wonder_trip_id'].isNotEmpty){
       _checkExpiredTravelDate(widget.cityInfo['travel_date'], widget.cityInfo['wonder_trip_id']);
     } else {
@@ -299,7 +299,7 @@ _searchAttractionsInTrip() async{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (_isLoading)
-                      PercentageDisplay(duration: 75),
+                      PercentageDisplay(duration: 120),
                     Text(
                       _cityDetails['locationName']??(widget.cityInfo['name']??''),
                       style: Theme.of(context).textTheme.headlineSmall,
